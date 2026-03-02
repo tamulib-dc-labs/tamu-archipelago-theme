@@ -1,0 +1,169 @@
+/**
+ * TAMU-inspired header styles for tamu_theme.
+ *
+ * Table of contents:
+ *  1. Institutional top bar (#tamu-top-bar)
+ *  2. Main navbar
+ *  3. Branding
+ *  4. Navigation links
+ *  5. Mobile toggler
+ *
+ * Targets the two <nav> elements in page.html.twig:
+ *  - header#header nav (top utility bar + main navbar)
+ *
+ * TAMU brand colors:
+ *  Maroon:       #500000
+ *  Dark maroon:  #3d0000  (used for top utility bar)
+ *  White:        #ffffff
+ */
+
+/* ============================================================
+   1. Institutional top bar
+   Sticky strip above all theme regions.
+   ============================================================ */
+#tamu-top-bar {
+  background-color: #3d0000;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  width: 100%;
+  font-size: 0.8rem;
+  font-family: sans-serif;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tamu-top-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0.4rem 1.5rem;
+}
+
+.tamu-top-bar__brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.tamu-top-bar__brand svg {
+  height: 160px;
+  width: auto;
+}
+
+.tamu-top-bar__brand:hover {
+  color: #cccccc;
+  text-decoration: none;
+}
+
+.tamu-top-bar__nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.tamu-top-bar__link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tamu-top-bar__link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Collapse nav links on small screens */
+@media (max-width: 575px) {
+  .tamu-top-bar__nav {
+    display: none;
+  }
+}
+
+/* ============================================================
+   2. Main navbar — maroon background
+   Overrides Bootstrap's bg-white utility (!important needed)
+   ============================================================ */
+header#header nav.navbar,
+header#header nav.navbar.bg-white {
+  background-color: #500000 !important;
+  border-bottom: 3px solid #999999;
+}
+
+/* Top utility bar (secondary_menu / top_header region) */
+header#header nav.navbar:first-of-type {
+  background-color: #3d0000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================================
+   Branding — logo and site name
+   ============================================================ */
+header#header .navbar-brand,
+header#header .navbar-brand span,
+header#header a.navbar-brand,
+header#header a.navbar-brand:hover,
+header#header a.navbar-brand:focus {
+  color: #ffffff !important;
+}
+
+/* Tighten the logo area vertical padding */
+header#header .page-header {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* ============================================================
+   Primary navigation links
+   ============================================================ */
+header#header nav.navbar .nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+header#header nav.navbar .nav-link:hover,
+header#header nav.navbar .nav-link:focus,
+header#header nav.navbar .nav-link.active {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+/* Dropdown menus */
+header#header nav.navbar .dropdown-menu {
+  background-color: #500000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+header#header nav.navbar .dropdown-item {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+header#header nav.navbar .dropdown-item:hover,
+header#header nav.navbar .dropdown-item:focus {
+  background-color: #3d0000;
+  color: #ffffff;
+}
+
+/* ============================================================
+   Mobile toggler — white icon on dark background
+   ============================================================ */
+header#header nav.navbar .navbar-toggler-icon {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+header#header nav.navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Collapsed mobile menu background */
+header#header .bg-white.to-be-collapsed,
+header#header div.bg-white.pb-2 {
+  background-color: #500000 !important;
+}

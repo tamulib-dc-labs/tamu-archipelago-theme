@@ -1,0 +1,5 @@
+header-overrides:
+  version: VERSION
+  css:
+    theme:
+      css/header.css: {}

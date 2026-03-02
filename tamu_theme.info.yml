@@ -1,0 +1,8 @@
+name: 'TAMU Theme'
+type: theme
+description: 'Texas A&M inspired header extending Archipelago Chiloé.'
+core_version_requirement: ^10 || ^11
+base theme: archipelago_subtheme_chiloe
+
+libraries:
+  - tamu_theme/header-overrides

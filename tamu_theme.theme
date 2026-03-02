@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * TAMU Theme — child theme of archipelago_subtheme_chiloe.
+ *
+ * Add preprocess hooks here as needed.
+ */
