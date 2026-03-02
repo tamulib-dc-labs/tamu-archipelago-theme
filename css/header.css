@@ -122,7 +122,7 @@ header#header .page-header {
    Primary navigation links
    ============================================================ */
 header#header nav.navbar .nav-link {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: #000000 !important;
   font-weight: 500;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -131,7 +131,7 @@ header#header nav.navbar .nav-link {
 header#header nav.navbar .nav-link:hover,
 header#header nav.navbar .nav-link:focus,
 header#header nav.navbar .nav-link.active {
-  color: #ffffff !important;
+  color: #000000 !important;
   text-decoration: underline;
 }
 
@@ -166,4 +166,8 @@ header#header nav.navbar .navbar-toggler {
 header#header .bg-white.to-be-collapsed,
 header#header div.bg-white.pb-2 {
   background-color: #500000 !important;
+}
+
+h1.title {
+  color: white;
 }
