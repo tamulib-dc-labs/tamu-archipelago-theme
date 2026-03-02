@@ -1,0 +1,321 @@
+{#
+/**
+ * @file
+ * Bootstrap Barrio's theme implementation to display a single page.
+ *
+ * The doctype, html, head and body tags are not in this template. Instead they
+ * can be found in the html.html.twig template normally located in the
+ * core/modules/system directory.
+ *
+ * Available variables:
+ *
+ * General utility variables:
+ * - base_path: The base URL path of the Drupal installation. Will usually be
+ *   "/" unless you have installed Drupal in a sub-directory.
+ * - is_front: A flag indicating if the current page is the front page.
+ * - logged_in: A flag indicating if the user is registered and signed in.
+ * - is_admin: A flag indicating if the user has permission to access
+ *   administration pages.
+ *
+ * Site identity:
+ * - front_page: The URL of the front page. Use this instead of base_path when
+ *   linking to the front page. This includes the language domain or prefix.
+ * - logo: The url of the logo image, as defined in theme settings.
+ * - site_name: The name of the site. This is empty when displaying the site
+ *   name has been disabled in the theme settings.
+ * - site_slogan: The slogan of the site. This is empty when displaying the site
+ *   slogan has been disabled in theme settings.
+
+ * Page content (in order of occurrence in the default page.html.twig):
+ * - node: Fully loaded node, if there is an automatically-loaded node
+ *   associated with the page and the node ID is the second argument in the
+ *   page's path (e.g. node/12345 and node/12345/revisions, but not
+ *   comment/reply/12345).
+ *
+ * Regions:
+ * - page.top_header: Items for the top header region.
+ * - page.top_header_form: Items for the top header form region.
+ * - page.header: Items for the header region.
+ * - page.header_form: Items for the header form region.
+ * - page.highlighted: Items for the highlighted region.
+ * - page.primary_menu: Items for the primary menu region.
+ * - page.secondary_menu: Items for the secondary menu region.
+ * - page.featured_top: Items for the featured top region.
+ * - page.content_top: Content 10 Columns width
+ * - page.content_top_flex: Content 10 Columns width aligned left
+ * - page.breadcrumb_with_sidebar: Breadcrumb area over the main content with sidebar
+ * - page.content: The main content of the current page.
+ * - page.content_second: The main content of the current page.
+ * - page.sidebar_first: Items for the left (first) sidebar.
+ * - page.sidebar_second: Items for the right (second) sidebar.
+ * - page.content_bottom:  Content Bottom with sidebars.
+ * - page.sidebar_second_bottom: Sidebad left (first) for Content Bottom
+ * - page.sidebar_second_bottom: Sidebad right (second) for Content Bottom
+ * - page.featured_bottom_first: Items for the first featured bottom region.
+ * - page.featured_bottom_second: Items for the second featured bottom region.
+ * - page.featured_bottom_third: Items for the third featured bottom region.
+ *
+ * Theme variables:
+ * - navbar_top_attributes: Items for the header region.
+ * - navbar_attributes: Items for the header region.
+ * - content_attributes: Items for the header region.
+ * - sidebar_first_attributes: Items for the highlighted region.
+ * - sidebar_second_attributes: Items for the primary menu region.
+ * - sidebar_collapse: If the sidebar_first will collapse.
+ *
+ * @see template_preprocess_page()
+ * @see bootstrap_barrio_preprocess_page()
+ * @see html.html.twig
+ */
+#}
+{%
+  set content_top_classes = [
+  'col-md-12',
+  'col-lg-12',
+  'col-xl-12',
+  'col-xxl-12',
+  'col-12',
+]
+%}
+{%- if 'container' == container -%}
+  {%- set container = 'container-lg' -%}
+{%- endif -%}
+{#- see https://www.drupal.org/project/drupal/issues/953034#comment-14192130 #}
+{%- set top_header_form_exists = page.top_header_form|render|striptags('<img><input><form><video><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+{%- set header_form_exists =  page.header_form|render|striptags('<img><input><video><form><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+{%- set header_right_exists = page.header_right|render|striptags('<img><input><video><form><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+{%- set primary_menu_exists = page.primary_menu|render|striptags('<img><input><video><form><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+{%- set sidebar_first_exists = page.sidebar_first|render|striptags('<img><input><video><form><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+{%- set sidebar_second_exists = page.sidebar_second|render|striptags('<img><input><video><form><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+<div id="page-wrapper">
+  <div id="page">
+    <header id="header" class="header" role="banner" aria-label="{{ 'Site header'|t}}">
+      {% block head %}
+        {% if page.secondary_menu or page.top_header or page.top_header_form %}
+          <nav{{ navbar_top_attributes.addClass(['navbar-expand-lg']) }}>
+           {% if container_navbar %}
+            <div class="{{ container }}">
+           {% endif %}
+           {{ page.top_header }}
+           {%  if navbar_collapse_btn_data == "offcanvas" %}
+               <div class="d-flex navbar-toggler-wrapper flex-column position-absolute top-0 end-0 me-2 mt-2">
+              <button class="navbar-toggler collapsed ml-auto" type="button" data-bs-toggle="{{ navbar_collapse_btn_data }}" data-bs-target="#CollapsingNavbarTop" aria-controls="CollapsingNavbarTop" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                   {% if header_form_exists %}
+                   <button class="navbar-toggler collapsed ml-auto" type="button" data-bs-toggle="{{ navbar_collapse_btn_data }}" data-bs-target="#CollapsingNavbar" aria-controls="CollapsingNavbar" aria-expanded="false" aria-label="Toggle Search"><span class="navbar-toggler-icon-search"></span></button>
+                   {%  endif %}{# only add the toggler for search/forms if we have actually data #}
+               </div>
+           {% else %}
+              <button class="navbar-toggler collapsed ml-auto" type="button" data-bs-toggle="{{ navbar_collapse_btn_data }}" data-bs-target=".to-be-collapsed" aria-controls="CollapsingNavbarTop CollapsingNavbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+           {% endif %}
+                <div class="{{ navbar_collapse_class }} to-be-collapsed" id="CollapsingNavbarTop">
+               {% if navbar_offcanvas %}
+                    <div class="offcanvas-header">
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+               {% endif %}
+                {{ page.secondary_menu }}
+                {% if page.top_header_form %}
+                  <div class="form-inline navbar-form ms-auto">
+                    {{ page.top_header_form }}
+                  </div>
+                {% endif %}
+                {% if navbar_offcanvas %}
+                    </div>
+                {% endif %}
+              </div>
+              {% if container_navbar %}
+            </div>
+            {% endif %}
+          </nav>
+        {% endif %}
+        <nav{{ navbar_attributes }}>
+          <div class="container-fluid gx-0 flex-wrap">
+            <div class="{{ container }} not-to-be-collapsed d-flex">
+              <div class="row w-100 g-0">
+                  {%  set header_class_col = 'col-lg-auto' %}
+                  {%  if header_right_exists %}
+                      {#  ensure that if we have something to the right, we add min col-lg-8 #}
+                      {%  set header_class_col = 'col-lg-8' %}
+                  {%  endif %}
+                <div class="align-content-left align-items-center col-md-12 {{ header_class_col }} col-sm-12 my-4 flex-wrap page-header">
+                  {{ page.header }}
+                </div>
+                  {%  if header_right_exists %}
+                  <div class="align-content-left align-items-center col-lg-4 col-md-12 col-sm-12 my-4 flex-wrap page-header-right">
+                      {{ page.header_right }}
+                  </div>
+                  {%  endif %}
+              </div>
+            </div>
+            {% if primary_menu_exists or header_form_exists %}
+             <div class="{{ navbar_collapse_class }} bg-white pb-2 to-be-collapsed" id="CollapsingNavbar">
+                 {% if navbar_offcanvas %}
+                 <div class="offcanvas-header">
+                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                 </div>
+                 <div class="offcanvas-body">
+                 {% endif %}
+                <div class="{{ container }}">
+                  <div class="row gx-2">
+                    {% if page.primary_menu %}
+                      <div class="align-content-right align-items-center col-lg-auto col-md-12 col-sm-12 my-1">
+                        {{ page.primary_menu }}
+                      </div>
+                    {% endif %}
+                    {% if page.header_form %}
+                      <div class="align-content-right align-items-center col-lg-auto ms-auto my-1">
+                        <div class="form-inline navbar-form justify-content-end" id="pageHeaderForm">
+                          {{ page.header_form }}
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+               {% if navbar_offcanvas %}
+                 </div>
+               {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </nav>
+      {% endblock %}
+    </header>
+    {% if page.highlighted %}
+      <div class="highlighted">
+        <aside class="{{ container }} section clearfix" role="complementary">
+          {{ page.highlighted }}
+        </aside>
+      </div>
+    {% endif %}
+    {% if page.featured_top %}
+      {% block featured %}
+        <div class="featured-top">
+          <aside class="featured-top__inner section {{ container }} clearfix" role="complementary">
+            {{ page.featured_top }}
+          </aside>
+        </div>
+      {% endblock %}
+    {% endif %}
+    <div id="main-wrapper-top" class="layout-main-wrapper pb-3 mb-2 clearfix">
+      <div id="main-breadcrumbs" class="{{ container }}">
+        {{ page.breadcrumb }}
+      </div>
+      {% block content_top %}
+        <div id="main-top" class="{{ container }}">
+          <div class="row justify-content-center">
+            <div class="{{ content_top_classes|join(" ") }}">
+              <section class="section">
+                <a id="main-content-top" tabindex="-1"></a>
+                {{ page.content_top }}
+              </section>
+            </div>
+          </div>
+        </div>
+        <div id="main-top-flex" class="{{ container }}">
+          <div class="region d-flex flex-nowrap flex-row align-self-stretch justify-content-center">
+                <a id="main-content-flex" tabindex="-1"></a>
+                {{ page.content_top_flex }}
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+    <div id="main-wrapper" class="layout-main-wrapper pb-3 mb-2 clearfix">
+      {% block content %}
+        <div id="main" class="{{ container }}">
+          <div class="row row-offcanvas row-offcanvas-left clearfix">
+            <main{{ content_attributes }}>
+              <section class="section">
+                <div class="col">
+                  {{ page.breadcrumb_with_sidebar }}
+                </div>
+                <a id="main-content" tabindex="0"></a>
+                {{ page.content }}
+              </section>
+            </main>
+            {% if sidebar_first_exists %}
+              <div{{ sidebar_first_attributes }}>
+                <aside class="section" role="complementary">
+                  {{ page.sidebar_first }}
+                </aside>
+              </div>
+            {% endif %}
+            {% if sidebar_second_exists %}
+              <div{{ sidebar_second_attributes }}>
+                <aside class="section" role="complementary">
+                  {{ page.sidebar_second }}
+                </aside>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div id="content_bottom_container" class="{{ container }}">
+          <div class="row row-offcanvas row-offcanvas-left clearfix">
+            <div id="content_bottom" class="col" role="complementary">
+              <section class="section">
+                {{ page.content_bottom }}
+              </section>
+            </div>
+            {% if page.sidebar_first_bottom %}
+              <div{{ sidebar_first_attributes.removeAttribute('id').setAttribute('id', 'sidebar-first-bottom') }}>
+                <aside class="section" role="complementary">
+                  {{ page.sidebar_first_bottom }}
+                </aside>
+              </div>
+            {% endif %}
+            {% if page.sidebar_second_bottom %}
+              <div{{ sidebar_second_attributes.removeAttribute('id').setAttribute('id', 'sidebar-second-bottom') }}>
+                <aside class="section" role="complementary">
+                  {{ page.sidebar_second_bottom }}
+                </aside>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        {#  Side bar off canvas for bottom 12 column flex #}
+        {% if page.sidebar_first_bottom_flex %}
+          <div id="bottom_flex_offcanvas_toggler_container" class="{{ container }}">
+            <button class="ml-auto btn btn-tertiary text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#BottomFlexNavbar" aria-controls="BottomFlexNavbar" aria-expanded="false" aria-label="Toggle Options"><span class="navbar-toggler-icon navbar-toggler-icon-flex"></span></button>
+          </div>
+         <div class="offcanvas offcanvas-start bg-white pb-2" id="BottomFlexNavbar">
+             <div class="offcanvas-header">
+               <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+             </div>
+             <div class="offcanvas-body">
+               <div class="row gx-2">
+             {{ page.sidebar_first_bottom_flex }}
+               </div>
+             </div>
+          </div>
+        {% endif %}
+        <div id="content-bottom-flex" class="{{ container }}">
+            <div class="region d-flex flex-nowrap flex-row align-self-stretch justify-content-center">
+                  {{ page.content_bottom_flex }}
+            </div>
+       </div>
+      {% endblock %}
+    </div>
+    <a href="#" class="back-to-top" rel="nofollow">
+      <i class="fas fa-chevron-up"></i>
+      <span class="sr-only">Back to top</span>
+    </a>
+    {% if page.featured_bottom_first or page.featured_bottom_second or page.featured_bottom_third %}
+      <div class="featured-bottom layout-main-wrapper pb-3 mb-2 clearfix">
+        <aside class="{{ container }} clearfix" role="complementary">
+          <div class="row justify-content-center">
+          {{ page.featured_bottom_first }}
+            <div class="col-sm-12 col-lg-6">
+          {{ page.featured_bottom_second }}
+            </div>
+              <div class="col-sm-12 col-lg-6">
+          {{ page.featured_bottom_third }}
+              </div>
+          </div>
+        </aside>
+      </div>
+    {% endif %}
+    {% block footer %}
+      {% include  '@archipelago_subtheme_chiloe/templates/includes/footer.html.twig' %}
+    {% endblock %}
+  </div>
+</div>
