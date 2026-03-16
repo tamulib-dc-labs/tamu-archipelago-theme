@@ -273,3 +273,8 @@ h1.title {
 .front-page-content {
   padding-bottom: 3rem;
 }
+
+#navbar-top .navbar-nav {
+  height: auto;
+  align-items: center;
+}
