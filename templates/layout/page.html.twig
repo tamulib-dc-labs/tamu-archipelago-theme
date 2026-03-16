@@ -129,6 +129,8 @@
             {% endif %}
           </nav>
         {% endif %}
+        {%- set header_exists = page.header|render|striptags('<img><input><video><form><audio><drupal-render-placeholder>')|default('')|trim is not empty -%}
+        {% if header_exists or header_right_exists or primary_menu_exists or header_form_exists %}
         <nav{{ navbar_attributes }}>
           <div class="container-fluid gx-0 flex-wrap">
             <div class="{{ container }} not-to-be-collapsed d-flex">
@@ -179,6 +181,7 @@
             {% endif %}
           </div>
         </nav>
+        {% endif %}
       {% endblock %}
     </header>
     {% if page.highlighted %}

@@ -6,6 +6,8 @@ base theme: archipelago_subtheme_chiloe
 
 libraries:
   - tamu_theme/header-overrides
+  - tamu_theme/cards
+  - tamu_theme/google-fonts
 
 regions:
   top_header: 'Top header (branding)'
