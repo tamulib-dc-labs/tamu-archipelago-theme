@@ -3,3 +3,15 @@ header-overrides:
   css:
     theme:
       css/header.css: {}
+
+cards:
+  version: VERSION
+  css:
+    theme:
+      css/cards.css: {}
+
+google-fonts:
+  version: VERSION
+  css:
+    base:
+      'https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap': { type: external, minified: true }
