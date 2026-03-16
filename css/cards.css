@@ -1,0 +1,134 @@
+/* ============================================================
+   TAMU Feature Cards
+   Usage: wrap cards in .tamu-cards-grid, each card uses .tamu-card
+   ============================================================ */
+
+/* Grid container — place this around a group of cards */
+.tamu-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+/* Single card */
+.tamu-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tamu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Image area */
+.tamu-card__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #3d0000;
+}
+
+.tamu-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.tamu-card:hover .tamu-card__image img {
+  transform: scale(1.04);
+}
+
+/* Maroon accent bar at top of card */
+.tamu-card::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: #500000;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Body */
+.tamu-card__body {
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tamu-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #500000;
+  margin: 0 0 0.5rem;
+  line-height: 1.3;
+}
+
+.tamu-card__description {
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  flex: 1;
+}
+
+/* Optional "View collection" link at bottom */
+.tamu-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #500000;
+  text-decoration: none;
+  margin-top: auto;
+  transition: gap 0.2s ease;
+}
+
+.tamu-card__link::after {
+  content: '→';
+}
+
+.tamu-card:hover .tamu-card__link {
+  gap: 0.5rem;
+  text-decoration: underline;
+}
+
+/* Image placeholder when no image is available */
+.tamu-card__image--placeholder {
+  background: linear-gradient(135deg, #500000 0%, #3d0000 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tamu-card__image--placeholder::after {
+  content: 'A&M';
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+}
+
+/* Responsive: 1 column on mobile */
+@media (max-width: 575px) {
+  .tamu-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
