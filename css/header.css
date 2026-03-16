@@ -52,19 +52,21 @@
 }
 
 .tamu-top-bar__brand svg {
-  height: 160px;
+  height: 100px;
   width: auto;
 }
 
 .tamu-top-bar__brand:hover {
-  color: #cccccc;
+  color: #ffffff;
   text-decoration: none;
 }
 
 .tamu-top-bar__nav {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: center;
+  min-height: 100px;
+  padding: 0 0.5rem;
 }
 
 .tamu-top-bar__link {
@@ -89,15 +91,28 @@
    2. Main navbar — maroon background
    Overrides Bootstrap's bg-white utility (!important needed)
    ============================================================ */
+header#header nav.navbar > .container-fluid,
+header#header nav.navbar > .container-lg,
+header#header nav.navbar > .container {
+  max-width: 1320px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+}
+
 header#header nav.navbar,
 header#header nav.navbar.bg-white {
   background-color: #500000 !important;
   border-bottom: 3px solid #999999;
 }
 
+header#header nav#navbar-main {
+  background-color: #ffffff !important;
+}
+
 /* Top utility bar (secondary_menu / top_header region) */
 header#header nav.navbar:first-of-type {
-  background-color: #3d0000 !important;
+  background-color: #ffffff !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -168,6 +183,93 @@ header#header div.bg-white.pb-2 {
   background-color: #500000 !important;
 }
 
+/* ============================================================
+   Hero section (highlighted region, front page only)
+   ============================================================ */
+body.path-frontpage .highlighted {
+  position: relative;
+  background-image: url('https://api.library.tamu.edu/iiif/2/a4b6714b-7e05-3146-a174-b047bd396f48/full/full/0/default.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+/* Dark overlay */
+body.path-frontpage .highlighted::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Keep content above overlay */
+body.path-frontpage .highlighted > * {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* Center text and search content */
+body.path-frontpage .highlighted .section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  gap: 1.5rem;
+  padding: 3rem 1.5rem;
+}
+
+body.path-frontpage .highlighted .section h1,
+body.path-frontpage .highlighted .section h2,
+body.path-frontpage .highlighted .section p {
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+/* Search bar inside hero */
+body.path-frontpage .highlighted input[type="text"],
+body.path-frontpage .highlighted input[type="search"] {
+  max-width: 600px;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.path-frontpage .highlighted .form-item,
+body.path-frontpage .highlighted form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 h1.title {
+  color: #202020;
+  padding: 1rem 1rem;
+  font-size: 2rem;
+}
+
+.highlighted {
+  padding-top: 0;
+}
+
+.card-body {
   color: white;
+  font-family: Oswald, sans-serif;
+}
+
+:root .archipelago-chiloe-theme .navbar-dark ul.dropdown-menu .dropdown-item a {
+  color: white;
+}
+
+.front-page-content {
+  padding-bottom: 3rem;
 }
