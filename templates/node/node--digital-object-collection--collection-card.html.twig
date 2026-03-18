@@ -1,0 +1,18 @@
+{#
+/**
+ * Card template for digital_object_collection nodes in collection_card view mode.
+ * Renders a .tamu-card compatible with the card grid in cards.css.
+ */
+#}
+<a href="{{ url }}" class="tamu-card">
+  <div class="tamu-card__image">
+    {{ content.field_descriptive_metadata }}
+  </div>
+  <div class="tamu-card__body">
+    <h3 class="tamu-card__title">{{ label }}</h3>
+    {% if content.body|render|striptags|trim is not empty %}
+      <div class="tamu-card__description">{{ content.body }}</div>
+    {% endif %}
+    <span class="tamu-card__link">View collection</span>
+  </div>
+</a>

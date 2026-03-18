@@ -1,0 +1,14 @@
+{#
+/**
+ * Wraps solr_search_collections view rows in a .tamu-cards-grid container.
+ */
+#}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+
+<div class="tamu-cards-grid">
+  {% for row in rows %}
+    {{ row.content }}
+  {% endfor %}
+</div>

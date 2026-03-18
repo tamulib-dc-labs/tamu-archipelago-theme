@@ -10,6 +10,14 @@ cards:
     theme:
       css/cards.css: {}
 
+aggie-ux-slim:
+  version: VERSION
+  css:
+    base:
+      'https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap': { type: external, minified: true }
+    theme:
+      css/slim.css: {}
+
 google-fonts:
   version: VERSION
   css:

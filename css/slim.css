@@ -1,0 +1,672 @@
+/*----------CSS SLIM-----------*/
+
+/*---------- VARIABLES ----------*/
+:root {
+/* COLORS */
+  --primary-brand: #500000;
+  --secondary-brand: #ffffff;
+  --primary-brand-dark: #3c0000;
+  --primary-brand-light: #732f2f;
+  --ivory: #e9e4dc;
+  --cream: #d6d3c4;
+  --white: #ffffff;
+  --gray-100: #f6f6f6;
+  --gray-200: #eaeaea;
+  --gray-300: #d1d1d1;
+  --gray-400: #a7a7a7;
+  --gray-500: #707070;
+  --gray-600: #626262;
+  --gray-700: #535353;
+  --gray-800: #3e3e3e;
+  --gray-900: #202020;
+  --black: #000000;
+
+/* UTILITY COLORS */
+  --link: var(--primary-brand);
+  --link-hover: var(--primary-brand-light);
+  --link-on-dark: var(--white);
+  --link-on-dark-hover: var(--cream);
+  --success: #389f5a;
+  --error: #d04343;
+  --warning: #deb349;
+  --info: #415779;
+  --gold: #af8846;
+
+/* FONTS */
+  --work-sans: "Work Sans", Arial, sans-serif;
+  --open-sans: "Open Sans", Arial, sans-serif;
+  --oswald: "Oswald", Arial, sans-serif;
+  --georgia: Georgia, Times, serif;
+
+/* BREAKPOINTS */
+  --aux-breakpoint-xs: 0;
+  --aux-breakpoint-sm: 576px;
+  --aux-breakpoint-md: 768px;
+  --aux-breakpoint-lg: 992px;
+  --aux-breakpoint-xl: 1200px;
+  --aux-breakpoint-xxl: 1400px;
+
+/* GRID VARIABLES */
+  --col-1: 8.33%;
+  --gutter: .75rem;
+}
+
+/*---------- BASIC ELEMENTS ----------*/
+
+p, ul, ol, li, dd, dt {
+  font-size: 1rem;
+  color: var(--black);
+  font-family: var(--open-sans);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--link);
+  font-family: var(--open-sans);
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  transition: 0.2s ease;
+}
+
+a:hover, a:active, a:focus {
+  color: var(--link-hover);
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: dotted var(--gold) 2px;
+  outline-offset: 3px;
+}
+
+h1 {
+  font-size: 3.25rem;
+  color: var(--primary-brand);
+  text-transform: uppercase;
+  font-family: var(--oswald);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.bold h1 {
+  font-size: 3rem;
+  color: var(--primary-brand);
+  text-transform: uppercase;
+  font-family: var(--work-sans);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.elegant h1 {
+  font-size: 3rem;
+  color: var(--primary-brand);
+  text-transform: uppercase;
+  font-family: var(--georgia);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 2rem;
+  color: var(--primary-brand);
+  font-family: var(--oswald);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.bold h2 {
+  font-size: 2.625rem;
+  color: var(--primary-brand);
+  font-family: var(--work-sans);
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.elegant h2 {
+  font-size: 2.5rem;
+  color: var(--primary-brand);
+  font-family: var(--georgia);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+h3 {
+  font-size: 1.6rem;
+  color: var(--primary-brand-light);
+  font-family: var(--work-sans);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.bold h3 {
+  font-size: 1.8rem;
+  color: var(--primary-brand-light);
+  font-family: var(--work-sans);
+  line-height: 1.2;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.elegant h3 {
+  font-size: 2rem;
+  color: var(--black);
+  font-family: var(--georgia);
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 1.35rem;
+  color: var(--gray-700);
+  font-family: var(--open-sans);
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.bold h4 {
+  font-size: 1.375rem;
+  color: var(--black);
+  font-family: var(--open-sans);
+  line-height: 1.4;
+  font-style: italic;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.elegant h4 {
+  font-size: 1.375rem;
+  color: var(--primary-brand-light);
+  font-family: var(--georgia);
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+h5 {
+  font-size: 1.125rem;
+  color: var(--black);
+  font-family: var(--work-sans);
+  line-height: 1.4;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bold h5 {
+  font-size: 1.125rem;
+  color: var(--primary-brand-light);
+  font-family: var(--work-sans);
+  line-height: 1.4;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.elegant h5 {
+  font-size: 1.125rem;
+  color: var(--black);
+  font-family: var(--georgia);
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+h6 {
+  font-size: 1rem;
+  color: var(--gray-800);
+  font-family: var(--open-sans);
+  line-height: 1.4;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.bold h6 {
+  font-size: 1rem;
+  color: var(--gray-800);
+  font-family: var(--work-sans);
+  line-height: 1.4;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.elegant h6 {
+  font-size: 1rem;
+  color: var(--gray-800);
+  font-family: var(--georgia);
+  line-height: 1.4;
+  font-weight: 400;
+  font-style: italic;
+}
+
+span {
+  font-size: 1rem;
+  color: var(--gray-800);
+  font-family: var(--work-sans);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+button, input[type="button"], input[type="reset"] {
+  display: block;
+  font-family: var(--work-sans);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.65rem 2rem;
+  text-align: center;
+  width: fit-content;
+  margin-bottom: 1rem;
+  background: var(--primary-brand);
+  color: var(--white);
+  border: 2px solid var(--primary-brand-dark);
+  position: relative;
+  transition: all 0.1s ease;
+  border-radius: 0;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+button:hover, button:active, button:focus {
+  background: var(--primary-brand-light);
+}
+
+input[type="submit"] {
+  font-family: var(--work-sans);
+  text-decoration: none;
+  text-transform: uppercase;
+  display: block;
+  text-align: center;
+  width: fit-content;
+  border: 0;
+  transition: 0.2s ease;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  background: var(--primary-brand-light);
+  color: var(--white);
+}
+
+input[type="submit"]:hover, input[type="submit"]:active, input[type="submit"]:focus {
+  background: var(--primary-brand);
+}
+
+h1 ~ span {
+  font-size: 1.25rem;
+}
+
+hr, .divider {
+  display: block;
+  background: var(--gray-300);
+  height: 10px;
+  width: 45.3px;
+  mask-image: url(https://aggieux.tamu.edu/static/media/hash-divider.b7ebb995.svg);
+  -webkit-mask-image: url(https://aggieux.tamu.edu/static/media/hash-divider.b7ebb995.svg);
+  mask-repeat: repeat space;
+  -webkit-mask-repeat: repeat space;
+}
+
+blockquote, blockquote > p {
+  font-family: var(--georgia);
+  font-size: 1.375rem;
+}
+
+figcaption {
+  font-family: var(--open-sans);
+  font-size: 1rem;
+  border-left: solid var(--primary-brand-light) 2px;
+  margin-top: 1rem;
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+dl {
+  font-family: "Open Sans", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+dl dt {
+  font-family: "Work Sans", Arial, sans-serif;
+  font-weight: 600;
+  color: var(--primary-brand);
+  font-size: 1.6rem;
+}
+
+dl dd {
+  font-size: 1rem;
+}
+
+dl dd:last-child {
+  margin-bottom: 0;
+  border: none;
+  padding: 0;
+}
+
+table {
+  font-family: var(--open-sans);
+  width: 100%;
+  border: 2px solid var(--gray-300);
+  border-collapse: separate;
+  border-spacing: 0px;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+table caption {
+  margin-bottom: 1rem;
+}
+
+table thead tr {
+  background: var(--gray-100);
+}
+
+table tr:nth-of-type(odd) td {
+  background: var(--gray-100);
+}
+
+table tbody tr:nth-of-type(odd) {
+  background: var(--gray-100);
+}
+
+td, th {
+  padding: 12px 16px;
+  text-align: left;
+  border: 1px solid var(--gray-300);
+}
+
+th {
+  font-weight: bold;
+  line-height: 1.8;
+  margin: 0;
+  max-width: 800px;
+  background-color: var(--gray-200);
+}
+
+table.table--slim,
+table.table--simple {
+  border: 0px;
+}
+
+table.table--slim td,
+table.table--simple td {
+  border: 0px;
+}
+
+table.table--slim th,
+table.table--simple th {
+  border: 0px;
+  background-color: var(--white);
+}
+
+table.table--slim th[scope="col"],
+table.table--simple th[scope="col"] {
+  border-bottom: 2px solid var(--black);
+}
+
+table.table--slim th[scope="row"],
+table.table--simple th[scope="row"] {
+  border-right: 2px solid var(--black);
+}
+
+table.table--slim.empty, table.table--simple.empty {
+  border-bottom: solid var(--black) 2px;
+  border-right: solid var(--black) 2px;
+}
+
+/*---------- BASIC LAYOUT CLASSES ----------*/
+
+.content-area {
+  width: 100%;
+}
+
+.side-bar {
+  width: 25%;
+}
+
+.content-area-with-sidebar {
+  width: 75%;
+}
+
+.full-screen {
+  width: 100vw;
+}
+
+/*---------- GRID LAYOUT ----------*/
+
+.col-2  { width: calc(var(--col-1) * 2); }
+.col-3  { width: calc(var(--col-1) * 3); }
+.col-4  { width: calc(var(--col-1) * 4); }
+.col-5  { width: calc(var(--col-1) * 5); }
+.col-6  { width: calc(var(--col-1) * 6); }
+.col-7  { width: calc(var(--col-1) * 7); }
+.col-8  { width: calc(var(--col-1) * 8); }
+.col-9  { width: calc(var(--col-1) * 9); }
+.col-10 { width: calc(var(--col-1) * 10); }
+.col-11 { width: calc(var(--col-1) * 11); }
+.col-12 { width: calc(var(--col-1) * 12); }
+
+/* CONTAINERS */
+
+.xs-contaier {
+  min-width: var(--aux-breakpoint-xs);
+  max-width: var(--aux-breakpoint-sm);
+}
+
+.sm-contaier {
+  min-width: var(--aux-breakpoint-sm);
+  max-width: var(--aux-breakpoint-md);
+}
+
+.md-contaier {
+  min-width: var(--aux-breakpoint-md);
+  max-width: var(--aux-breakpoint-lg);
+}
+
+.lg-contaier {
+  min-width: var(--aux-breakpoint-lg);
+  max-width: var(--aux-breakpoint-xl);
+}
+
+.xl-contaier {
+  min-width: var(--aux-breakpoint-xl);
+  max-width: var(--aux-breakpoint-xxl);
+}
+
+.xxl-contaier {
+  min-width: var(--aux-breakpoint-xxl);
+}
+
+/*---------- OPTIONAL BASIC STYLING ----------*/
+
+.on-light-border {
+  border: dotted 1px var(--primary-brand-light);
+}
+
+.on-dark-border {
+  border: dotted 1px var(--cream);
+}
+
+.cta-link-trailing, .cta-link-leading {
+  color: var(--primary-brand);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  font-weight: bold;
+  transition: 0.2s ease;
+  line-height: inherit;
+  position: relative;
+  cursor: pointer;
+  font-family: var(--open-sans);
+  font-size: 1.25rem;
+  display: inline-block;
+}
+
+.cta-link-trailing::after, .cta-link-leading::before {
+  content: "";
+  transition: 0.2s ease;
+  display: inline-block;
+  background-color: var(--primary-brand);
+  width: 1.1rem;
+  height: 1rem;
+  margin-left: 0.3rem;
+  mask-image: url(https://aggieux.tamu.edu/static/media/angles-right.2eb9306f.svg);
+  mask-repeat: no-repeat;
+  mask-position: bottom;
+  mask-size: 0.8rem;
+  -webkit-mask-image: url(https://aggieux.tamu.edu/static/media/angles-right.2eb9306f.svg);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: bottom;
+  -webkit-mask-size: 0.8rem;
+}
+
+.cta-link-leading {
+  margin-left: 1.4rem;
+}
+
+.cta-link-leading::before {
+  margin-right: 0.3rem;
+  margin-left: -1.4rem;
+}
+
+.primary-button-alt {
+  display: block;
+  font-family: var(--work-sans);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.65rem 2rem;
+  text-align: center;
+  width: fit-content;
+  margin-bottom: 1rem;
+  background: transparent;
+  color: var(--primary-brand);
+  border: 2px solid var(--primary-brand-dark);
+  position: relative;
+  transition: all 0.1s ease;
+  border-radius: 0;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+.primary-button-alt:hover, .primary-button-alt:active, .primary-button-alt:focus {
+  background: var(--primary-brand-light);
+  color: var(--white);
+}
+
+/* BOLD STYLES */
+
+.bold .on-light-border {
+  border: solid 3px var(--primary-brand);
+}
+
+.bold .on-dark-border {
+  border: solid 2px var(--cream);
+}
+
+.bold .offset-border-light {
+  background: var(--white);
+  box-shadow: -10px 10px 0 var(--primary-brand);
+}
+
+.bold .offset-border-dark {
+  background: var(--maroon);
+  box-shadow: -10px 10px 0 var(--cream);
+}
+
+.bold .divider, .bold hr {
+  display: block;
+  background: var(--gray-300);
+  height: 24px;
+  width: 4rem;
+  mask-image: url(https://aggieux.tamu.edu/static/media/dot.61fc9bd7.svg);
+  -webkit-mask-image: url(https://aggieux.tamu.edu/static/media/dot.61fc9bd7.svg);
+  mask-size: 8px;
+  -webkit-mask-size: 8px;
+  mask-repeat: repeat space;
+  -webkit-mask-repeat: repeat space;
+}
+
+.bold .cta-link-trailing, .bold .cta-link-leading {
+  color: var(--primary-brand);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  font-weight: bold;
+  transition: 0.2s ease;
+  line-height: inherit;
+  position: relative;
+  cursor: pointer;
+  font-family: var(--work-sans);
+  font-size: 1.25rem;
+  display: inline-block;
+}
+
+.bold .cta-link-trailing {
+  font-style: italic;
+}
+
+.bold .cta-link-leading {
+  margin-left: 1.4rem;
+}
+
+.bold .cta-link-trailing::after, .bold .cta-link-leading::before {
+  content: "";
+  transition: 0.2s ease;
+  display: inline-block;
+  background-color: var(--primary-brand);
+  width: 1.1rem;
+  height: 1rem;
+  mask-repeat: no-repeat;
+  mask-position: bottom;
+  mask-size: 0.8rem;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: bottom;
+  -webkit-mask-size: 0.8rem;
+}
+
+.bold .cta-link-trailing::after {
+  margin-left: 0.5rem;
+  mask-image: url(https://aggieux.tamu.edu/static/media/arrow-right-long.73b4edf6.svg);
+  -webkit-mask-image: url(https://aggieux.tamu.edu/static/media/arrow-right-long.73b4edf6.svg);
+}
+
+.bold .cta-link-leading::before {
+  margin-right: 0.3rem;
+  margin-left: -1.4rem;
+  mask-image: url(https://aggieux.tamu.edu/static/media/circle-chevron-right.04c98249.svg);
+  -webkit-mask-image: url(https://aggieux.tamu.edu/static/media/circle-chevron-right.04c98249.svg);
+}
+
+/* ELEGANT STYLES */
+
+.elegant .on-light-border {
+  border: dotted 1px var(--primary-brand-light);
+}
+
+.elegant .on-dark-border {
+  border: dotted 1px var(--cream);
+}
+
+.elegant .divider, .elegant hr {
+  display: block;
+  background: #d1d1d1;
+  height: 10px;
+  width: 45.3px;
+  mask-image: url(https://aggieux.tamu.edu/static/media/hash-divider.b7ebb995.svg);
+  -webkit-mask-image: url(https://aggieux.tamu.edu/static/media/hash-divider.b7ebb995.svg);
+  mask-repeat: repeat space;
+  -webkit-mask-repeat: repeat space;
+}
+
+.elegant .cta-link-trailing {
+  color: var(--primary-brand);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  font-weight: bold;
+  transition: 0.2s ease;
+  line-height: inherit;
+  position: relative;
+  cursor: pointer;
+  font-family: var(--georgia);
+  font-size: 1.25rem;
+  display: inline-block;
+}
