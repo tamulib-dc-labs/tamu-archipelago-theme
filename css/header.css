@@ -73,6 +73,7 @@
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   white-space: nowrap;
+  font-size: 1rem;
 }
 
 .tamu-top-bar__link:hover {
@@ -281,8 +282,13 @@ h1.title {
 
 .hero-gradient {
   background: linear-gradient(
-          135deg,
-          rgba(80, 0, 0, 0.85),
-          rgba(122, 31, 31, 0.85)
+    135deg,
+    rgba(80, 0, 0, 0.85),
+    rgba(122, 31, 31, 0.85)
   );
+}
+
+#block-tamu-theme-useraccountmenu a {
+  color:white !important;
+  font-size: 1rem !important;
 }
