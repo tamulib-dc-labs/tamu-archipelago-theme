@@ -2,7 +2,7 @@ header-overrides:
   version: VERSION
   css:
     theme:
-      css/header.css: {}
+      css/header.css: { weight: 999 }
 
 cards:
   version: VERSION
@@ -10,13 +10,13 @@ cards:
     theme:
       css/cards.css: {}
 
-aggie-ux-slim:
-  version: VERSION
+aggie-ux-cdn:
+  version: '2.0.0'
   css:
     base:
-      'https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap': { type: external, minified: true }
-    theme:
-      css/slim.css: {}
+      'https://aux.tamu.edu/v2/2.0.0/styles/aux-styles.css': { type: external, minified: true }
+  js:
+    'https://aux.tamu.edu/v2/2.0.0/js/aux.js': { type: external, minified: true }
 
 google-fonts:
   version: VERSION
