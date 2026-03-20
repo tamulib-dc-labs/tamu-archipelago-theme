@@ -317,3 +317,8 @@ h3 {
 .form-type-select .dropdown > .btn.dropdown-toggle:hover  {
   color: #500000 !important;
 }
+
+/* Fix Top Menu */
+li.nav-item {
+  margin-bottom: 9.6px !important;
+}
