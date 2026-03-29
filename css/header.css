@@ -327,3 +327,12 @@ li.nav-item {
 a:hover {
   text-decoration: none;
 }
+
+body.scrolled .back-to-top {
+  background-color: rgba(80, 0, 0, 0.85);
+}
+
+.form-checkbox.form-check-input:checked {
+  background-color: maroon;
+  color: white;
+}
