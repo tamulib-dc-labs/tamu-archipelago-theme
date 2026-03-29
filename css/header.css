@@ -301,6 +301,7 @@ h3 {
   color: #732f2f;
   font-size: 1.6rem;
   line-height: 1.2;
+  font-size: 2rem;
 }
 
 /* Upstream Facet Fixes */
@@ -321,4 +322,8 @@ h3 {
 /* Fix Top Menu */
 li.nav-item {
   margin-bottom: 9.6px !important;
+}
+
+a:hover {
+  text-decoration: none;
 }
