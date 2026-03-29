@@ -333,6 +333,6 @@ body.scrolled .back-to-top {
 }
 
 .form-checkbox.form-check-input:checked {
-  background-color: maroon;
+  background-color: rgba(80, 0, 0, 0.85);
   color: white;
 }
