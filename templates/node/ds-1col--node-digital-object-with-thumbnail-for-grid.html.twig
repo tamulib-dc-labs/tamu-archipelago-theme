@@ -1,18 +1,19 @@
 {#
 /**
  * TAMU card layout for digital_object nodes in digital_object_with_thumbnail_for_grid view mode.
- * Uses stretched-link to make the whole card clickable without nesting <a> tags
- * (the image field already renders its own <a> wrapper).
+ * Requires the field_descriptive_metadata formatter to have "link to content" disabled,
+ * otherwise the image's own <a> will conflict with this outer <a> wrapper.
  */
 #}
-<div class="tamu-card">
+<a href="{{ path('entity.node.canonical', {'node': attributes['data-history-node-id']}) }}" class="tamu-card">
   <div class="tamu-card__image">
     {{ content.field_descriptive_metadata }}
   </div>
   <div class="tamu-card__body">
-    <h3 class="tamu-card__title">
-      <a href="{{ content.node_url }}" class="stretched-link">{{ content.node_title|render|striptags|trim }}</a>
-    </h3>
-    <span class="tamu-card__link">View item</span>
+    <h3 class="tamu-card__title">{{ content.node_title|render|striptags|trim }}</h3>
+    <p class="tamu-card__description"></p>
+    <span class="tamu-card__link">
+      View item
+    </span>
   </div>
-</div>
+</a>
