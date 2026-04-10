@@ -7,6 +7,11 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
   font-family: 'Oswald', sans-serif;
 }
 
+/* Add vertical spacing between rows of cards in all Bootstrap grid views */
+.views-view-grid .row > * {
+  margin-bottom: 1.5rem !important;
+}
+
 /* Grid container — place this around a group of cards */
 .tamu-cards-grid {
   display: grid;
@@ -61,11 +66,11 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
 /* Maroon accent bar at top of card */
 .tamu-card::before {
   content: '';
-  display: block;
-  height: 4px;
-  background: #500000;
-  width: 100%;
-  flex-shrink: 0;
+  display: block !important;
+  height: 4px !important;
+  background: #500000 !important;
+  width: 100% !important;
+  flex-shrink: 0 !important;
 }
 
 /* Body */
