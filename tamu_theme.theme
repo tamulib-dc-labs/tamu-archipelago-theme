@@ -27,10 +27,8 @@ function tamu_theme_preprocess_ds_1col(&$variables) {
  * Fix aria label for search.
  */
 function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-    if (isset($form['search_api_fulltext'])) {
-      $form['search_api_fulltext']['#attributes']['aria-label'] = t('Search');
-      // Or add a visible label:
-      $form['search_api_fulltext']['#title'] = t('Search');
-      $form['search_api_fulltext']['#title_display'] = 'before'; // or 'invisible' for screen-reader only
-    }
+  if (isset($form['search_api_fulltext'])) {
+    $form['search_api_fulltext']['#title'] = t('Search');
+    $form['search_api_fulltext']['#title_display'] = 'invisible';
   }
+}

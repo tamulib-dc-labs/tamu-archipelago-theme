@@ -1,0 +1,5 @@
+{% if attributes.name is defined and attributes.name == 'search_api_fulltext' %}
+  {%  set attributes = attributes.setAttribute('size', '100') %}
+  {%  set attributes = attributes.setAttribute('aria-label', 'Search'|t) %}
+{% endif %}
+<input{{ attributes.addClass("form-control").removeClass("form-text") }} />{{ children }}
