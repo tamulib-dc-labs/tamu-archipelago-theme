@@ -336,3 +336,19 @@ body.scrolled .back-to-top {
   background-color: rgba(80, 0, 0, 0.85);
   color: white;
 }
+
+/* Skip link — high contrast on focus */
+.skip-link {
+  background-color: #500000 !important;
+  color: #ffffff !important;
+}
+
+/* Views display switcher links — parent theme sets color to transparent */
+.views-display-link {
+  color: #500000 !important;
+}
+
+.sr-only {
+  background-color: #500000 !important;
+  color: #ffffff !important;
+}
