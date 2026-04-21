@@ -348,6 +348,17 @@ body.scrolled .back-to-top {
   color: #500000 !important;
 }
 
+/* Breadcrumb — force left alignment (overrides chiloe justify-content: end) */
+#main-breadcrumbs,
+:root .archipelago-chiloe-theme #main-breadcrumbs {
+  justify-content: flex-start !important;
+}
+
+#main-breadcrumbs nav[role="navigation"],
+#main-breadcrumbs .breadcrumb {
+  text-align: left;
+}
+
 .sr-only {
   background-color: #500000 !important;
   color: #ffffff !important;
