@@ -6,3 +6,31 @@
  *
  * Add preprocess hooks here as needed.
  */
+
+/**
+ * Pass node URL to DS layout templates so tamu-card can wrap with a link.
+ */
+function tamu_theme_preprocess_ds_1col(&$variables) {
+  $elements = $variables['elements'] ?? [];
+  // Only run for the card view mode to avoid affecting other DS 1col layouts.
+  if (($elements['#view_mode'] ?? '') !== 'digital_object_with_thumbnail_for_grid') {
+    return;
+  }
+  // DS stores the entity as #node or #entity depending on version.
+  $node = $elements['#node'] ?? $elements['#entity'] ?? NULL;
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    $variables['node_url'] = $node->toUrl()->toString();
+  }
+}
+
+/**
+ * Fix aria label for search.
+ */
+function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    if (isset($form['search_api_fulltext'])) {
+      $form['search_api_fulltext']['#attributes']['aria-label'] = t('Search');
+      // Or add a visible label:
+      $form['search_api_fulltext']['#title'] = t('Search');
+      $form['search_api_fulltext']['#title_display'] = 'before'; // or 'invisible' for screen-reader only
+    }
+  }
