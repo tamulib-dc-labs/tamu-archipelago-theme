@@ -24,6 +24,22 @@ function tamu_theme_preprocess_ds_1col(&$variables) {
 }
 
 /**
+ * Add SAML login link to the user login form.
+ */
+function tamu_theme_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $return_to = \Drupal::request()->query->get('returnTo', 'user');
+  $saml_url = \Drupal\Core\Url::fromUserInput('/saml/drupal_login/netid_login', [
+    'query' => ['returnTo' => $return_to],
+  ])->toString();
+
+  $form['saml_login'] = [
+    '#type' => 'markup',
+    '#markup' => '<div class="saml-login-link"><a href="' . $saml_url . '" class="btn btn-primary mt-2">Login with NetID</a></div>',
+    '#weight' => -10,
+  ];
+}
+
+/**
  * Fix aria label for search.
  */
 function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
