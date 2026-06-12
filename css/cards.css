@@ -3,7 +3,7 @@
    Usage: wrap cards in .tamu-cards-grid, each card uses .tamu-card
    ============================================================ */
 
-h2, h3, h4, h5, h6, h2 a, h3 a {
+h2, h2 a {
   font-family: var(--oswald);
 }
 

@@ -321,12 +321,12 @@ figcaption {
 }
 
 dl {
-  font-family: "Open Sans", Arial, sans-serif;
+  font-family: var(--open-sans);
   line-height: 1.5;
 }
 
 dl dt {
-  font-family: "Work Sans", Arial, sans-serif;
+  font-family: var(--work-sans);
   font-weight: 600;
   color: var(--primary-brand);
   font-size: 1.6rem;

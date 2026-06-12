@@ -303,9 +303,132 @@ h3 {
   line-height: 1.2;
 }
 
-/* Upstream Facet Fixes */
-.facets-widget-sbf_range_date_slider .form-control {
-  color: white !important;
+/* ============================================================
+   Facets — brand alignment and accessibility fixes
+   ============================================================ */
+
+/* Fix: date slider form-control had white text, making inputs invisible.
+   Exclude submit buttons — they share the .form-control class but need white text. */
+.facets-widget-sbf_range_date_slider .form-control:not([type="submit"]) {
+  color: var(--gray-900) !important;
+}
+
+/* Update Facet button — match standard TAMU button (square, standard maroon, border) */
+.block-facets input[type="submit"],
+.block-facets button[type="submit"] {
+  background: var(--primary-brand) !important;
+  color: var(--white) !important;
+  border: 2px solid var(--primary-brand-dark) !important;
+  border-radius: 0 !important;
+  font-family: var(--work-sans) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  padding: 0.65rem 2rem !important;
+  width: 100% !important;
+  transition: background 0.1s ease !important;
+}
+
+.block-facets input[type="submit"]:hover,
+.block-facets button[type="submit"]:hover {
+  background: var(--primary-brand-light) !important;
+  color: var(--white) !important;
+}
+
+/* Fix: global slim.css span rule (font-style:italic; color:gray) bleeds into
+   accordion headers and facet item labels — restore normal text rendering */
+.block-facets .accordion-button span {
+  font-style: normal !important;
+  color: var(--white) !important;
+  font-family: var(--oswald) !important;
+  font-weight: 400 !important;
+  font-size: 1rem !important;
+}
+
+.block-facets .facet-item__value,
+.block-facets .facet-item__count {
+  font-style: normal;
+  color: inherit;
+  font-family: var(--open-sans);
+}
+
+.block-facets .facet-item__count {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875em;
+  font-weight: 400;
+}
+
+/* Facet items: maroon background / white text at rest; darken on hover */
+.block-facets .facet-item a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 3px;
+  margin-left: 0;
+  background: var(--primary-brand);
+  color: var(--white) !important;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.block-facets .facet-item a:hover,
+.block-facets .facet-item a:active {
+  background: var(--primary-brand-dark);
+  color: var(--white) !important;
+  text-decoration: none;
+}
+
+.block-facets .facet-item a:focus {
+  color: var(--white) !important;
+  text-decoration: none;
+  outline: none;
+}
+
+.block-facets .facet-item a:focus-visible {
+  outline: 2px dotted var(--gold);
+  outline-offset: 2px;
+  background: var(--primary-brand-dark);
+}
+
+.block-facets .facet-item.is-active a {
+  background: var(--primary-brand-dark);
+  color: var(--white) !important;
+  font-weight: 700;
+}
+
+/* Fix: Bootstrap Barrio sets 1rem top+bottom margin on each facet item —
+   tighten spacing to match AUX compact list density */
+:root .block-facets ul li.facet-item {
+  margin-top: 0.125rem !important;
+  margin-bottom: 0.125rem !important;
+}
+
+/* Accordion buttons: maroon background + white text in all states.
+   Without background-color here, collapsed buttons revert to Bootstrap's
+   white background and our white text becomes invisible. */
+.block-facets .accordion-button,
+.block-facets .accordion-button.collapsed {
+  background-color: var(--primary-brand) !important;
+  color: var(--white) !important;
+  box-shadow: none;
+}
+
+/* Invert the Bootstrap chevron icon so it stays white on dark bg */
+.block-facets .accordion-button::after {
+  filter: brightness(0) invert(1);
+}
+
+.block-facets .accordion-button:hover,
+.block-facets .accordion-button:focus {
+  background-color: var(--primary-brand-dark) !important;
+  color: var(--white) !important;
+}
+
+.block-facets .accordion-button:focus-visible {
+  outline: 2px dotted var(--gold);
+  outline-offset: -4px;
+  box-shadow: none;
 }
 
 
@@ -361,4 +484,48 @@ body.scrolled .back-to-top {
 .sr-only {
   background-color: var(--primary-brand) !important;
   color: var(--white) !important;
+}
+
+/* ============================================================
+   Pager / pagination — TAMU brand treatment
+   ============================================================ */
+
+/* Fix global span italic/gray bleeding into "next ›" and "Last »" labels */
+.pagination .page-link span {
+  font-style: normal;
+  color: inherit;
+  font-family: var(--open-sans);
+  font-weight: inherit;
+}
+
+/* Rest: maroon border + maroon text on white */
+.pagination .page-link {
+  color: var(--primary-brand);
+  background-color: var(--white);
+  border-color: var(--primary-brand);
+  font-family: var(--open-sans);
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* Active page: white text on maroon (already working, reinforce) */
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-brand);
+  border-color: var(--primary-brand-dark);
+  color: var(--white);
+}
+
+/* Hover / focus: white text on maroon — clear, consistent, high contrast */
+.pagination .page-link:hover,
+.pagination .page-link:focus {
+  background-color: var(--primary-brand);
+  border-color: var(--primary-brand-dark);
+  color: var(--white) !important;
+  text-decoration: none;
+}
+
+.pagination .page-link:focus-visible {
+  outline: 2px dotted var(--gold);
+  outline-offset: 2px;
+  box-shadow: none;
 }
