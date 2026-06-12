@@ -34,7 +34,7 @@ function tamu_theme_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormSta
 
   $form['saml_login'] = [
     '#type' => 'markup',
-    '#markup' => '<div class="saml-login-link"><a href="' . $saml_url . '" class="btn btn-primary mt-2">Login with NetID</a></div>',
+    '#markup' => '<div class="saml-login-link"><a href="' . $saml_url . '" class="btn btn-primary mt-2">Login with NetID - Test</a></div>',
     '#weight' => -10,
   ];
 }

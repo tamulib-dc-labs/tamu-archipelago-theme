@@ -1,3 +1,9 @@
+aux-slim:
+  version: VERSION
+  css:
+    base:
+      css/slim.css: {}
+
 header-overrides:
   version: VERSION
   css:

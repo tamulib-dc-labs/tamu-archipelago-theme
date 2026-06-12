@@ -5,6 +5,7 @@ core_version_requirement: ^10 || ^11
 base theme: archipelago_subtheme_chiloe
 
 libraries:
+  - tamu_theme/aux-slim
   - tamu_theme/header-overrides
   - tamu_theme/cards
   - tamu_theme/aggie-ux-cdn

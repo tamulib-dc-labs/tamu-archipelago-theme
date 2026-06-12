@@ -22,8 +22,8 @@
    Sticky strip above all theme regions.
    ============================================================ */
 #tamu-top-bar {
-  background-color: #3d0000;
-  color: #ffffff;
+  background-color: var(--primary-brand-dark);
+  color: var(--white);
   position: sticky;
   top: 0;
   z-index: 1100;
@@ -43,7 +43,7 @@
 }
 
 .tamu-top-bar__brand {
-  color: #ffffff;
+  color: var(--white);
   text-decoration: none;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -57,7 +57,7 @@
 }
 
 .tamu-top-bar__brand:hover {
-  color: #ffffff;
+  color: var(--white);
   text-decoration: none;
 }
 
@@ -70,14 +70,14 @@
 }
 
 .tamu-top-bar__link {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--link-on-dark);
   text-decoration: none;
   white-space: nowrap;
   font-size: 1rem;
 }
 
 .tamu-top-bar__link:hover {
-  color: #ffffff;
+  color: var(--link-on-dark-hover);
   text-decoration: underline;
 }
 
@@ -103,17 +103,17 @@ header#header nav.navbar > .container {
 
 header#header nav.navbar,
 header#header nav.navbar.bg-white {
-  background-color: #500000 !important;
-  border-bottom: 3px solid #999999;
+  background-color: var(--primary-brand, #500000) !important;
+  border-bottom: 3px solid var(--gray-400, #a7a7a7);
 }
 
 header#header nav#navbar-main {
-  background-color: #ffffff !important;
+  background-color: var(--white, #ffffff) !important;
 }
 
 /* Top utility bar (secondary_menu / top_header region) */
 header#header nav.navbar:first-of-type {
-  background-color: #ffffff !important;
+  background-color: var(--white, #ffffff) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -125,7 +125,7 @@ header#header .navbar-brand span,
 header#header a.navbar-brand,
 header#header a.navbar-brand:hover,
 header#header a.navbar-brand:focus {
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 /* Tighten the logo area vertical padding */
@@ -138,7 +138,7 @@ header#header .page-header {
    Primary navigation links
    ============================================================ */
 header#header nav.navbar .nav-link {
-  color: #000000 !important;
+  color: var(--black) !important;
   font-weight: 500;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -147,24 +147,24 @@ header#header nav.navbar .nav-link {
 header#header nav.navbar .nav-link:hover,
 header#header nav.navbar .nav-link:focus,
 header#header nav.navbar .nav-link.active {
-  color: #000000 !important;
+  color: var(--black) !important;
   text-decoration: underline;
 }
 
 /* Dropdown menus */
 header#header nav.navbar .dropdown-menu {
-  background-color: #500000;
+  background-color: var(--primary-brand);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 header#header nav.navbar .dropdown-item {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--link-on-dark);
 }
 
 header#header nav.navbar .dropdown-item:hover,
 header#header nav.navbar .dropdown-item:focus {
-  background-color: #3d0000;
-  color: #ffffff;
+  background-color: var(--primary-brand-dark);
+  color: var(--white);
 }
 
 /* ============================================================
@@ -181,7 +181,7 @@ header#header nav.navbar .navbar-toggler {
 /* Collapsed mobile menu background */
 header#header .bg-white.to-be-collapsed,
 header#header div.bg-white.pb-2 {
-  background-color: #500000 !important;
+  background-color: var(--primary-brand) !important;
 }
 
 /* ============================================================
@@ -219,7 +219,7 @@ body.path-frontpage .highlighted .section {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  color: #ffffff;
+  color: var(--white);
   gap: 1.5rem;
   padding: 3rem 1.5rem;
 }
@@ -227,7 +227,7 @@ body.path-frontpage .highlighted .section {
 body.path-frontpage .highlighted .section h1,
 body.path-frontpage .highlighted .section h2,
 body.path-frontpage .highlighted .section p {
-  color: #ffffff;
+  color: var(--white);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
   margin: 0;
 }
@@ -253,7 +253,7 @@ body.path-frontpage .highlighted form {
 }
 
 h1.title {
-  color: #202020;
+  color: var(--gray-900);
   padding: 1rem 1rem;
   font-size: 2rem;
 }
@@ -264,7 +264,7 @@ h1.title {
 
 .card-body {
   color: var(--primary-brand);
-  font-family: Oswald, sans-serif;
+  font-family: var(--oswald);
 }
 
 :root .archipelago-chiloe-theme .navbar-dark ul.dropdown-menu .dropdown-item a {
@@ -284,7 +284,7 @@ h1.title {
   background: linear-gradient(
     135deg,
     rgba(80, 0, 0, 0.85),
-    rgba(122, 31, 31, 0.85)
+    rgba(115, 47, 47, 0.85)   /* var(--primary-brand-light) with opacity */
   );
   border-radius: 15px;
 }
@@ -296,12 +296,11 @@ h1.title {
 
 /* Preserve AUX h3 styling */
 h3 {
-  font-family: "Work Sans", Arial, sans-serif;
+  font-family: var(--work-sans);
   font-weight: 600;
-  color: #732f2f;
+  color: var(--primary-brand-light);
   font-size: 1.6rem;
   line-height: 1.2;
-  font-size: 2rem;
 }
 
 /* Upstream Facet Fixes */
@@ -316,7 +315,7 @@ h3 {
 
 /* Fix CHANGED DESCENDING TEXT */
 .form-type-select .dropdown > .btn.dropdown-toggle:hover  {
-  color: #500000 !important;
+  color: var(--primary-brand) !important;
 }
 
 /* Fix Top Menu */
@@ -329,23 +328,23 @@ a:hover {
 }
 
 body.scrolled .back-to-top {
-  background-color: rgba(80, 0, 0, 0.85);
+  background-color: rgba(80, 0, 0, 0.85); /* var(--primary-brand) with opacity */
 }
 
 .form-checkbox.form-check-input:checked {
-  background-color: rgba(80, 0, 0, 0.85);
-  color: white;
+  background-color: rgba(80, 0, 0, 0.85); /* var(--primary-brand) with opacity */
+  color: var(--white);
 }
 
 /* Skip link — high contrast on focus */
 .skip-link {
-  background-color: #500000 !important;
-  color: #ffffff !important;
+  background-color: var(--primary-brand) !important;
+  color: var(--white) !important;
 }
 
 /* Views display switcher links — parent theme sets color to transparent */
 .views-display-link {
-  color: #500000 !important;
+  color: var(--primary-brand) !important;
 }
 
 /* Breadcrumb — force left alignment (overrides chiloe justify-content: end) */
@@ -360,6 +359,6 @@ body.scrolled .back-to-top {
 }
 
 .sr-only {
-  background-color: #500000 !important;
-  color: #ffffff !important;
+  background-color: var(--primary-brand) !important;
+  color: var(--white) !important;
 }

@@ -4,7 +4,7 @@
    ============================================================ */
 
 h2, h3, h4, h5, h6, h2 a, h3 a {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--oswald);
 }
 
 /* Add vertical spacing between rows of cards in all Bootstrap grid views */
@@ -26,7 +26,7 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff;
+  background: var(--white);
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
@@ -48,7 +48,7 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: #3d0000;
+  background: var(--primary-brand-dark);
 }
 
 .tamu-card__image img {
@@ -68,7 +68,7 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
   content: '';
   display: block !important;
   height: 4px !important;
-  background: #500000 !important;
+  background: var(--primary-brand) !important;
   width: 100% !important;
   flex-shrink: 0 !important;
 }
@@ -82,20 +82,20 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
 }
 
 .tamu-card__title {
-  font-family: 'Oswald', sans-serif !important;
+  font-family: var(--oswald) !important;
   margin: 0 0 0.5rem !important;
-  color: rgb(101, 28, 28) !important;
+  color: var(--primary-brand-light) !important;
   line-height: 1.2 !important;
   font-weight: 400 !important;
 }
 
 .tamu-card__description {
-  font-size: 16px;
-  color: #444;
+  font-size: 1rem;
+  color: var(--gray-700);
   line-height: 1.6;
   margin: 0 0 1rem;
   flex: 1;
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: var(--open-sans);
   font-weight: 400;
 }
 
@@ -106,7 +106,7 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
   gap: 0.3rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #500000;
+  color: var(--primary-brand);
   text-decoration: none;
   margin-top: auto;
   transition: gap 0.2s ease;
@@ -123,7 +123,7 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
 
 /* Image placeholder when no image is available */
 .tamu-card__image--placeholder {
-  background: linear-gradient(135deg, #500000 0%, #3d0000 100%);
+  background: linear-gradient(135deg, var(--primary-brand) 0%, var(--primary-brand-dark) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,10 +131,17 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
 
 .tamu-card__image--placeholder::after {
   content: 'A&M';
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--oswald);
   font-size: 2rem;
   color: rgba(255, 255, 255, 0.3);
   font-weight: 700;
+}
+
+/* Focus states — AUX gold dotted outline on interactive cards */
+.tamu-card:focus-visible,
+.tamu-card__link:focus-visible {
+  outline: dotted var(--gold) 2px;
+  outline-offset: 3px;
 }
 
 /* Responsive: 1 column on mobile */
@@ -142,6 +149,13 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
   .tamu-cards-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Invisible full-card link — sits above background, below image/text content */
+.tamu-card__cover-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
 /* ── Clover IIIF Slider / Swiper — Bootstrap conflict fix ──────────────── */
@@ -163,9 +177,9 @@ h2, h3, h4, h5, h6, h2 a, h3 a {
 }
 
 .clover-browse {
-  color: #500000 !important;
+  color: var(--primary-brand) !important;
   padding-top: 1rem;
-  font-family:"Oswald",Arial,sans-serif;
+  font-family: var(--oswald);
   font-weight:400;
 }
 
