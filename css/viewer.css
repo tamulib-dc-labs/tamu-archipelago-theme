@@ -36,6 +36,19 @@
   background-color: var(--primary-brand-dark) !important;
 }
 
+/* Thumbnail figcaptions — white background, brand text */
+.clover-viewer-media-wrapper figcaption {
+  background-color: #ffffff !important;
+  color: var(--primary-brand) !important;
+  font-size: 0.75rem;
+}
+
+.clover-viewer-media-wrapper button:hover figcaption,
+.clover-viewer-media-wrapper button:focus figcaption {
+  background-color: #ffffff !important;
+  color: var(--primary-brand-dark) !important;
+}
+
 /* Allow viewer container height to grow with tall thumbnails */
 .strawberry-clover-item {
   height: auto !important;
