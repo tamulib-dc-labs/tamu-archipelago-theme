@@ -1,0 +1,54 @@
+/* ── Clover IIIF Viewer — TAMU theme overrides ─────────────────────────── */
+
+/* Navigation bar (prev / page count / next) */
+.clover-viewer-media-navigation {
+  background-color: var(--primary-brand-dark) !important;
+  color: #ffffff !important;
+}
+
+.clover-viewer-media-navigation button {
+  color: #ffffff !important;
+}
+
+.clover-viewer-media-navigation button:hover:not([disabled]) {
+  background-color: var(--primary-brand) !important;
+}
+
+/* Content search button */
+.clover-viewer-media-search {
+  background-color: var(--primary-brand) !important;
+  color: #ffffff !important;
+}
+
+.clover-viewer-media-search:hover {
+  background-color: var(--primary-brand-dark) !important;
+}
+
+/* Thumbnail strip — allow height to grow with thumbnail size */
+.strawberry-clover-item {
+  height: auto !important;
+  min-height: 400px;
+}
+
+.clover-viewer-media-wrapper {
+  height: auto !important;
+  flex-shrink: 0;
+}
+
+/* Scroll container inside media wrapper */
+.clover-viewer-media-wrapper > div {
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Individual thumbnail items */
+.media-thumbnail-lazyload {
+  outline-color: var(--primary-brand) !important;
+}
+
+/* Active/selected thumbnail */
+.media-thumbnail-lazyload[aria-current="true"],
+.media-thumbnail-lazyload[data-active="true"] {
+  outline: 3px solid var(--primary-brand) !important;
+  outline-offset: -3px;
+}

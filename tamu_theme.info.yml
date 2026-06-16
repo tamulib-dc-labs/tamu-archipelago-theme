@@ -8,6 +8,7 @@ libraries:
   - tamu_theme/aux-slim
   - tamu_theme/header-overrides
   - tamu_theme/cards
+  - tamu_theme/viewer
   - tamu_theme/aggie-ux-cdn
   - tamu_theme/google-fonts
 
