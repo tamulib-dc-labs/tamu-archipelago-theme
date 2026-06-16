@@ -6,7 +6,15 @@
   color: #ffffff !important;
 }
 
+/* Page count text "1 / 498" */
+.clover-viewer-media-navigation span,
+.clover-viewer-media-navigation em {
+  color: #ffffff !important;
+}
+
+/* Prev / Next arrow buttons */
 .clover-viewer-media-navigation button {
+  background-color: transparent !important;
   color: #ffffff !important;
 }
 
@@ -14,7 +22,11 @@
   background-color: var(--primary-brand) !important;
 }
 
-/* Content search button */
+.clover-viewer-media-navigation button[disabled] {
+  opacity: 0.4;
+}
+
+/* Content search button (sibling of nav bar) */
 .clover-viewer-media-search {
   background-color: var(--primary-brand) !important;
   color: #ffffff !important;
@@ -24,7 +36,7 @@
   background-color: var(--primary-brand-dark) !important;
 }
 
-/* Thumbnail strip — allow height to grow with thumbnail size */
+/* Allow viewer container height to grow with tall thumbnails */
 .strawberry-clover-item {
   height: auto !important;
   min-height: 400px;
@@ -35,20 +47,7 @@
   flex-shrink: 0;
 }
 
-/* Scroll container inside media wrapper */
 .clover-viewer-media-wrapper > div {
   height: auto !important;
   max-height: none !important;
-}
-
-/* Individual thumbnail items */
-.media-thumbnail-lazyload {
-  outline-color: var(--primary-brand) !important;
-}
-
-/* Active/selected thumbnail */
-.media-thumbnail-lazyload[aria-current="true"],
-.media-thumbnail-lazyload[data-active="true"] {
-  outline: 3px solid var(--primary-brand) !important;
-  outline-offset: -3px;
 }
