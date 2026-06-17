@@ -93,3 +93,13 @@
 /* Remove the gap left by the hidden page-title block */
 .node--type-digital-object-collection .layout-main-wrapper { padding-top: 0; }
 .node--type-digital-object-collection .section { padding-top: 0 !important; margin-top: 0 !important; }
+
+/* ── Body-level whitespace removal on collection pages ─────────────────────── */
+/* 1. Page title in navbar (.page-header has my-4 Bootstrap spacing) */
+body.node--type-digital-object-collection .page-header { display: none; }
+
+/* 2. Highlighted/messages region */
+body.node--type-digital-object-collection .highlighted { display: none; }
+
+/* 3. main-wrapper-top (breadcrumbs + empty top sections) */
+body.node--type-digital-object-collection #main-wrapper-top { display: none; }
