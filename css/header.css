@@ -26,7 +26,9 @@
   color: var(--white);
   position: sticky;
   top: 0;
-  z-index: 1100;
+  z-index: 1400;
+  isolation: isolate;
+  will-change: transform;
   width: 100%;
   font-size: 0.8rem;
   font-family: sans-serif;
@@ -92,6 +94,12 @@
    2. Main navbar — maroon background
    Overrides Bootstrap's bg-white utility (!important needed)
    ============================================================ */
+/* Create a stacking context on the header so nav links can't escape above #tamu-top-bar */
+header#header {
+  position: relative;
+  z-index: 100;
+}
+
 header#header nav.navbar > .container-fluid,
 header#header nav.navbar > .container-lg,
 header#header nav.navbar > .container {

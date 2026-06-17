@@ -2,6 +2,7 @@
 
 .tamu-collection-hero {
   position: relative;
+  z-index: 0;
   width: 100%;
   min-height: 420px;
   overflow: hidden;
@@ -93,12 +94,6 @@
 /* Remove the gap left by the hidden page-title block */
 .node--type-digital-object-collection .layout-main-wrapper { padding-top: 0; }
 .node--type-digital-object-collection .section { padding-top: 0 !important; margin-top: 0 !important; }
-
-/* Ensure navbar stays above the full-width hero breakout */
-body.node--type-digital-object-collection #navbar-main {
-  position: relative;
-  z-index: 200;
-}
 
 /* ── Body-level whitespace removal on collection pages ─────────────────────── */
 /* 1. Page title in navbar (.page-header has my-4 Bootstrap spacing) */
