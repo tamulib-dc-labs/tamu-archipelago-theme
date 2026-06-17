@@ -1,0 +1,95 @@
+/* ── Collection hero ───────────────────────────────────────────────────── */
+
+.tamu-collection-hero {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  background-color: var(--primary-brand-dark);
+  display: flex;
+  align-items: flex-end;
+}
+
+.tamu-collection-hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tamu-collection-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* Gradient scrim so text is readable over any image */
+.tamu-collection-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 20%,
+    rgba(30, 0, 0, 0.55) 60%,
+    rgba(20, 0, 0, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.tamu-collection-hero__overlay {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 2.5rem 0 2rem;
+}
+
+.tamu-collection-hero__title {
+  color: #ffffff;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.tamu-collection-hero__description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  max-width: 680px;
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.tamu-collection-hero__description p {
+  margin: 0;
+}
+
+/* Fallback when no image */
+.tamu-collection-hero--no-image {
+  min-height: 200px;
+  background: linear-gradient(135deg, var(--primary-brand-dark) 0%, var(--primary-brand) 100%);
+}
+
+/* Metadata section below hero */
+.tamu-collection-meta {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* ── Full-width breakout for the hero on collection pages ──────────────────── */
+/* The DS layout puts the node inside a narrow content column; escape it. */
+.node--type-digital-object-collection .tamu-collection-hero {
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  width: 100vw;
+  max-width: 100vw;
+}
+
+/* Hide the page-title block on collection landing pages (title is in hero) */
+.node--type-digital-object-collection .block-page-title-block { display: none; }
+
+/* Remove the gap left by the hidden page-title block */
+.node--type-digital-object-collection .layout-main-wrapper { padding-top: 0; }
+.node--type-digital-object-collection .section { padding-top: 0 !important; margin-top: 0 !important; }

@@ -1,0 +1,38 @@
+{#
+/**
+ * Hero layout for digital_object_collection nodes.
+ * Full-width image banner with title overlay, description and metadata below.
+ */
+#}
+{% set has_image = content.field_descriptive_metadata|render|striptags|trim is not empty %}
+
+<article{{ attributes }}>
+
+  {# ── Hero ──────────────────────────────────────────────────────────────── #}
+  <div class="tamu-collection-hero{% if not has_image %} tamu-collection-hero--no-image{% endif %}">
+    {% if has_image %}
+      <div class="tamu-collection-hero__image">
+        {{ content.field_descriptive_metadata }}
+      </div>
+    {% endif %}
+    <div class="tamu-collection-hero__overlay">
+      <div class="container">
+        <h1 class="tamu-collection-hero__title">{{ label }}</h1>
+        {% if content.body|render|striptags|trim is not empty %}
+          <div class="tamu-collection-hero__description">{{ content.body }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {# ── Body / metadata ──────────────────────────────────────────────────── #}
+  <div class="container tamu-collection-meta">
+    <div class="row">
+      <div class="col-md-12">
+        {{ title_suffix }}
+        {{ content|without('field_descriptive_metadata', 'body', 'title') }}
+      </div>
+    </div>
+  </div>
+
+</article>

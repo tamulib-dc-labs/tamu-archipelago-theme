@@ -22,6 +22,12 @@ viewer:
     theme:
       css/viewer.css: { weight: 999 }
 
+collection-hero:
+  version: VERSION
+  css:
+    theme:
+      css/collection-hero.css: { weight: 999 }
+
 aggie-ux-cdn:
   version: '2.0.0'
   css:
