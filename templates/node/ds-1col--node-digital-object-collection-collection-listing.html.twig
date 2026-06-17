@@ -4,7 +4,7 @@
  * Builds the hero image URL directly from JSON to avoid double-rendering.
 #}
 {% set node_entity = node ?? drupal_entity('node', attributes['data-history-node-id']) %}
-{% set iiif_base = 'http://localhost:8183/iiif/2' %}
+{% set iiif_base = drupal_config('format_strawberryfield.iiif_settings', 'pub_server_url')|trim('/') %}
 {% set hero_src = '' %}
 {% set hero_alt = '' %}
 
