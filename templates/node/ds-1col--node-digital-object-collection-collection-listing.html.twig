@@ -12,7 +12,7 @@
   {% set raw_json = node_entity.field_descriptive_metadata.value %}
   {% if raw_json %}
     {% set metadata = raw_json|sbf_json_decode %}
-    {% set hero_alt = metadata.label ?? node_entity.label.value %}
+    {% set hero_alt = metadata.label ?? node_entity.label %}
     {% if metadata['as:image'] is defined %}
       {% set img_obj = metadata['as:image']|first %}
       {% if img_obj and img_obj.url is defined %}
@@ -41,7 +41,7 @@
     {% endif %}
     <div class="tamu-collection-hero__overlay">
       <div class="container">
-        <h1 class="tamu-collection-hero__title">{{ node_entity ? node_entity.label : node.label }}</h1>
+        <h1 class="tamu-collection-hero__title">{{ node_entity ? node_entity.label|raw : node.label|raw }}</h1>
         {% if content.body is defined %}
           {% set body_text = content.body|render|striptags|trim %}
           {% if body_text is not empty %}
