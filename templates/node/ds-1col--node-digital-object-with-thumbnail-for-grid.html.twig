@@ -1,12 +1,12 @@
 <div class="tamu-card">
   <a href="{{ path('entity.node.canonical', {'node': attributes['data-history-node-id']}) }}"
      class="tamu-card__cover-link"
-     aria-label="{{ content.node_title|render|striptags|trim }}"></a>
+     aria-label="{{ content.node_title|render|striptags|trim|raw }}"></a>
   <div class="tamu-card__image">
     {{ content.field_descriptive_metadata }}
   </div>
   <div class="tamu-card__body">
-    <h3 class="tamu-card__title" aria-hidden="true">{{ content.node_title|render|striptags|trim }}</h3>
+    <h3 class="tamu-card__title" aria-hidden="true">{{ content.node_title|render|striptags|trim|raw }}</h3>
     <p class="tamu-card__description"></p>
     <span class="tamu-card__link">View item</span>
   </div>
