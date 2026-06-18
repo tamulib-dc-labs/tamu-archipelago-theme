@@ -164,6 +164,43 @@ h2, h2 a {
   z-index: 1;
 }
 
+/* ── Collection membership view — masonry override ─────────────────────── */
+/* Override Bootstrap's flex row so CSS columns can take over */
+.view-id-collection_membership .views-view-grid .row {
+  display: block;
+  columns: 4;
+  column-gap: 1.5rem;
+}
+
+.view-id-collection_membership .views-view-grid .row > [class*="col"] {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 991px) {
+  .view-id-collection_membership .views-view-grid .row {
+    columns: 3;
+  }
+}
+
+@media (max-width: 767px) {
+  .view-id-collection_membership .views-view-grid .row {
+    columns: 2;
+  }
+}
+
+@media (max-width: 575px) {
+  .view-id-collection_membership .views-view-grid .row {
+    columns: 1;
+  }
+}
+
 /* ── Clover IIIF Slider / Swiper — Bootstrap conflict fix ──────────────── */
 /* Bootstrap's .card and flex resets override Swiper's horizontal layout.  */
 .swiper {
