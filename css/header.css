@@ -97,6 +97,8 @@
 /* Create a stacking context on the header so nav links can't escape above #tamu-top-bar */
 header#header {
   isolation: isolate;
+  position: relative;
+  z-index: 10;
 }
 
 header#header nav.navbar > .container-fluid,
