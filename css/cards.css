@@ -47,17 +47,15 @@ h2, h2 a {
 .tamu-card__image {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--primary-brand-dark);
 }
 
 .tamu-card__image img {
   width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  transition: transform 0.3s ease !important;
+  height: auto !important;
   display: block;
+  transition: transform 0.3s ease !important;
 }
 
 .tamu-card:hover .tamu-card__image img {
