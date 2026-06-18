@@ -12,16 +12,17 @@ h2, h2 a {
   margin-bottom: 1.5rem !important;
 }
 
-/* Grid container — place this around a group of cards */
+/* Grid container — CSS columns masonry */
 .tamu-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  columns: 3;
+  column-gap: 1.5rem;
   padding: 2rem 0;
 }
 
 /* Single card */
 .tamu-card {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -144,10 +145,15 @@ h2, h2 a {
   outline-offset: 3px;
 }
 
-/* Responsive: 1 column on mobile */
+/* Responsive: fewer columns on smaller screens */
+@media (max-width: 767px) {
+  .tamu-cards-grid {
+    columns: 2;
+  }
+}
 @media (max-width: 575px) {
   .tamu-cards-grid {
-    grid-template-columns: 1fr;
+    columns: 1;
   }
 }
 
