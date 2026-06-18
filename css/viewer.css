@@ -49,7 +49,51 @@
   color: var(--primary-brand-dark) !important;
 }
 
-/* Allow viewer container height to grow with tall thumbnails */
+/* ── Information panel tabs ──────────────────────────────────────────────── */
+.clover-viewer-information-panel [role="tablist"] {
+  background-color: #f5f5f5 !important;
+  border-bottom: 2px solid #ddd !important;
+}
+
+.clover-viewer-information-panel [role="tab"] {
+  color: var(--primary-brand-dark) !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  opacity: 0.7;
+}
+
+.clover-viewer-information-panel [role="tab"]:hover {
+  opacity: 1;
+  background-color: #ebebeb !important;
+}
+
+.clover-viewer-information-panel [role="tab"][data-state="active"],
+.clover-viewer-information-panel [role="tab"][aria-selected="true"] {
+  color: var(--primary-brand-dark) !important;
+  background-color: #ffffff !important;
+  border-bottom: 3px solid var(--primary-brand) !important;
+  opacity: 1;
+}
+
+/* ── Annotation items (content search highlights) ───────────────────────── */
+.clover-iiif-annotation-item {
+  background-color: #fff8e1 !important;
+  color: #333333 !important;
+  border-left: 3px solid var(--primary-brand) !important;
+  border-radius: 4px !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.clover-iiif-annotation-item mark,
+.clover-iiif-annotation-item em {
+  background-color: #ffe082 !important;
+  color: #333333 !important;
+  font-style: normal !important;
+}
+
+/* ── Allow viewer container height to grow with tall thumbnails */
 .strawberry-clover-item {
   height: auto !important;
   min-height: 400px;
