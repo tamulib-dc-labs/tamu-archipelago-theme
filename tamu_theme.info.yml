@@ -10,6 +10,7 @@ libraries:
   - tamu_theme/cards
   - tamu_theme/viewer
   - tamu_theme/collection-hero
+  - tamu_theme/footer
   - tamu_theme/aggie-ux-cdn
   - tamu_theme/google-fonts
 

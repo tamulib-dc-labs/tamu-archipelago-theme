@@ -298,7 +298,7 @@ h1.title {
   border-radius: 15px;
 }
 
-#block-tamu-theme-useraccountmenu a {
+header #block-tamu-theme-useraccountmenu a {
   color: white !important;
   font-size: 1rem !important;
 }

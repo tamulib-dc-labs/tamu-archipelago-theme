@@ -22,6 +22,12 @@ viewer:
     theme:
       css/viewer.css: { weight: 999 }
 
+footer:
+  version: VERSION
+  css:
+    theme:
+      css/footer.css: {}
+
 collection-hero:
   version: VERSION
   css:

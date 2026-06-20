@@ -1,0 +1,64 @@
+{% if page.footer_first or page.footer_second or page.footer_third or page.footer_fourth %}
+<div class="tamu-footer-blocks">
+  <div class="tamu-footer-blocks__inner">
+    {{ page.footer_first }}
+    {{ page.footer_second }}
+    {{ page.footer_third }}
+    {{ page.footer_fourth }}
+  </div>
+</div>
+{% endif %}
+
+<footer aria-label="giving and organization information" class="tamu-footer">
+  <div class="tamu-footer__inner">
+    <div class="tamu-footer__col tamu-footer__col--brand">
+      <a href="https://library.tamu.edu/about/giving/" class="tamu-footer__support-btn">Support the Libraries</a>
+      <img src="{{ base_path ~ directory }}/images/150-logo.svg" alt="Texas A&M 150th Anniversary Logo" class="tamu-footer__anniversary-logo">
+    </div>
+    <div class="tamu-footer__col tamu-footer__col--askus">
+      <div class="tamu-footer__askus-header">
+        <img alt="Ask Us" src="{{ base_path ~ directory }}/images/askus_white.png" width="80" height="76">
+        <h2 class="tamu-footer__askus-title">AskUs Anything<br>at any time.</h2>
+      </div>
+      <ul class="tamu-footer__links">
+        <li><a href="https://library.tamu.edu/askus/index"><i class="fas fa-arrow-circle-right" aria-hidden="true"></i>Chat with Us</a></li>
+        <li><a href="https://library.tamu.edu/about/phone"><i class="fas fa-arrow-circle-right" aria-hidden="true"></i>Call Us</a></li>
+        <li><a href="sms:9792561091"><i class="fas fa-arrow-circle-right" aria-hidden="true"></i>Text Us @ 979-256-1091</a></li>
+        <li><a href="https://library.tamu.edu/askus/contact-us.php"><i class="fas fa-arrow-circle-right" aria-hidden="true"></i>Email Us</a></li>
+      </ul>
+    </div>
+    <div class="tamu-footer__col tamu-footer__col--nav">
+      <ul class="tamu-footer__links tamu-footer__links--nav">
+        <li><a href="https://library.tamu.edu/about/">About the Libraries</a></li>
+        <li><a href="https://library.tamu.edu/about/phone">Quick Phone &amp; Mailing List</a></li>
+        <li><a href="https://library.tamu.edu/directory/">Directory</a></li>
+        <li><a href="https://library.tamu.edu/about/employment/">Employment</a></li>
+        <li>
+          <a href="https://library.tamu.edu/sitemap">Site Map</a>
+          <span class="tamu-footer__divider">|</span>
+          <a href="https://library.tamu.edu/search/site">Site Search</a>
+        </li>
+      </ul>
+      <h3 class="tamu-footer__follow-heading">Follow Us</h3>
+      <ul class="tamu-footer__social">
+        <li><a href="https://www.facebook.com/profile.php?id=61577442545402" aria-label="Follow us on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.instagram.com/tamulibraries" aria-label="Follow us on Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+        <li><a href="https://twitter.com/tamulibraries" aria-label="Follow us on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.youtube.com/user/tamulibrary" aria-label="Follow us on YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a></li>
+        <li><a href="https://linkedin.com/company/tamulibraries" aria-label="Follow us on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="tamu-footer-bar">
+  <div class="tamu-footer-bar__inner">
+    <a href="https://howdy.tamu.edu">howdy.tamu.edu</a>
+    <a href="https://library.tamu.edu/services/off-campus_access">Off-Campus Access</a>
+    <a href="https://www.tamu.edu">Texas A&amp;M University</a>
+    <a href="https://library.tamu.edu/site-policies">Site Policies</a>
+    <a href="https://www.tamu.edu/accessibility/">Accessibility</a>
+    <a href="https://library.tamu.edu/texas-crews">Texas CREWS</a>
+    <a href="https://library.tamu.edu/askus/contact-us.php">Comments</a>
+    <a href="https://library.tamu.edu/services-status">Services Status</a>
+  </div>
+</div>
