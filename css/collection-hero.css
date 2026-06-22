@@ -98,9 +98,14 @@
 /* ── Body-level whitespace removal on collection pages ─────────────────────── */
 /* 1. Page title in navbar (.page-header has my-4 Bootstrap spacing) */
 body.node--type-digital-object-collection:not(.path-frontpage) .page-header { display: none; }
+/* Keep visible for editors when tabs are present */
+body.node--type-digital-object-collection:not(.path-frontpage) .page-header:has(.tabs) { display: flex; }
 
 /* 2. Highlighted/messages region (exclude front page — it uses .highlighted for the hero search) */
 body.node--type-digital-object-collection:not(.path-frontpage) .highlighted { display: none; }
+/* But keep local task tabs (View/Edit/Delete) visible for editors */
+body.node--type-digital-object-collection:not(.path-frontpage) .highlighted:has(.tabs) { display: block; }
+body.node--type-digital-object-collection:not(.path-frontpage) .highlighted .tabs { display: block; }
 
 /* 3. main-wrapper-top (breadcrumbs + empty top sections) */
 body.node--type-digital-object-collection:not(.path-frontpage) #main-wrapper-top { display: none; }
