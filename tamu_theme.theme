@@ -40,6 +40,31 @@ function tamu_theme_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormSta
 }
 
 /**
+ * Add "Featured on front page" checkbox to Digital Object Collection edit form.
+ */
+function tamu_theme_form_node_digital_object_collection_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $node = $form_state->getFormObject()->getEntity();
+  $form['tamu_promote'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Featured on front page'),
+    '#description' => t('Check to display this collection in the Featured Collections section on the home page.'),
+    '#default_value' => (bool) $node->get('promote')->value,
+    '#weight' => -10,
+    '#group' => 'advanced',
+  ];
+  $form['actions']['submit']['#submit'][] = 'tamu_theme_promote_node_submit';
+}
+
+/**
+ * Submit handler to save the promote value.
+ */
+function tamu_theme_promote_node_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $node = $form_state->getFormObject()->getEntity();
+  $node->set('promote', (int) $form_state->getValue('tamu_promote'));
+  $node->save();
+}
+
+/**
  * Fix aria label for search.
  */
 function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
