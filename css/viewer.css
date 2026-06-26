@@ -93,18 +93,18 @@
   font-style: normal !important;
 }
 
-/* ── Allow viewer container height to grow with tall thumbnails */
+/* ── Viewer container — let JS-set inline height control the canvas size.
+   Do NOT override with height:auto here or OpenSeadragon's coordinate
+   system will be calculated against a different height than the rendered one,
+   causing annotation bounding boxes to appear offset. */
 .strawberry-clover-item {
-  height: auto !important;
   min-height: 400px;
 }
 
 .clover-viewer-media-wrapper {
-  height: auto !important;
   flex-shrink: 0;
 }
 
 .clover-viewer-media-wrapper > div {
-  height: auto !important;
   max-height: none !important;
 }
