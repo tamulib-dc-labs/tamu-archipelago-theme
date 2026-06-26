@@ -1,52 +1,110 @@
 /* ── Clover IIIF Viewer — TAMU theme overrides ─────────────────────────── */
-/*
- * Colors are controlled via the "Custom theme" JSON field in the Clover
- * formatter display settings (/admin/…/display-settings/…), not here.
- * This file only contains layout rules that customTheme tokens cannot set.
- *
- * Custom theme JSON (paste into the formatter GUI field):
- * {
- *   "colors": {
- *     "primary":       "#500000",
- *     "primaryMuted":  "#3d0000",
- *     "primaryAlt":    "#2b0000",
- *     "accent":        "#af8846",
- *     "accentMuted":   "#c9a96e",
- *     "accentAlt":     "#8b6914",
- *     "secondary":     "#ffffff",
- *     "secondaryMuted":"#f5f5f5",
- *     "secondaryAlt":  "#c1c8cd"
- *   }
- * }
- */
 
-/* ── Viewer container ────────────────────────────────────────────────────── */
-/* Do NOT set height:auto here — OSD reads the JS-set inline height to
-   initialize its coordinate system for annotation bounding boxes. */
-.strawberry-clover-item {
-  min-height: 400px;
+/* Navigation bar (prev / page count / next) */
+.clover-viewer-media-navigation {
+  background-color: var(--primary-brand-dark) !important;
+  color: #ffffff !important;
 }
 
-.clover-viewer-media-wrapper {
-  flex-shrink: 0;
+/* Page count text "1 / 498" */
+.clover-viewer-media-navigation span,
+.clover-viewer-media-navigation em {
+  color: #ffffff !important;
 }
 
-.clover-viewer-media-wrapper > div {
-  max-height: none;
+/* Prev / Next arrow buttons */
+.clover-viewer-media-navigation button {
+  background-color: transparent !important;
+  color: #ffffff !important;
 }
 
-/* ── Annotation search result items (not covered by customTheme tokens) ──── */
+.clover-viewer-media-navigation button:hover:not([disabled]) {
+  background-color: var(--primary-brand) !important;
+}
+
+.clover-viewer-media-navigation button[disabled] {
+  opacity: 0.4;
+}
+
+/* Content search button (sibling of nav bar) */
+.clover-viewer-media-search {
+  background-color: var(--primary-brand) !important;
+  color: #ffffff !important;
+}
+
+.clover-viewer-media-search:hover {
+  background-color: var(--primary-brand-dark) !important;
+}
+
+/* Thumbnail figcaptions — white background, brand text */
+.clover-viewer-media-wrapper figcaption {
+  background-color: #ffffff !important;
+  color: var(--primary-brand) !important;
+  font-size: 0.75rem;
+}
+
+.clover-viewer-media-wrapper button:hover figcaption,
+.clover-viewer-media-wrapper button:focus figcaption {
+  background-color: #ffffff !important;
+  color: var(--primary-brand-dark) !important;
+}
+
+/* ── Information panel tabs ──────────────────────────────────────────────── */
+.clover-viewer-information-panel [role="tablist"] {
+  background-color: #f5f5f5 !important;
+  border-bottom: 2px solid #ddd !important;
+}
+
+.clover-viewer-information-panel [role="tab"] {
+  color: var(--primary-brand-dark) !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  opacity: 0.7;
+}
+
+.clover-viewer-information-panel [role="tab"]:hover {
+  opacity: 1;
+  background-color: #ebebeb !important;
+}
+
+.clover-viewer-information-panel [role="tab"][data-state="active"],
+.clover-viewer-information-panel [role="tab"][aria-selected="true"] {
+  color: var(--primary-brand-dark) !important;
+  background-color: #ffffff !important;
+  border-bottom: 3px solid var(--primary-brand) !important;
+  opacity: 1;
+}
+
+/* ── Annotation items (content search highlights) ───────────────────────── */
 .clover-iiif-annotation-item {
-  background-color: #fff8e1;
-  color: #333333;
-  border-left: 3px solid #500000;
-  border-radius: 4px;
-  padding: 0.5rem 0.75rem;
+  background-color: #fff8e1 !important;
+  color: #333333 !important;
+  border-left: 3px solid var(--primary-brand) !important;
+  border-radius: 4px !important;
+  padding: 0.5rem 0.75rem !important;
 }
 
 .clover-iiif-annotation-item mark,
 .clover-iiif-annotation-item em {
-  background-color: #ffe082;
-  color: #333333;
-  font-style: normal;
+  background-color: #ffe082 !important;
+  color: #333333 !important;
+  font-style: normal !important;
+}
+
+/* ── Allow viewer container height to grow with tall thumbnails */
+.strawberry-clover-item {
+  height: auto !important;
+  min-height: 400px;
+}
+
+.clover-viewer-media-wrapper {
+  height: auto !important;
+  flex-shrink: 0;
+}
+
+.clover-viewer-media-wrapper > div {
+  height: auto !important;
+  max-height: none !important;
 }
