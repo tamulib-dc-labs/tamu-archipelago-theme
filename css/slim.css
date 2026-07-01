@@ -670,3 +670,24 @@ table.table--slim.empty, table.table--simple.empty {
   font-size: 1.25rem;
   display: inline-block;
 }
+
+/* ── Bootstrap nav-tabs: ensure readable text on maroon active/hover tabs ── */
+.nav-tabs .nav-link {
+  color: var(--primary-brand);
+}
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  color: var(--primary-brand-dark);
+}
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: #ffffff;
+  background-color: var(--primary-brand);
+  border-color: var(--primary-brand);
+}
+.nav-tabs .nav-link.active:hover,
+.nav-tabs .nav-link.active:focus {
+  color: #ffffff;
+  background-color: var(--primary-brand-dark);
+  border-color: var(--primary-brand-dark);
+}
