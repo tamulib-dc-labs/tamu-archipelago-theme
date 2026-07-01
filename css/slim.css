@@ -269,6 +269,12 @@ button:hover, button:active, button:focus {
   background: var(--primary-brand-light);
 }
 
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  background: transparent;
+  color: var(--primary-brand-dark);
+}
+
 input[type="submit"] {
   font-family: var(--work-sans);
   text-decoration: none;
