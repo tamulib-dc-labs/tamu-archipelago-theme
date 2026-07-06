@@ -1,0 +1,53 @@
+/* ── Promo band block ── */
+.tamu-promo-band {
+  background: #f7f4f0;
+  border-top: 3px solid var(--primary-brand);
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.tamu-promo-band__inner {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+.tamu-promo-band__heading {
+  font-size: 1.5rem;
+  color: var(--primary-brand);
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.tamu-promo-band__body {
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+}
+
+.tamu-promo-band__body p {
+  margin: 0;
+}
+
+.tamu-promo-band__cta {
+  display: inline-block;
+  font-family: var(--work-sans, sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary-brand);
+  border: 2px solid var(--primary-brand);
+  padding: 0.55rem 1.5rem;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tamu-promo-band__cta:hover,
+.tamu-promo-band__cta:focus {
+  background: var(--primary-brand);
+  color: #fff;
+  text-decoration: none;
+}

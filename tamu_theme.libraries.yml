@@ -28,6 +28,12 @@ footer:
     theme:
       css/footer.css: {}
 
+promo-hero:
+  version: VERSION
+  css:
+    theme:
+      css/promo-band.css: {}
+
 collection-hero:
   version: VERSION
   css:
