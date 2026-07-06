@@ -17,6 +17,8 @@
   width: 100%;
   height: auto;
   display: block;
+  max-height: 400px;
+  object-fit: cover;
 }
 
 /* ── Text side ── */
