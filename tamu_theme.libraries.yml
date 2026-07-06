@@ -28,7 +28,7 @@ footer:
     theme:
       css/footer.css: {}
 
-promo-hero:
+promo-band:
   version: VERSION
   css:
     theme:

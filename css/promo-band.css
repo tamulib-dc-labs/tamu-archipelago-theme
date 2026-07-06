@@ -1,16 +1,27 @@
 /* ── Promo band block ── */
 .tamu-promo-band {
-  background: #f7f4f0;
-  border-top: 3px solid var(--primary-brand);
-  padding: 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding: 2.5rem 0;
   margin-bottom: 2rem;
 }
 
-.tamu-promo-band__inner {
-  max-width: 780px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 0 1.5rem;
+/* ── Image side ── */
+.tamu-promo-band__image {
+  flex: 0 0 42%;
+  max-width: 42%;
+}
+
+.tamu-promo-band__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Text side ── */
+.tamu-promo-band__text {
+  flex: 1 1 0;
 }
 
 .tamu-promo-band__heading {
@@ -50,4 +61,17 @@
   background: var(--primary-brand);
   color: #fff;
   text-decoration: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .tamu-promo-band {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .tamu-promo-band__image {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
