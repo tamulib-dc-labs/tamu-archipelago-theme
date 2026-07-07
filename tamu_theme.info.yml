@@ -13,6 +13,7 @@ libraries:
   - tamu_theme/footer
   - tamu_theme/aggie-ux-cdn
   - tamu_theme/google-fonts
+  - tamu_theme/promo-band
 
 regions:
   top_header: 'Top header (branding)'
