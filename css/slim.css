@@ -697,3 +697,7 @@ table.table--slim.empty, table.table--simple.empty {
   background-color: var(--primary-brand-dark);
   border-color: var(--primary-brand-dark);
 }
+
+.tamu-footer__divider {
+  color: white;
+}
