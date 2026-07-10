@@ -269,6 +269,12 @@ button span {
   color: inherit;
 }
 
+button[data-testid="select-button"] svg {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  color: inherit !important;
+}
+
 button:hover, button:active, button:focus {
   background: var(--primary-brand-light);
 }
