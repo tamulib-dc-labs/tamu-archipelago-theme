@@ -55,6 +55,15 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
+.tamu-collection-hero__title span {
+  color: #ffffff;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  font-style: normal;
+}
+
 .tamu-collection-hero__description {
   color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
