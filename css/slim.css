@@ -244,6 +244,10 @@ span {
   line-height: 1.4;
 }
 
+dd p {
+  font-family: inherit;
+}
+
 button, input[type="button"], input[type="reset"] {
   display: block;
   font-family: var(--work-sans);
