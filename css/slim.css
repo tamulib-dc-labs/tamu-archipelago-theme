@@ -244,10 +244,6 @@ span {
   line-height: 1.4;
 }
 
-dd p {
-  font-family: inherit;
-}
-
 button, input[type="button"], input[type="reset"] {
   display: block;
   font-family: var(--work-sans);
@@ -267,16 +263,6 @@ button, input[type="button"], input[type="reset"] {
   border-radius: 0;
   line-height: inherit;
   cursor: pointer;
-}
-
-button span {
-  color: inherit;
-}
-
-button[data-testid="select-button"] svg {
-  fill: currentColor !important;
-  stroke: currentColor !important;
-  color: inherit !important;
 }
 
 button:hover, button:active, button:focus {
@@ -712,6 +698,74 @@ table.table--slim.empty, table.table--simple.empty {
   border-color: var(--primary-brand-dark);
 }
 
-.tamu-footer__divider {
-  color: white;
+/* ── About page body ── */
+.tamu-about-body {
+  max-width: 800px;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+
+.tamu-about-body__intro {
+  margin-bottom: 0.5rem;
+}
+
+.tamu-about-body__intro h2 {
+  font-family: var(--oswald);
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--primary-brand);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.tamu-about-body__intro p {
+  font-family: var(--open-sans);
+  font-size: 1.05rem;
+  color: var(--gray-800);
+  line-height: 1.75;
+  max-width: 68ch;
+}
+
+.tamu-about-body__divider {
+  border: none;
+  border-top: 3px solid var(--primary-brand);
+  margin: 2.5rem 0;
+  opacity: 1;
+}
+
+.tamu-about-body__section h2 {
+  font-family: var(--oswald);
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--primary-brand);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.tamu-about-body__section h3 {
+  font-family: var(--work-sans);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--gray-900);
+  margin-top: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+.tamu-about-body__section p {
+  font-family: var(--open-sans);
+  font-size: 1rem;
+  color: var(--gray-800);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.tamu-about-body__section a {
+  color: var(--primary-brand);
+  font-weight: 600;
+  font-family: var(--open-sans);
 }
