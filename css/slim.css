@@ -769,3 +769,18 @@ table.table--slim.empty, table.table--simple.empty {
   font-weight: 600;
   font-family: var(--open-sans);
 }
+
+.tamu-about-body__cite {
+  border-left: 4px solid var(--primary-brand);
+  margin: 1rem 0 1rem 0;
+  padding: 0.6rem 1.25rem;
+  background: var(--gray-100);
+}
+
+.tamu-about-body__cite p {
+  font-family: var(--georgia);
+  font-size: 0.95rem;
+  color: var(--gray-800);
+  line-height: 1.65;
+  margin-bottom: 0;
+}
