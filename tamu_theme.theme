@@ -81,6 +81,14 @@ function tamu_theme_form_node_digital_object_edit_form_alter(&$form, \Drupal\Cor
 }
 
 /**
+ * Add node ID to theme suggestions so node--TYPE--NID.html.twig templates work.
+ */
+function tamu_theme_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  $node = $variables['elements']['#node'];
+  $suggestions[] = 'node__' . $node->bundle() . '__' . $node->id();
+}
+
+/**
  * Attach promo-band CSS on the front page.
  */
 function tamu_theme_page_attachments(array &$attachments) {
