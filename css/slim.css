@@ -244,6 +244,10 @@ span {
   line-height: 1.4;
 }
 
+dd p {
+  font-family: inherit;
+}
+
 button, input[type="button"], input[type="reset"] {
   display: block;
   font-family: var(--work-sans);
@@ -263,6 +267,16 @@ button, input[type="button"], input[type="reset"] {
   border-radius: 0;
   line-height: inherit;
   cursor: pointer;
+}
+
+button span {
+  color: inherit;
+}
+
+button[data-testid="select-button"] svg {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  color: inherit !important;
 }
 
 button:hover, button:active, button:focus {
@@ -783,4 +797,8 @@ table.table--slim.empty, table.table--simple.empty {
   color: var(--gray-800);
   line-height: 1.65;
   margin-bottom: 0;
+}
+
+.tamu-footer__divider {
+  color: white;
 }
