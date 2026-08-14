@@ -14,6 +14,7 @@ libraries:
   - tamu_theme/aggie-ux-cdn
   - tamu_theme/google-fonts
   - tamu_theme/promo-band
+  - tamu_theme/nav
 
 regions:
   top_header: 'Top header (branding)'

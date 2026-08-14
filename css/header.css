@@ -183,6 +183,121 @@ header#header nav.navbar .navbar-toggler-icon {
   filter: invert(1) grayscale(100%) brightness(200%);
 }
 
+/* ============================================================
+   6. Mobile menu — toggle in the institutional bar, floating panel
+   Below lg the toggle moves into #tamu-top-bar and the menu floats over the
+   page. Two reasons: the toggler was the only in-flow content in #navbar-top,
+   so the navbar rendered as an empty white strip; and a plain collapse pushes
+   the hero down instead of overlaying it.
+   Everything here is scoped to the mobile breakpoint — at lg and above
+   navbar-expand-lg lays the menu out inline and none of it should apply.
+   ============================================================ */
+.tamu-top-bar__menu-toggle {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .tamu-top-bar__menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .tamu-top-bar__menu-toggle:focus-visible {
+    outline: 2px dotted #af8846;
+    outline-offset: 3px;
+  }
+
+  /* Three-bar icon: the span is the middle bar, pseudo elements the outer two. */
+  .tamu-top-bar__menu-icon,
+  .tamu-top-bar__menu-icon::before,
+  .tamu-top-bar__menu-icon::after {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--white);
+    transition: transform 0.2s ease, background-color 0.2s ease, top 0.2s ease;
+  }
+
+  .tamu-top-bar__menu-icon {
+    position: relative;
+  }
+
+  .tamu-top-bar__menu-icon::before,
+  .tamu-top-bar__menu-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .tamu-top-bar__menu-icon::before {
+    top: -7px;
+  }
+
+  .tamu-top-bar__menu-icon::after {
+    top: 7px;
+  }
+
+  /* Collapse the bars into an X while the panel is open. */
+  .tamu-top-bar__menu-toggle[aria-expanded='true'] .tamu-top-bar__menu-icon {
+    background-color: transparent;
+  }
+
+  .tamu-top-bar__menu-toggle[aria-expanded='true'] .tamu-top-bar__menu-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .tamu-top-bar__menu-toggle[aria-expanded='true'] .tamu-top-bar__menu-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  /* Superseded by the toggle above. */
+  header#header nav.navbar .navbar-toggler,
+  header#header nav.navbar .navbar-toggler-wrapper {
+    display: none !important;
+  }
+
+  /* Nothing in flow here any more — stop it reserving vertical space. */
+  header#header nav.navbar#navbar-top {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: 0;
+    border-bottom: 0;
+  }
+
+  /* Float over the page rather than pushing it down. --tamu-top-bar-h is
+     measured and published by js/nav.js; the fallback covers the 100px logo
+     plus the bar's own padding and border in case the script has not run. */
+  header#header .to-be-collapsed.collapse,
+  header#header .to-be-collapsed.collapsing {
+    position: fixed;
+    top: var(--tamu-top-bar-h, 114px);
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    background-color: var(--white);
+    border-bottom: 3px solid var(--primary-brand);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    padding: 0.5rem 1.5rem 1rem;
+  }
+
+  /* Only once open — .collapsing needs Bootstrap's own overflow:hidden for
+     the height transition to work. */
+  header#header .to-be-collapsed.collapse.show {
+    max-height: calc(100vh - var(--tamu-top-bar-h, 114px));
+    overflow-y: auto;
+  }
+}
+
 header#header nav.navbar .navbar-toggler {
   border-color: rgba(255, 255, 255, 0.5) !important;
 }
