@@ -108,3 +108,8 @@
   height: auto !important;
   max-height: none !important;
 }
+
+/* -- Make Clover Title be prominent to satisfy George */
+.clover-viewer-header .label {
+    font-size: 2rem;
+}
