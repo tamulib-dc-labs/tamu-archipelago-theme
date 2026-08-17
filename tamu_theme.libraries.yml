@@ -60,3 +60,5 @@ nav:
   version: VERSION
   js:
     js/nav.js: {}
+  dependencies:
+    - archipelago_subtheme_chiloe/global-styling

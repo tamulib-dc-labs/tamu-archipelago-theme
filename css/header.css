@@ -211,7 +211,7 @@ header#header nav.navbar .navbar-toggler-icon {
   }
 
   .tamu-top-bar__menu-toggle:focus-visible {
-    outline: 2px dotted #af8846;
+    outline: 2px dotted var(--gold);
     outline-offset: 3px;
   }
 
