@@ -94,6 +94,17 @@
           <a href="https://library.tamu.edu/mylibrary/" class="tamu-top-bar__link">My Library</a>
           <a href="https://library.tamu.edu/askus" class="tamu-top-bar__link">Help</a>
         </nav>
+
+        {# Mobile menu toggle. Lives here rather than in the navbar so that
+           #navbar-top has nothing left to render on small screens — it was
+           showing as an empty white strip. Targets the same .to-be-collapsed
+           panels as the theme's own toggler, which header.css hides below lg. #}
+        <button class="tamu-top-bar__menu-toggle" type="button"
+                data-bs-toggle="collapse" data-bs-target=".to-be-collapsed"
+                aria-controls="CollapsingNavbarTop CollapsingNavbar"
+                aria-expanded="false" aria-label="{{ 'Toggle navigation'|t }}">
+          <span class="tamu-top-bar__menu-icon" aria-hidden="true"></span>
+        </button>
       </div>
     </div>
     {# ============================================================ #}

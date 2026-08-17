@@ -60,7 +60,11 @@ bootstrap_barrio_navbar_color: navbar-dark
 bootstrap_barrio_navbar_background: ''
 bootstrap_barrio_navbar_top_class: ''
 bootstrap_barrio_navbar_class: ''
-bootstrap_barrio_navbar_offcanvas: offcanvas-collapse
+# Empty on purpose. Any non-empty value switches page.html.twig to the
+# offcanvas branch, which renders the toggler as position-absolute (leaving the
+# navbar an empty white band) and the menu as a height-capped offcanvas-top
+# panel that scrolls instead of showing every link.
+bootstrap_barrio_navbar_offcanvas: ''
 bootstrap_barrio_navbar_flyout: 0
 bootstrap_barrio_navbar_slide: 0
 bootstrap_barrio_tabs_style: ''
