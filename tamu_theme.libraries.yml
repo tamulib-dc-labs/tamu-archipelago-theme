@@ -53,3 +53,12 @@ google-fonts:
   css:
     base:
       'https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap': { type: external, minified: true }
+
+# Mobile menu: publishes the top bar height and dismisses the floating panel.
+# No weight key here — Drupal rejects positive JS weights outright.
+nav:
+  version: VERSION
+  js:
+    js/nav.js: {}
+  dependencies:
+    - archipelago_subtheme_chiloe/global-styling
