@@ -41,21 +41,34 @@
   justify-content: space-between;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 0.4rem 1.5rem;
+  padding: 0.55rem 1.5rem;
 }
 
 .tamu-top-bar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--white);
   text-decoration: none;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
 }
 
 .tamu-top-bar__brand svg {
-  height: 100px;
-  width: auto;
+  height: 18px;
+  width: 18px;
+  fill: currentColor;
+  color: var(--white);
+  transform: scaleX(-1);
+}
+
+.tamu-top-bar__wordmark {
+  color: var(--white) !important;
+  font-style: normal !important;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 .tamu-top-bar__brand:hover {
@@ -65,9 +78,9 @@
 
 .tamu-top-bar__nav {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
-  min-height: 100px;
+  min-height: 0;
   padding: 0 0.5rem;
 }
 
@@ -75,7 +88,9 @@
   color: var(--link-on-dark);
   text-decoration: none;
   white-space: nowrap;
-  font-size: 1rem;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: italic;
 }
 
 .tamu-top-bar__link:hover {
@@ -83,10 +98,142 @@
   text-decoration: underline;
 }
 
+/* Pill-style utility button (e.g. "Libraries") — mirrors library.tamu.edu's
+   outlined dropdown buttons in the institutional bar.
+   It's a real <button>, so slim.css's global `button { ... }` rule (block
+   display, uppercase, maroon fill, 2px border, margin-bottom, etc.) applies
+   too and has to be reset explicitly rather than just overridden piecemeal. */
+button.tamu-top-bar__button.dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: auto;
+  margin-bottom: 0;
+  text-align: left;
+  text-transform: none;
+  line-height: normal;
+  position: relative;
+  background: var(--white);
+  color: var(--primary-brand);
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--primary-brand);
+  border-radius: 0;
+  padding: 0.25rem 0.85rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.tamu-top-bar__button svg {
+  height: 16px;
+  width: 16px;
+  fill: currentColor;
+}
+
+.tamu-top-bar__button:hover {
+  color: var(--white);
+  background-color: var(--primary-brand);
+  border-color: var(--primary-brand);
+  text-decoration: none;
+}
+
+/* ============================================================
+   Libraries dropdown — maroon links on light-gray panel,
+   matching library.tamu.edu's utility-nav persona menu.
+   ============================================================ */
+.tamu-top-bar__dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  margin: 0 !important;
+}
+
+#tamu-top-bar .dropdown-menu {
+  background-color: var(--gray-100, #f6f6f6) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  min-width: 260px;
+}
+
+#tamu-top-bar .dropdown-menu .dropdown-item {
+  color: var(--primary-brand) !important;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  white-space: normal;
+  background-color: transparent !important;
+}
+
+#tamu-top-bar .dropdown-menu .dropdown-item:hover,
+#tamu-top-bar .dropdown-menu .dropdown-item:focus {
+  background-color: var(--white) !important;
+  color: var(--primary-brand-dark) !important;
+  text-decoration: underline;
+}
+
 /* Collapse nav links on small screens */
 @media (max-width: 575px) {
   .tamu-top-bar__nav {
     display: none;
+  }
+}
+
+/* ============================================================
+   1b. Site identity band — white strip between the institutional
+   bar and the primary nav: site title + TAMU logo lockup.
+   ============================================================ */
+.tamu-site-identity {
+  background-color: var(--white, #ffffff);
+  border-bottom: 1px solid var(--gray-400, #a7a7a7);
+}
+
+.tamu-site-identity__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+}
+
+.tamu-site-identity__title a {
+  color: var(--black, #000000);
+  font-family: var(--work-sans, "Work Sans", Arial, sans-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.75rem;
+  text-decoration: none;
+}
+
+.tamu-site-identity__title a:hover {
+  color: var(--primary-brand);
+  text-decoration: none;
+}
+
+.tamu-site-identity__logo img {
+  display: block;
+  height: 48px;
+  width: auto;
+}
+
+@media (max-width: 575px) {
+  .tamu-site-identity__inner {
+    padding: 1rem;
+  }
+
+  .tamu-site-identity__title a {
+    font-size: 1.25rem;
+  }
+
+  .tamu-site-identity__logo img {
+    height: 36px;
   }
 }
 
@@ -112,18 +259,18 @@ header#header nav.navbar > .container {
 
 header#header nav.navbar,
 header#header nav.navbar.bg-white {
-  background-color: var(--primary-brand, #500000) !important;
-  border-bottom: 3px solid var(--gray-400, #a7a7a7);
+  background-color: var(--gray-100, #f6f6f6) !important;
+  border-bottom: 1px solid var(--gray-400, #a7a7a7);
 }
 
 header#header nav#navbar-main {
-  background-color: var(--white, #ffffff) !important;
+  background-color: var(--gray-100, #f6f6f6) !important;
 }
 
 /* Top utility bar (secondary_menu / top_header region) */
 header#header nav.navbar:first-of-type {
-  background-color: var(--white, #ffffff) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--gray-100, #f6f6f6) !important;
+  border-bottom: 1px solid var(--gray-400, #a7a7a7);
 }
 
 /* ============================================================
@@ -134,7 +281,7 @@ header#header .navbar-brand span,
 header#header a.navbar-brand,
 header#header a.navbar-brand:hover,
 header#header a.navbar-brand:focus {
-  color: var(--white) !important;
+  color: var(--black, #000000) !important;
 }
 
 /* Tighten the logo area vertical padding */
@@ -156,31 +303,31 @@ header#header nav.navbar .nav-link {
 header#header nav.navbar .nav-link:hover,
 header#header nav.navbar .nav-link:focus,
 header#header nav.navbar .nav-link.active {
-  color: var(--black) !important;
+  color: var(--primary-brand) !important;
   text-decoration: underline;
 }
 
 /* Dropdown menus */
 header#header nav.navbar .dropdown-menu {
-  background-color: var(--primary-brand);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--white);
+  border: 1px solid var(--gray-400, #a7a7a7);
 }
 
 header#header nav.navbar .dropdown-item {
-  color: var(--link-on-dark);
+  color: var(--black);
 }
 
 header#header nav.navbar .dropdown-item:hover,
 header#header nav.navbar .dropdown-item:focus {
-  background-color: var(--primary-brand-dark);
-  color: var(--white);
+  background-color: var(--gray-100, #f6f6f6);
+  color: var(--primary-brand);
 }
 
 /* ============================================================
-   Mobile toggler — white icon on dark background
+   Mobile toggler — dark icon on light background
    ============================================================ */
 header#header nav.navbar .navbar-toggler-icon {
-  filter: invert(1) grayscale(100%) brightness(200%);
+  filter: none;
 }
 
 /* ============================================================
@@ -280,32 +427,32 @@ header#header nav.navbar .navbar-toggler-icon {
   header#header .to-be-collapsed.collapse,
   header#header .to-be-collapsed.collapsing {
     position: fixed;
-    top: var(--tamu-top-bar-h, 114px);
+    top: var(--tamu-top-bar-h, 52px);
     left: 0;
     right: 0;
     z-index: 1050;
-    background-color: var(--white);
+    background-color: var(--gray-100, #f6f6f6);
     border-bottom: 3px solid var(--primary-brand);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     padding: 0.5rem 1.5rem 1rem;
   }
 
   /* Only once open — .collapsing needs Bootstrap's own overflow:hidden for
      the height transition to work. */
   header#header .to-be-collapsed.collapse.show {
-    max-height: calc(100vh - var(--tamu-top-bar-h, 114px));
+    max-height: calc(100vh - var(--tamu-top-bar-h, 52px));
     overflow-y: auto;
   }
 }
 
 header#header nav.navbar .navbar-toggler {
-  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: var(--gray-400, #a7a7a7) !important;
 }
 
 /* Collapsed mobile menu background */
 header#header .bg-white.to-be-collapsed,
 header#header div.bg-white.pb-2 {
-  background-color: var(--primary-brand) !important;
+  background-color: var(--gray-100, #f6f6f6) !important;
 }
 
 /* ============================================================
