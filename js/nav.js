@@ -30,9 +30,14 @@
     if (!bar) {
       return;
     }
+    var height = bar.offsetHeight;
+    var identity = document.querySelector('.tamu-site-identity');
+    if (identity) {
+      height += identity.offsetHeight;
+    }
     document.documentElement.style.setProperty(
       '--tamu-top-bar-h',
-      bar.offsetHeight + 'px'
+      height + 'px'
     );
   }
 

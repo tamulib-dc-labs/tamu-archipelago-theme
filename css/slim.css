@@ -802,3 +802,7 @@ table.table--slim.empty, table.table--simple.empty {
 .tamu-footer__divider {
   color: white;
 }
+
+div [data-testid="scroll-item-body"] span b {
+  color: #500000;
+}
