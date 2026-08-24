@@ -134,4 +134,38 @@
   // time — waiting for the window 'load' event (after behaviors attach)
   // avoids a race where that rename clobbers our change.
   window.addEventListener('load', setHeroSearchPlaceholder);
+
+  /* ---------------------------------------------------------------
+     Hero background photo
+     Picked client-side: this site has Internal Page Cache and Dynamic Page Cache enabled,
+     both of which cache the response before hook_preprocess_html() (or any other theme hook)
+     runs, so a PHP-side random pick just gets baked into the cached
+     page and stops varying after the first hit. Doing it in JS sidesteps
+     that entirely — every visitor's browser makes its own pick.
+     Add/remove IIIF image URLs here; no database or config change needed.
+     --------------------------------------------------------------- */
+  var HERO_IMAGES = [
+    'https://digitalcollections.library.tamu.edu/iiif/2/533%2Fimage-dragon-map-12a3dc73-a180-40fb-acf3-cad43569a34d.jpg/full/1400,/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/6e3%2Fimage-1654665-23030282-e311-42f3-b35b-d166a7dc11d4.jpg/full/1400,/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/def%2Fimage-08382-f8bd5b91-8eae-4298-a224-b6d5bf7c37ae.jpg/full/1400,/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/e01%2Fimage-stripling-f12943c6-0fc4-40b0-8596-d93ee430970f.jpg/full/1400,/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/75e%2Fimage-poncho-70553485-7fc8-4449-a208-51e5cb5a53b5.jpg/2,49,2363,1191/full/0/default.jpg'
+  ];
+
+  function setRandomHeroImage() {
+    // The <body class="path-frontpage ..."> tag has already been parsed by
+    // the time this (mid-body) script runs, even though .tamu-hero-photo
+    // itself, further down the page, has not — check the body class rather
+    // than querying for the element.
+    if (!document.body.classList.contains('path-frontpage')) {
+      return;
+    }
+    var image = HERO_IMAGES[Math.floor(Math.random() * HERO_IMAGES.length)];
+    document.documentElement.style.setProperty(
+      '--tamu-hero-image',
+      'url("' + image + '")'
+    );
+  }
+
+  setRandomHeroImage();
 })();

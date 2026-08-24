@@ -484,7 +484,10 @@ body.path-frontpage .highlighted .section {
 }
 
 body.path-frontpage .highlighted .tamu-hero-photo {
-  background-image: url('https://api.library.tamu.edu/iiif/2/a4b6714b-7e05-3146-a174-b047bd396f48/full/full/0/default.jpg');
+  /* --tamu-hero-image is set per-request by tamu_theme_page_attachments(),
+     picked at random from tamu_theme_hero_images() in tamu_theme.theme.
+     The url() here is just a fallback if that inline <style> is missing. */
+  background-image: var(--tamu-hero-image, url('https://digitalcollections.library.tamu.edu/iiif/2/533%2Fimage-dragon-map-12a3dc73-a180-40fb-acf3-cad43569a34d.jpg/full/1400,/0/default.jpg'));
   background-size: cover;
   background-position: center;
   min-height: 440px;
@@ -855,4 +858,8 @@ body.scrolled .back-to-top {
   outline: 2px dotted var(--gold);
   outline-offset: 2px;
   box-shadow: none;
+}
+
+.highlighted {
+  padding-top: 0rem !important;
 }
