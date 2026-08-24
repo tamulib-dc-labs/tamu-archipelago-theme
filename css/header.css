@@ -39,9 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0.55rem 1.5rem;
+  padding: 0.35rem 1.5rem;
 }
 
 .tamu-top-bar__brand {
@@ -220,9 +218,7 @@ button.tamu-top-bar__button.dropdown-toggle {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 1.25rem 1.5rem;
+  padding: 0.65rem 1.5rem;
 }
 
 .tamu-site-identity__title a {
@@ -230,7 +226,7 @@ button.tamu-top-bar__button.dropdown-toggle {
   font-family: var(--work-sans, "Work Sans", Arial, sans-serif);
   font-weight: 700;
   font-style: italic;
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   text-decoration: none;
 }
 
@@ -241,21 +237,21 @@ button.tamu-top-bar__button.dropdown-toggle {
 
 .tamu-site-identity__logo img {
   display: block;
-  height: 48px;
+  height: 36px;
   width: auto;
 }
 
 @media (max-width: 575px) {
   .tamu-site-identity__inner {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
 
   .tamu-site-identity__title a {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 
   .tamu-site-identity__logo img {
-    height: 36px;
+    height: 28px;
   }
 }
 
@@ -274,14 +270,22 @@ header#header nav.navbar#navbar-top {
   min-height: 0;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#navbar-top .navbar-nav {
+  margin-left: -16px;
 }
 
 header#header nav.navbar > .container-fluid,
 header#header nav.navbar > .container-lg,
 header#header nav.navbar > .container {
-  max-width: 1320px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   width: 100%;
 }
 
@@ -649,9 +653,9 @@ h1.title {
 
 .hero-gradient {
   background: linear-gradient(
-          135deg,
-          rgba(80, 0, 0, 0.85),
-          rgba(115, 47, 47, 0.85)   /* var(--primary-brand-light) with opacity */
+    135deg,
+    rgba(80, 0, 0, 0.85),
+    rgba(115, 47, 47, 0.85)   /* var(--primary-brand-light) with opacity */
   );
   border-radius: 15px;
 }
