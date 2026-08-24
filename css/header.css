@@ -323,6 +323,20 @@ header#header nav.navbar .dropdown-item:focus {
   color: var(--primary-brand);
 }
 
+/* archipelago_subtheme_chiloe's `.navbar-dark ul.dropdown-menu .dropdown-item a`
+   rule forces white text — invisible on our light dropdown panel. The primary
+   menu nests <a class="nav-link"> inside <li class="dropdown-item">, so it
+   needs its own override distinct from the .dropdown-item-as-anchor rule above. */
+header#header nav.navbar .dropdown-menu .dropdown-item a {
+  color: var(--black) !important;
+}
+
+header#header nav.navbar .dropdown-menu .dropdown-item:hover a,
+header#header nav.navbar .dropdown-menu .dropdown-item a:hover,
+header#header nav.navbar .dropdown-menu .dropdown-item a:focus {
+  color: var(--primary-brand) !important;
+}
+
 /* ============================================================
    Mobile toggler — dark icon on light background
    ============================================================ */
