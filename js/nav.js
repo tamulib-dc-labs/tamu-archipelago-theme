@@ -146,7 +146,7 @@
      Add/remove IIIF image URLs here; no database or config change needed.
      --------------------------------------------------------------- */
   var HERO_IMAGES = [
-    'https://digitalcollections.library.tamu.edu/iiif/2/533%2Fimage-dragon-map-12a3dc73-a180-40fb-acf3-cad43569a34d.jpg/full/1400,/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/533%2Fimage-dragon-map-12a3dc73-a180-40fb-acf3-cad43569a34d.jpg/45,38,1713,1316/full/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/6e3%2Fimage-1654665-23030282-e311-42f3-b35b-d166a7dc11d4.jpg/full/1400,/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/def%2Fimage-08382-f8bd5b91-8eae-4298-a224-b6d5bf7c37ae.jpg/full/1400,/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/e01%2Fimage-stripling-f12943c6-0fc4-40b0-8596-d93ee430970f.jpg/full/1400,/0/default.jpg',
