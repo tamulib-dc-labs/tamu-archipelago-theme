@@ -150,9 +150,9 @@
     'https://digitalcollections.library.tamu.edu/iiif/2/6e3%2Fimage-1654665-23030282-e311-42f3-b35b-d166a7dc11d4.jpg/full/1400,/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/def%2Fimage-08382-f8bd5b91-8eae-4298-a224-b6d5bf7c37ae.jpg/full/1400,/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/e01%2Fimage-stripling-f12943c6-0fc4-40b0-8596-d93ee430970f.jpg/full/1400,/0/default.jpg',
-    'https://digitalcollections.library.tamu.edu/iiif/2/75e%2Fimage-poncho-70553485-7fc8-4449-a208-51e5cb5a53b5.jpg/2,49,2363,1191/full/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/75e%2Fimage-poncho-70553485-7fc8-4449-a208-51e5cb5a53b5.jpg/57,56,2262,950/full/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/d8c%2Fimage-g5672-m4-1624-o77-86270f92-2fe7-4c25-a24a-5b2dddac02b1.jp2/485,808,7842,5362/1400,/0/default.jpg',
-    'https://digitalcollections.library.tamu.edu/iiif/2/34d%2Fimage-utf-8-cmlrsc00181-eacdb2b9-d3a7-4ece-85b8-4e01c1a27170.jp2/full/1400,/0/default.jpg'
+    'https://digitalcollections.library.tamu.edu/iiif/2/34d%2Fimage-utf-8-cmlrsc00181-eacdb2b9-d3a7-4ece-85b8-4e01c1a27170.jp2/0,62,7039,4055/1400,/0/default.jpg'
   ];
   function setRandomHeroImage() {
     // The <body class="path-frontpage ..."> tag has already been parsed by
