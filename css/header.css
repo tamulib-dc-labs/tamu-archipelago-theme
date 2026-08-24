@@ -543,8 +543,8 @@ body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-co
   position: relative;
   z-index: 1;
   background: var(--gray-100, #f6f6f6);
-  width: 60%;
-  max-width: 600px;
+  width: 70%;
+  max-width: 1000px;
   margin: -70px auto 0;
   padding: 2rem 2rem 1.5rem;
 }
