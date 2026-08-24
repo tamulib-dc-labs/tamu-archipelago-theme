@@ -89,15 +89,6 @@ function tamu_theme_theme_suggestions_node_alter(array &$suggestions, array $var
 }
 
 /**
- * Attach promo-band CSS on the front page.
- */
-function tamu_theme_page_attachments(array &$attachments) {
-  if (\Drupal::service('path.matcher')->isFrontPage()) {
-    $attachments['#attached']['library'][] = 'tamu_theme/promo-band';
-  }
-}
-
-/**
  * Fix aria label for search.
  */
 function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
