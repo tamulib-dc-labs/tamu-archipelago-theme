@@ -270,6 +270,12 @@ header#header {
   z-index: 10;
 }
 
+header#header nav.navbar#navbar-top {
+  min-height: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 header#header nav.navbar > .container-fluid,
 header#header nav.navbar > .container-lg,
 header#header nav.navbar > .container {
@@ -498,11 +504,18 @@ header#header div.bg-white.pb-2 {
    ============================================================ */
 body.path-frontpage .highlighted {
   padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
 }
 
 body.path-frontpage .highlighted .section {
   display: block;
   padding: 0;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 body.path-frontpage .highlighted .tamu-hero-photo {
@@ -526,7 +539,8 @@ body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-co
   position: relative;
   z-index: 1;
   background: var(--gray-100, #f6f6f6);
-  width: 80%;
+  width: 60%;
+  max-width: 600px;
   margin: -70px auto 0;
   padding: 2rem 2rem 1.5rem;
 }
@@ -635,9 +649,9 @@ h1.title {
 
 .hero-gradient {
   background: linear-gradient(
-    135deg,
-    rgba(80, 0, 0, 0.85),
-    rgba(115, 47, 47, 0.85)   /* var(--primary-brand-light) with opacity */
+          135deg,
+          rgba(80, 0, 0, 0.85),
+          rgba(115, 47, 47, 0.85)   /* var(--primary-brand-light) with opacity */
   );
   border-radius: 15px;
 }
@@ -887,4 +901,13 @@ body.scrolled .back-to-top {
 
 .highlighted {
   padding-top: 0rem !important;
+}
+
+.nav-link {
+  padding-top: 12px !important;
+  padding-bottom: 0px !important;
+}
+
+.js input.form-autocomplete {
+  padding-top: 6px !important;
 }
