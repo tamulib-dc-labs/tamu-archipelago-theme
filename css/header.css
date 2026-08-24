@@ -471,70 +471,95 @@ header#header div.bg-white.pb-2 {
 
 /* ============================================================
    Hero section (highlighted region, front page only)
+   Full-bleed photo with a white search card overlapping its
+   bottom-left corner — mirrors library.tamu.edu's homepage hero.
    ============================================================ */
 body.path-frontpage .highlighted {
-  position: relative;
-  background-image: url('https://api.library.tamu.edu/iiif/2/a4b6714b-7e05-3146-a174-b047bd396f48/full/full/0/default.jpg');
-  background-size: cover;
-  background-position: center;
-  min-height: 400px;
-  display: flex;
-  align-items: center;
   padding: 0;
 }
 
-/* Dark overlay */
-body.path-frontpage .highlighted::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+body.path-frontpage .highlighted .section {
+  display: block;
+  padding: 0;
 }
 
-/* Keep content above overlay */
-body.path-frontpage .highlighted > * {
+body.path-frontpage .highlighted .tamu-hero-photo {
+  background-image: url('https://api.library.tamu.edu/iiif/2/a4b6714b-7e05-3146-a174-b047bd396f48/full/full/0/default.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 440px;
+}
+
+/* Search card — pulled up over the photo with a negative top margin
+   rather than absolute positioning, so it stays two independent
+   Drupal blocks that don't need coordinated offsets. */
+body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1 {
+  display: block !important;
   position: relative;
   z-index: 1;
-  width: 100%;
+  background: var(--gray-100, #f6f6f6);
+  width: 80%;
+  margin: -70px auto 0;
+  padding: 2rem 2rem 1.5rem;
 }
 
-/* Center text and search content */
-body.path-frontpage .highlighted .section {
+body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1::before {
+  content: 'Search';
+  display: block;
+  font-family: var(--oswald, "Oswald", Arial, sans-serif);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1.75rem;
+  color: var(--primary-brand);
+  margin-bottom: 1rem;
+}
+
+body.path-frontpage .highlighted .form-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: var(--white);
-  gap: 1.5rem;
-  padding: 3rem 1.5rem;
+  align-items: stretch;
+  border: 3px solid var(--primary-brand, #500000);
 }
 
-body.path-frontpage .highlighted .section h1,
-body.path-frontpage .highlighted .section h2,
-body.path-frontpage .highlighted .section p {
-  color: var(--white);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-  margin: 0;
+/* The <input size="100"> attribute gives the input a huge intrinsic width;
+   the actual flex item is this wrapper div, not the input, so min-width
+   has to be reset here or the row overflows the card regardless of the
+   input's own CSS width. */
+body.path-frontpage .highlighted .form-row .js-form-item-search-api-fulltext {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
 }
 
 /* Search bar inside hero */
 body.path-frontpage .highlighted input[type="text"],
 body.path-frontpage .highlighted input[type="search"] {
-  max-width: 600px;
   width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
   padding: 0.75rem 1rem;
-  border-radius: 4px;
   border: none;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 0;
+  font-size: 1rem;
+  box-shadow: none;
 }
 
-body.path-frontpage .highlighted .form-item,
-body.path-frontpage .highlighted form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+body.path-frontpage .highlighted .form-row .form-actions {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+body.path-frontpage .highlighted input[type="submit"] {
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 767.98px) {
+  body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1 {
+    width: calc(100% - 2rem);
+    margin: -50px 1rem 0;
+  }
 }
 
 h1.title {

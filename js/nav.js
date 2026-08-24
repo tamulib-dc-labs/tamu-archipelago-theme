@@ -108,4 +108,30 @@
       toggle.focus();
     }
   });
+
+  /* ---------------------------------------------------------------
+     Hero search placeholder
+     The hero search box and the header/modal search box are two block
+     placements of the *same* Views exposed-filter display, so Drupal
+     builds a single form render array and reuses it for both — a
+     hook_form_alter placeholder would show up in both inputs. Setting
+     it here, scoped to the hero block's own DOM node, only touches the
+     one input.
+     --------------------------------------------------------------- */
+  function setHeroSearchPlaceholder() {
+    var heroSearchInput = document.querySelector(
+      '.block-views-exposed-filter-blocksolr-search-content-page-1 input[type="text"]'
+    );
+    if (heroSearchInput && !heroSearchInput.placeholder) {
+      heroSearchInput.placeholder = 'Search for images, books, videos, etc.';
+    }
+  }
+
+  // This script runs mid-body, before the hero markup further down the
+  // page has been parsed, so the query needs the DOM to finish first. Core's
+  // autocomplete behavior also renames this input's id (it collides with the
+  // header search box's) once it attaches, which happens around the same
+  // time — waiting for the window 'load' event (after behaviors attach)
+  // avoids a race where that rename clobbers our change.
+  window.addEventListener('load', setHeroSearchPlaceholder);
 })();
