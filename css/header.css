@@ -177,10 +177,32 @@ button.tamu-top-bar__button.dropdown-toggle {
   text-decoration: underline;
 }
 
-/* Collapse nav links on small screens */
-@media (max-width: 575px) {
+/* Below lg, the brand + 4 links + 2 pill buttons + hamburger no longer fit
+   on one line (nothing here shrinks or wraps on its own), so the row
+   overflows and squeezes — or fully hides — the hamburger off the right
+   edge, making the whole mobile nav look broken/unreachable. Rather than
+   hiding the utility links (losing Help/Hours/My Library/Libraries/
+   Information For on mobile entirely), drop them to their own line below
+   the brand + hamburger row. */
+@media (max-width: 991.98px) {
+  .tamu-top-bar__inner {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .tamu-top-bar__brand {
+    order: 1;
+  }
+
+  .tamu-top-bar__menu-toggle {
+    order: 2;
+  }
+
   .tamu-top-bar__nav {
-    display: none;
+    order: 3;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
   }
 }
 
@@ -484,10 +506,13 @@ body.path-frontpage .highlighted .section {
 }
 
 body.path-frontpage .highlighted .tamu-hero-photo {
-  /* --tamu-hero-image is set per-request by tamu_theme_page_attachments(),
-     picked at random from tamu_theme_hero_images() in tamu_theme.theme.
-     The url() here is just a fallback if that inline <style> is missing. */
-  background-image: var(--tamu-hero-image, url('https://digitalcollections.library.tamu.edu/iiif/2/533%2Fimage-dragon-map-12a3dc73-a180-40fb-acf3-cad43569a34d.jpg/full/1400,/0/default.jpg'));
+  /* --tamu-hero-image is set client-side by setRandomHeroImage() in nav.js,
+     picked at random from HERO_IMAGES there. Deliberately no fallback url()
+     here: nav.js is an external file and can finish downloading well after
+     this element has already painted, so a fallback image would flash
+     briefly before JS swaps it for the random pick. No image at all (until
+     JS runs, or permanently if JS is disabled) reads better than that jump. */
+  background-image: var(--tamu-hero-image);
   background-size: cover;
   background-position: center;
   min-height: 440px;

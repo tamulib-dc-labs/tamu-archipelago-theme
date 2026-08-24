@@ -137,8 +137,9 @@
 
   /* ---------------------------------------------------------------
      Hero background photo
-     Picked client-side: this site has Internal Page Cache and Dynamic Page Cache enabled,
-     both of which cache the response before hook_preprocess_html() (or any other theme hook)
+     Picked client-side, not server-side: this site has Internal Page
+     Cache and Dynamic Page Cache enabled, both of which cache the
+     response before hook_preprocess_html() (or any other theme hook)
      runs, so a PHP-side random pick just gets baked into the cached
      page and stops varying after the first hit. Doing it in JS sidesteps
      that entirely — every visitor's browser makes its own pick.
@@ -151,7 +152,6 @@
     'https://digitalcollections.library.tamu.edu/iiif/2/e01%2Fimage-stripling-f12943c6-0fc4-40b0-8596-d93ee430970f.jpg/full/1400,/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/75e%2Fimage-poncho-70553485-7fc8-4449-a208-51e5cb5a53b5.jpg/2,49,2363,1191/full/0/default.jpg'
   ];
-
   function setRandomHeroImage() {
     // The <body class="path-frontpage ..."> tag has already been parsed by
     // the time this (mid-body) script runs, even though .tamu-hero-photo
