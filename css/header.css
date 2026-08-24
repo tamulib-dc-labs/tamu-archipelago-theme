@@ -506,10 +506,25 @@ body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-co
 body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1::before {
   content: 'Search';
   display: block;
-  font-family: var(--oswald, "Oswald", Arial, sans-serif);
-  font-weight: 700;
+  font-family: Oswald, Arial, sans-serif;
+  font-feature-settings: normal;
+  font-kerning: auto;
+  font-language-override: normal;
+  font-optical-sizing: auto;
+  font-size: 44px;
+  font-size-adjust: none;
+  font-stretch: 100%;
+  font-style: normal;
+  font-variant-alternates: normal;
+  font-variant-caps: normal;
+  font-variant-east-asian: normal;
+  font-variant-emoji: normal;
+  font-variant-ligatures: normal;
+  font-variant-numeric: normal;
+  font-variant-position: normal;
+  font-variation-settings: normal;
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: 1.75rem;
   color: var(--primary-brand);
   margin-bottom: 1rem;
 }
