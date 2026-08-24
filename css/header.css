@@ -920,3 +920,8 @@ input#edit-submit-solr-search-content {
   height: 100%;
   margin: 0px;
 }
+
+input#edit-search-api-fulltext {
+  border-color: var(--primary-brand-dark);
+  border-width: 0.75px;
+}
