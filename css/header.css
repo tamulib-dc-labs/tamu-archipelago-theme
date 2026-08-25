@@ -39,9 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0.55rem 1.5rem;
+  padding: 0.35rem 1.5rem;
 }
 
 .tamu-top-bar__brand {
@@ -177,10 +175,32 @@ button.tamu-top-bar__button.dropdown-toggle {
   text-decoration: underline;
 }
 
-/* Collapse nav links on small screens */
-@media (max-width: 575px) {
+/* Below lg, the brand + 4 links + 2 pill buttons + hamburger no longer fit
+   on one line (nothing here shrinks or wraps on its own), so the row
+   overflows and squeezes — or fully hides — the hamburger off the right
+   edge, making the whole mobile nav look broken/unreachable. Rather than
+   hiding the utility links (losing Help/Hours/My Library/Libraries/
+   Information For on mobile entirely), drop them to their own line below
+   the brand + hamburger row. */
+@media (max-width: 991.98px) {
+  .tamu-top-bar__inner {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .tamu-top-bar__brand {
+    order: 1;
+  }
+
+  .tamu-top-bar__menu-toggle {
+    order: 2;
+  }
+
   .tamu-top-bar__nav {
-    display: none;
+    order: 3;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
   }
 }
 
@@ -198,9 +218,7 @@ button.tamu-top-bar__button.dropdown-toggle {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 1.25rem 1.5rem;
+  padding: 0.65rem 1.5rem;
 }
 
 .tamu-site-identity__title a {
@@ -208,7 +226,7 @@ button.tamu-top-bar__button.dropdown-toggle {
   font-family: var(--work-sans, "Work Sans", Arial, sans-serif);
   font-weight: 700;
   font-style: italic;
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   text-decoration: none;
 }
 
@@ -219,21 +237,21 @@ button.tamu-top-bar__button.dropdown-toggle {
 
 .tamu-site-identity__logo img {
   display: block;
-  height: 48px;
+  height: 36px;
   width: auto;
 }
 
 @media (max-width: 575px) {
   .tamu-site-identity__inner {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
 
   .tamu-site-identity__title a {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 
   .tamu-site-identity__logo img {
-    height: 36px;
+    height: 28px;
   }
 }
 
@@ -248,12 +266,30 @@ header#header {
   z-index: 10;
 }
 
+header#header nav.navbar#navbar-top {
+  min-height: 0;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#navbar-top .offcanvas-body {
+  align-items: center;
+}
+
+#navbar-top .navbar-nav {
+  margin-left: -16px;
+}
+
 header#header nav.navbar > .container-fluid,
 header#header nav.navbar > .container-lg,
 header#header nav.navbar > .container {
-  max-width: 1320px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   width: 100%;
 }
 
@@ -471,70 +507,132 @@ header#header div.bg-white.pb-2 {
 
 /* ============================================================
    Hero section (highlighted region, front page only)
+   Full-bleed photo with a white search card overlapping its
+   bottom-left corner — mirrors library.tamu.edu's homepage hero.
    ============================================================ */
 body.path-frontpage .highlighted {
-  position: relative;
-  background-image: url('https://api.library.tamu.edu/iiif/2/a4b6714b-7e05-3146-a174-b047bd396f48/full/full/0/default.jpg');
+  padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
+body.path-frontpage .highlighted .section {
+  display: block;
+  padding: 0;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+body.path-frontpage .highlighted .tamu-hero-photo {
+  /* --tamu-hero-image is set client-side by setRandomHeroImage() in nav.js,
+     picked at random from HERO_IMAGES there. Deliberately no fallback url()
+     here: nav.js is an external file and can finish downloading well after
+     this element has already painted, so a fallback image would flash
+     briefly before JS swaps it for the random pick. No image at all (until
+     JS runs, or permanently if JS is disabled) reads better than that jump. */
+  background-image: var(--tamu-hero-image);
   background-size: cover;
   background-position: center;
-  min-height: 400px;
-  display: flex;
-  align-items: center;
-  padding: 0;
+  min-height: 440px;
 }
 
-/* Dark overlay */
-body.path-frontpage .highlighted::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-/* Keep content above overlay */
-body.path-frontpage .highlighted > * {
+/* Search card — pulled up over the photo with a negative top margin
+   rather than absolute positioning, so it stays two independent
+   Drupal blocks that don't need coordinated offsets. */
+body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1 {
+  display: block !important;
   position: relative;
   z-index: 1;
-  width: 100%;
+  background: var(--gray-100, #f6f6f6);
+  width: 70%;
+  /* Without a cap, 60% of a now-full-bleed (not container-capped) hero
+     keeps growing past what a single search field + button should ever be
+     on a wide monitor. 600px comfortably fits the "Search for images,
+     books, videos, etc." placeholder without wrapping. */
+  max-width: 1000px;
+  margin: -70px auto 0;
+  padding: 2rem 2rem 1.5rem;
 }
 
-/* Center text and search content */
-body.path-frontpage .highlighted .section {
+body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1::before {
+  content: 'Search';
+  display: block;
+  font-family: Oswald, Arial, sans-serif;
+  font-feature-settings: normal;
+  font-kerning: auto;
+  font-language-override: normal;
+  font-optical-sizing: auto;
+  font-size: 44px;
+  font-size-adjust: none;
+  font-stretch: 100%;
+  font-style: normal;
+  font-variant-alternates: normal;
+  font-variant-caps: normal;
+  font-variant-east-asian: normal;
+  font-variant-emoji: normal;
+  font-variant-ligatures: normal;
+  font-variant-numeric: normal;
+  font-variant-position: normal;
+  font-variation-settings: normal;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--primary-brand);
+  margin-bottom: 1rem;
+}
+
+body.path-frontpage .highlighted .form-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: var(--white);
-  gap: 1.5rem;
-  padding: 3rem 1.5rem;
+  align-items: stretch;
+  border: 3px solid var(--primary-brand, #500000);
 }
 
-body.path-frontpage .highlighted .section h1,
-body.path-frontpage .highlighted .section h2,
-body.path-frontpage .highlighted .section p {
-  color: var(--white);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-  margin: 0;
+/* The <input size="100"> attribute gives the input a huge intrinsic width;
+   the actual flex item is this wrapper div, not the input, so min-width
+   has to be reset here or the row overflows the card regardless of the
+   input's own CSS width. */
+body.path-frontpage .highlighted .form-row .js-form-item-search-api-fulltext {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
 }
 
 /* Search bar inside hero */
 body.path-frontpage .highlighted input[type="text"],
 body.path-frontpage .highlighted input[type="search"] {
-  max-width: 600px;
   width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
   padding: 0.75rem 1rem;
-  border-radius: 4px;
   border: none;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 0;
+  font-size: 1rem;
+  box-shadow: none;
 }
 
-body.path-frontpage .highlighted .form-item,
-body.path-frontpage .highlighted form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+body.path-frontpage .highlighted input.form-autocomplete {
+  padding-top: 0.75rem !important;
+}
+
+body.path-frontpage .highlighted .form-row .form-actions {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+body.path-frontpage .highlighted input[type="submit"] {
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 767.98px) {
+  body.path-frontpage .highlighted .block-views-exposed-filter-blocksolr-search-content-page-1 {
+    width: calc(100% - 2rem);
+    margin: -50px 1rem 0;
+  }
 }
 
 h1.title {
@@ -815,4 +913,32 @@ body.scrolled .back-to-top {
   outline: 2px dotted var(--gold);
   outline-offset: 2px;
   box-shadow: none;
+}
+
+.highlighted {
+  padding-top: 0rem !important;
+}
+
+.nav-link {
+  padding-top: 12px !important;
+  padding-bottom: 0px !important;
+}
+
+input#edit-search-api-fulltext {
+  height: 38px;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+input#edit-submit-solr-search-content {
+  height: 38px;
+  margin: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 36px;
+}
+
+input#edit-search-api-fulltext {
+  border-color: var(--primary-brand-dark);
+  border-width: 0.75px;
 }
