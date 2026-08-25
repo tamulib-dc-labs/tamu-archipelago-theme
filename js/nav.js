@@ -152,7 +152,8 @@
     'https://digitalcollections.library.tamu.edu/iiif/2/e01%2Fimage-stripling-f12943c6-0fc4-40b0-8596-d93ee430970f.jpg/full/1400,/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/75e%2Fimage-poncho-70553485-7fc8-4449-a208-51e5cb5a53b5.jpg/29,67,2325,734/full/0/default.jpg',
     'https://digitalcollections.library.tamu.edu/iiif/2/d8c%2Fimage-g5672-m4-1624-o77-86270f92-2fe7-4c25-a24a-5b2dddac02b1.jp2/485,808,7842,5362/1400,/0/default.jpg',
-    'https://digitalcollections.library.tamu.edu/iiif/2/34d%2Fimage-utf-8-cmlrsc00181-eacdb2b9-d3a7-4ece-85b8-4e01c1a27170.jp2/0,62,7039,4055/1400,/0/default.jpg'
+    'https://digitalcollections.library.tamu.edu/iiif/2/34d%2Fimage-utf-8-cmlrsc00181-eacdb2b9-d3a7-4ece-85b8-4e01c1a27170.jp2/0,62,7039,4055/1400,/0/default.jpg',
+    'https://digitalcollections.library.tamu.edu/iiif/2/534%2Fimage-g5834-o6a35-1581-b73a-edit-89587dda-1143-4f9a-b414-6dcfad3a0bd7.jp2/600,3166,7129,2949/1400,/0/default.jpg'
   ];
   function setRandomHeroImage() {
     // The <body class="path-frontpage ..."> tag has already been parsed by
