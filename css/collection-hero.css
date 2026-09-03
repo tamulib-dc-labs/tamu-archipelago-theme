@@ -115,6 +115,3 @@ body.node--type-digital-object-collection:not(.path-frontpage) .highlighted { di
 /* But keep local task tabs (View/Edit/Delete) visible for editors */
 body.node--type-digital-object-collection:not(.path-frontpage) .highlighted:has(.tabs) { display: block; }
 body.node--type-digital-object-collection:not(.path-frontpage) .highlighted .tabs { display: block; }
-
-/* 3. main-wrapper-top (breadcrumbs + empty top sections) */
-body.node--type-digital-object-collection:not(.path-frontpage) #main-wrapper-top { display: none; }
