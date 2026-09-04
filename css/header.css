@@ -883,6 +883,42 @@ body.scrolled .back-to-top {
   font-weight: inherit;
 }
 
+/* Cell geometry. Drupal renders the current page and the ellipsis as
+   <span class="page-link"> and every other cell as <a class="page-link">, so
+   two global rules from shared stylesheets land on half the pager only:
+
+     slim.css     span { line-height: 1.4; font-style: italic; }
+                  -> span cells 36.4px tall, anchors 38px, and the current
+                     page italic purely by accident
+     aux-styles.css  ul li { margin-bottom: 0.6rem }  (prose-list defaults)
+                  -> 9.6px under every .page-item but the last, skewing
+                     flex stretch inside ul.pagination
+     aux-styles.css  ul { margin-left: 1rem }
+                  -> the whole pager indented 16px from the content edge
+
+   Fixed at the component level rather than by editing those shared sheets:
+   min-height plus flex centring makes span and anchor cells identical
+   regardless of which line-height wins. */
+.pagination {
+  align-items: center;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.pagination .page-item {
+  margin-bottom: 0;
+  display: flex;
+}
+
+.pagination .page-item .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  line-height: 1.5;
+  font-style: normal;
+}
+
 /* Rest: maroon border + maroon text on white */
 .pagination .page-link {
   color: var(--primary-brand);
@@ -924,21 +960,70 @@ body.scrolled .back-to-top {
   padding-bottom: 0px !important;
 }
 
-input#edit-search-api-fulltext {
-  height: 38px;
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
+/* ============================================================
+   Views exposed forms — input / SEARCH / RESET alignment
+
+   These used to be sized by ID (input#edit-search-api-fulltext,
+   input#edit-submit-solr-search-content). Those IDs are not stable: the
+   Solr exposed form is built more than once per request (once for the view
+   display, once for the block placement), so Html::getUniqueId appends
+   `--2` to whichever copy it renders second. Which copy got the bare ID
+   varied page to page, so the rules landed on the wrong element and the
+   controls came out at different heights (measured live: 38px / 48px /
+   58px in various combinations on /search, /collections and
+   /search_websites).
+
+   Everything below is keyed on classes so it applies to every exposed
+   form — the header search bar and the in-page filter forms alike.
+   ============================================================ */
+
+.views-exposed-form .form-row {
+  align-items: center;
 }
 
-input#edit-submit-solr-search-content {
+/* `form .form-actions { align-self: flex-end }` (in both style.css and
+   form.css) bottom-aligns the button wrapper in the flex row. Invisible
+   while every control matches, but it drops the buttons to the baseline
+   the moment one control differs in height. */
+.views-exposed-form .form-actions {
+  align-self: auto;
+  display: flex;
+  align-items: center;
+}
+
+.views-exposed-form input.form-control,
+.views-exposed-form input.form-submit {
   height: 38px;
-  margin: 0px;
+  min-height: 38px;
   padding-top: 0;
   padding-bottom: 0;
-  line-height: 36px;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-input#edit-search-api-fulltext {
+/* RESET sitting next to SEARCH — the base .btn margin-left is dropped
+   above along with the rest of the margins. */
+.views-exposed-form input.form-submit + input.form-submit {
+  margin-left: 0.5rem;
+}
+
+.views-exposed-form input.form-control {
   border-color: var(--primary-brand-dark);
   border-width: 0.75px;
+}
+
+/* Front-page hero search is deliberately taller than the header bar: the
+   field and the SEARCH button both fill a bordered row rather than sitting
+   at the 38px bar height. Exempt it from the sizing above — its border,
+   padding and radius already win on specificity, only the heights and the
+   centring of the button wrapper need undoing. */
+body.path-frontpage .highlighted .views-exposed-form .form-actions {
+  align-items: stretch;
+}
+
+body.path-frontpage .highlighted .views-exposed-form input.form-control,
+body.path-frontpage .highlighted .views-exposed-form input.form-submit {
+  height: auto;
+  min-height: 0;
 }
