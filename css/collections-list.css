@@ -1,0 +1,73 @@
+/* Browse Collections — list layout (/collections).
+   Scoped to body.path-collections so the grid page and front page are untouched. */
+
+.path-collections .tamu-cards-grid {
+  column-count: auto;
+  columns: auto;
+  column-gap: normal;
+}
+
+.path-collections .tamu-cards-grid > div {
+  margin-bottom: 1rem;
+}
+
+.path-collections .tamu-card {
+  flex-direction: row;
+  align-items: stretch;
+  height: auto;
+}
+
+/* Out of flow, or the accent bar becomes a full-width flex item and pushes
+   the image and body outside the card. */
+.path-collections .tamu-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+.path-collections .tamu-card__image {
+  flex: 0 0 220px;
+  max-width: 220px;
+  height: 165px;
+  align-self: center;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.path-collections .tamu-card__image > * {
+  height: 100%;
+}
+
+/* !important: cards.css sets height/width on this selector with !important. */
+.path-collections .tamu-card__image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* !important: cards.css sets flex and padding here with !important. */
+.path-collections .tamu-card__body {
+  flex: 1 1 auto !important;
+  justify-content: center;
+  padding: 1.25rem 1.5rem !important;
+}
+
+/* Release cards.css's margin-top: auto so justify-content: center applies. */
+.path-collections .tamu-card__link {
+  margin-top: 0;
+}
+
+@media (max-width: 575.98px) {
+  .path-collections .tamu-card {
+    flex-direction: column;
+  }
+
+  .path-collections .tamu-card__image {
+    flex: 0 0 auto;
+    max-width: none;
+    width: 100%;
+    height: 200px;
+  }
+}

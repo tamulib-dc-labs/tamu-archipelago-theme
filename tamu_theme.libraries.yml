@@ -40,6 +40,12 @@ collection-hero:
     theme:
       css/collection-hero.css: { weight: 999 }
 
+collections-list:
+  version: VERSION
+  css:
+    theme:
+      css/collections-list.css: { weight: 999 }
+
 aggie-ux-cdn:
   version: '2.0.0'
   css:
