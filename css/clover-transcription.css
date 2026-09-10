@@ -1,0 +1,46 @@
+/* ── Clover Scroll Transcription Viewer — Mobile overflow & layout fixes ─── */
+
+/* --- 1. Hide the "Reasoning" column (all breakpoints) --- */
+/* Reasoning is the last annotation Clover renders. :not(:only-child) keeps a
+   lone annotation visible on objects that carry no Reasoning block at all. */
+.clover-twig-scroll article > div:last-child > div > div:last-child:not(:only-child) {
+  display: none !important;
+}
+
+.clover-twig-scroll article > div:last-child > div > div:first-child {
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* --- 2. Mobile (< 768px): stack image over transcription vertically --- */
+@media (max-width: 767.98px) {
+  .clover-twig-scroll article {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .clover-twig-scroll article > div {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .clover-twig-scroll article > div:first-child figure,
+  .clover-twig-scroll article > div:first-child figure > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .clover-twig-scroll article > div:last-child > div {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .clover-twig-scroll article > div:last-child > div > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}

@@ -22,6 +22,12 @@ viewer:
     theme:
       css/viewer.css: { weight: 999 }
 
+clover-transcription:
+  version: VERSION
+  css:
+    theme:
+      css/clover-transcription.css: { weight: 999 }
+
 footer:
   version: VERSION
   css:
