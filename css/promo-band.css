@@ -65,6 +65,13 @@
   text-decoration: none;
 }
 
+.btn.btn--primary:hover,
+.btn.btn--primary:focus-visible {
+  color: var(--primary-brand, #500000);
+  background-color: #fff;
+  border-color: var(--primary-brand, #500000);
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .tamu-promo-band {
