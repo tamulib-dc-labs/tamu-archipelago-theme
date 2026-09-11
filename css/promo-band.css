@@ -65,12 +65,6 @@
   text-decoration: none;
 }
 
-/* Browse Collections / primary button: invert colors on hover and keyboard focus.
-   Chiloe's `.btn:hover` sets color from --bs-btn-hover-color, which is only
-   defined for Bootstrap's .btn-primary — on TAMU's .btn--primary it falls back
-   to the gray body color. aux-styles.css also sets the hover background via
-   `a.btn--primary:hover` (0,2,1), so `.btn.btn--primary` (0,3,0) is needed to
-   win. The arrow inherits via aux's `a.btn svg { fill: currentColor }`. */
 .btn.btn--primary:hover,
 .btn.btn--primary:focus-visible {
   color: var(--primary-brand, #500000);
