@@ -373,6 +373,23 @@ header#header nav.navbar .dropdown-menu .dropdown-item a:focus {
   color: var(--primary-brand) !important;
 }
 
+/* Current-page item: white on maroon. The `color: var(--black) !important` rule
+   above otherwise leaves it black on the active highlight. :has() covers pages
+   where Drupal puts `is-active` on the <a> instead of `active` on the <li>. */
+header#header nav.navbar .dropdown-menu .dropdown-item.active,
+header#header nav.navbar .dropdown-menu .dropdown-item:has(> a.is-active) {
+  background-color: var(--primary-brand, #500000);
+}
+
+header#header nav.navbar .dropdown-menu .dropdown-item.active a,
+header#header nav.navbar .dropdown-menu .dropdown-item.active a:hover,
+header#header nav.navbar .dropdown-menu .dropdown-item.active a:focus,
+header#header nav.navbar .dropdown-menu .dropdown-item a.is-active,
+header#header nav.navbar .dropdown-menu .dropdown-item a.is-active:hover,
+header#header nav.navbar .dropdown-menu .dropdown-item a.is-active:focus {
+  color: #ffffff !important;
+}
+
 /* ============================================================
    Mobile toggler — dark icon on light background
    ============================================================ */
