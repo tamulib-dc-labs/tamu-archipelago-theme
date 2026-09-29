@@ -883,6 +883,34 @@ body.scrolled .back-to-top {
   text-align: left;
 }
 
+/* ---------------------------------------------------------------
+ * Breadcrumb spacing.
+ * Removes all space between the breadcrumb and the page content
+ * (Chiloe 2.5rem + Bootstrap 1rem + wrapper pb-3 1rem + mb-2 0.5rem).
+ * Without a breadcrumb, the whole area collapses to 0.
+ * --------------------------------------------------------------- */
+
+:root .archipelago-chiloe-theme #main-breadcrumbs {
+  margin-bottom: 0;
+}
+
+:root .archipelago-chiloe-theme #main-breadcrumbs .breadcrumb {
+  --bs-breadcrumb-margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* !important needed to override Bootstrap's pb-3 / mb-2 utility classes */
+#main-wrapper-top {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Pages without a breadcrumb: the breadcrumb block still renders empty
+   and its container keeps Chiloe's 1.875rem top margin. Collapse it. */
+:root .archipelago-chiloe-theme #main-breadcrumbs:not(:has(.breadcrumb)) {
+  display: none;
+}
+
 .sr-only {
   background-color: var(--primary-brand) !important;
   color: var(--white) !important;
