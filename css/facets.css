@@ -1,0 +1,28 @@
+/**
+ * Facet sidebar
+ *
+ * On wide screens the facet sidebar sticks below the sticky header and
+ * follows the results down the page. The column Barrio wraps it in
+ * (col-md-3) stretches to the height of the results, which gives the
+ * sticky aside room to travel.
+ *
+ * Expanded facets ("Show more") can be far taller than the viewport, so the
+ * aside is capped at the visible height and scrolls on its own.
+ *
+ * Below md the sidebar stacks with the results, so it is left in the flow.
+ * :has() keeps this to sidebars that actually hold facets.
+ */
+@media (min-width: 768px) {
+  #main aside.section:has(.block-facets) {
+    position: sticky;
+    top: calc(var(--tamu-top-bar-h, 0px) + 1rem);
+    max-height: calc(100vh - var(--tamu-top-bar-h, 0px) - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Room for the date slider's floating tips, which would otherwise be
+       clipped at the top edge of the scroll area. */
+    padding-top: 1.5rem;
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+  }
+}
