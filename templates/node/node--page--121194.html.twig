@@ -1,7 +1,7 @@
 <article{{ attributes }}>
 
   {# ── Hero ── #}
-  <div class="tamu-collection-hero" style="background-image: url('https://digitalcollections.library.tamu.edu/iiif/2/f8c%2Fimage-berger-60846bdd-cc8c-48fa-974b-57bc5d478859.jpg/full/1400,/0/default.jpg'); background-size: cover; background-position: center;">
+  <div class="tamu-collection-hero" style="background-image: url('https://digitalcollections.library.tamu.edu/iiif/2/e2d%2Fimage-g6014-a5a3-1642-m47-edit-159011ea-ea51-4275-bd50-185f6aca6831.jp2/402,685,5707,2524/full/0/default.jpg'); background-size: cover; background-position: center;">
     <div class="tamu-collection-hero__overlay">
       <div class="container">
         <h1 class="tamu-collection-hero__title">Georeferencing Our Collections</h1>
@@ -12,5 +12,58 @@
   {# ── Body ── #}
   <div class="container tamu-about-body">
     {{ title_suffix }}
+    <section class="tamu-about-body__section">
+      <h2>Georeferencing Our Collections</h2>
+
+      <h3>What is georeferencing?</h3>
+      <p>
+        <strong>Georeferencing</strong> is the process of aligning a scanned historical map with real-world geographic
+        coordinates. Once a map is georeferenced, it can be treated as geospatial data, opening up possibilities like:
+      </p>
+      <ul>
+        <li>Layering a historic map on top of a modern web map</li>
+        <li>Overlaying one historic map on another to compare how a place has changed over time</li>
+        <li>Transcribing geospatial data from historic maps, such as labels, features, or outlines</li>
+      </ul>
+      <p>
+        As a user, you'll most often encounter georeferenced maps in interactive web viewers, where a historic map is
+        displayed on top of a modern base map so you can see the two side by side.
+      </p>
+
+      <h3>Using Georeferenced Maps</h3>
+      <p>Many of Texas A&M's historical maps have been georeferenced using <a href="https://allmaps.org/">Allmaps</a>.
+        When a map has been georeferenced, a <strong>Georeferenced Map</strong> tab will appear beneath the image.
+        Clicking this tab displays the map superimposed on a modern base map in the Allmaps Viewer, where you can
+        adjust the transparency to compare the historic and modern geography.
+      </p>
+      <figure>
+        <img src="/themes/custom/tamu_theme/images/georeferenced.png" title="Example of a Georeferenced Map of Cuba" alt="An example of a Georeferenced Map of Cuba" style="max-width:720px;height:auto;background-color:#800000;padding:.25em">
+        <figcaption>An example of a Georeferenced Map of Cuba</figcaption>
+      </figure>
+
+      <h3>Contributing to Our Georeferencing in Allmaps</h3>
+      <p>Georeferencing works by matching points on a map image to points on a modern map; these are called
+      <em>ground control points</em>, or simply <em>control points</em>. We've already created control points for
+      hundreds of our maps, but you can help by georeferencing new maps or improving the georeferencing on maps that
+      already have it.</p>
+      <p>Texas A&M uses the <a href="https://allmaps.org">Allmaps platform</a> for georeferencing. Allmaps makes the
+      process easier for contributors, more interoperable across institutional collections, and simpler to maintain.
+      Unlike traditional georeferencing software, ,which can be complicated to use and often requires downloading and
+      uploading very large image files, Allmaps runs almost entirely in a user's web browser. This lowers the barrier
+      for anyone who wants to create or view georeferenced maps, and reduces the need for institutions to maintain
+      expensive, brittle server infrastructure.</p>
+      <p>To georeference a map (or improve its existing georeferencing), start by finding its IIIF manifest. You can
+      find the link in the upper right corner above the viewer, or under <strong>"View IIIF Manifest"</strong> at the
+        bottom of the <em>Description</em> tab. Copy the manifest URL and paste it into the
+      <a href="https://editor.allmaps.org">Allmaps Editor</a></p>
+      <p>If the item contains multiple images, draw a mask around each image that includes a map. Once you've drawn your
+      masks and selected a map, georeference it by connecting three or more points on the image to their corresponding
+      real-world locations. Once you're done, the georeferenced map will automatically appear in our digital collections
+      portal within 24 hours.</p>
+      <figure>
+        <img src="/themes/custom/tamu_theme/images/allmaps-edit.png" title="Example of a Georeferenced Map of Texas" alt="An example of a Georeferenced Map of Texas" style="max-width:720px;height:auto;background-color:#800000;padding:.25em">
+        <figcaption><a href="https://editor.allmaps.org/georeference?url=https%3A%2F%2Fdigitalcollections.library.tamu.edu%2Fiiif%2F2%2F1f7%252Fimage-00004381467-18304958-0487-4ffe-a760-508aa8aa06fc.jp2%2Finfo.json&image=https%3A%2F%2Fdigitalcollections.library.tamu.edu%2Fiiif%2F2%2F1f7%252Fimage-00004381467-18304958-0487-4ffe-a760-508aa8aa06fc.jp2">Using Allmaps Editor to Georeference a Historic Map of Texas</a></figcaption>
+      </figure>
+    </section>
   </div>
 </article>
