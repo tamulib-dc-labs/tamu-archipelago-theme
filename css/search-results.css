@@ -1,0 +1,918 @@
+/* ============================================================
+   Search results (/search, /search_grid)
+
+   1. Page frame: drop the centred container-lg, tighten the vertical
+      gaps around the results, and move the facets into a slide-in
+      panel opened from a "Filters" button (js/facet-drawer.js) so the
+      results take the full width.
+   2. Result rows (/search only): turn the Layout Builder two-column
+      row (title on top, thumbnail and metadata split 50/50) into a
+      horizontal card, thumbnail on the left and title + metadata on
+      the right. What the card shows is still decided by the metadata
+      display Twig template; only the layout changes here.
+
+   Page rules are keyed on page-view-solr-search-content plus
+   layout-sidebar-first, which matches /search and /search_grid (the
+   faceted displays) but not /search_websites or /search_pages.
+   ============================================================ */
+
+/* ---------- 1. Page frame ---------- */
+
+body.page-view-solr-search-content.layout-sidebar-first #main-breadcrumbs,
+body.page-view-solr-search-content.layout-sidebar-first #main-top,
+body.page-view-solr-search-content.layout-sidebar-first #main-top-flex,
+body.page-view-solr-search-content.layout-sidebar-first #main,
+body.page-view-solr-search-content.layout-sidebar-first #content_bottom_container {
+  max-width: none;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* The breadcrumb band only holds the List/Grid switcher on these pages.
+   Chiloe gives it 1.875rem above and 2.5rem below; the wrapper adds
+   pb-3 + mb-2 on top of that. */
+:root body.page-view-solr-search-content.layout-sidebar-first #main-breadcrumbs {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* header.css hides the band when it has no breadcrumb trail, which is
+   always the case here; keep it while it holds the List/Grid switcher
+   or the Filters button. */
+:root body.archipelago-chiloe-theme #main-breadcrumbs:has(> .views-display-link, > .tamu-facet-toggle) {
+  display: flex;
+}
+
+/* Fixed-width facet column instead of col-md-3, which would grow to
+   25% of a full-width page. Narrower on tablets so the results keep
+   room beside it. */
+@media (min-width: 768px) {
+  body.page-view-solr-search-content.layout-sidebar-first #sidebar_first {
+    flex: 0 0 14rem;
+    max-width: 14rem;
+  }
+
+  /* A flex item will not shrink below its content's min-content width,
+     and the pager alone needs ~480px; past that the results wrapped
+     below the facets instead of sitting beside them. */
+  body.page-view-solr-search-content.layout-sidebar-first main#content {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  body.page-view-solr-search-content.layout-sidebar-first #sidebar_first {
+    flex: 0 0 18rem;
+    max-width: 18rem;
+  }
+}
+
+/* Below md the facets stack above the results. Unstyled, the column is
+   only as wide as its buttons (~90px) and stayed above the results only
+   because the old 50/50 rows could not shrink; the cards can, so without
+   this the results squeeze in beside the facets. */
+@media (max-width: 767.98px) {
+  body.page-view-solr-search-content.layout-sidebar-first #sidebar_first {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* ---------- Facet panel (js/facet-drawer.js) ----------
+
+   The facets live in a slide-in Bootstrap offcanvas panel opened from a
+   "Filters" button, and the results take the full width. The column
+   rules above and below remain for when the script does not run. */
+
+/* Hidden until the script has turned the sidebar into the panel, so the
+   column does not flash in first. Shown again if Bootstrap is missing. */
+html.js body.page-view-solr-search-content.layout-sidebar-first:not(.no-facet-drawer) #sidebar_first:not(.offcanvas) {
+  display: none;
+}
+
+body.page-view-solr-search-content.layout-sidebar-first #sidebar_first.offcanvas {
+  flex: none;
+  width: min(22rem, 88vw);
+  max-width: none;
+  padding: 0;
+  border-top: 4px solid var(--primary-brand);
+  background: var(--white);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+  /* Above the sticky #tamu-top-bar (z-index 1400), which otherwise sits
+     over the top of the panel and is not dimmed by the backdrop.
+     Bootstrap's defaults are 1045 and 1040. */
+  z-index: 1500;
+}
+
+body.has-facet-drawer .offcanvas-backdrop {
+  z-index: 1490;
+}
+
+#sidebar_first.offcanvas .tamu-facet-drawer__header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #eaeaea; /* AUX $gray-200 */
+}
+
+#sidebar_first.offcanvas .tamu-facet-drawer__title {
+  margin: 0;
+  /* Chiloe underlines sidebar headings */
+  padding: 0;
+  border: 0;
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: none;
+  color: var(--primary-brand);
+}
+
+#sidebar_first.offcanvas .offcanvas-body {
+  padding: 1rem 1.25rem 1.5rem;
+  overflow-y: auto;
+}
+
+#sidebar_first.offcanvas .block-facets {
+  padding-right: 0;
+}
+
+/* Facet titles as AUX headings (Work Sans, sentence case) rather than
+   header.css's Oswald capitals, matching the result titles beside them. */
+:root #sidebar_first.offcanvas .block-facets .accordion-button span {
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* With the column gone, the results' 12px column padding only indents
+   them from the Filters button above. */
+body.has-facet-drawer main#content {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* "Filters" button: an AUX secondary button, maroon outline that fills
+   on hover, with the number of applied facets in a badge. */
+body.page-view-solr-search-content.layout-sidebar-first #main-breadcrumbs {
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tamu-facet-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 38px;
+  padding: 0 1rem;
+  border: 2px solid var(--primary-brand);
+  border-radius: 6px;
+  background: var(--white);
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-brand);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tamu-facet-toggle:hover,
+.tamu-facet-toggle:focus {
+  background: var(--primary-brand);
+  color: var(--white);
+}
+
+.tamu-facet-toggle:focus-visible {
+  outline: 2px dotted var(--primary-brand);
+  outline-offset: 2px;
+}
+
+.tamu-facet-toggle__icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* slim.css sets every span italic and grey */
+.tamu-facet-toggle__label,
+.tamu-facet-toggle__count {
+  font-family: inherit;
+  font-style: normal;
+  color: inherit;
+}
+
+.tamu-facet-toggle__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--primary-brand);
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--white);
+}
+
+.tamu-facet-toggle__count[hidden] {
+  display: none;
+}
+
+.tamu-facet-toggle:hover .tamu-facet-toggle__count,
+.tamu-facet-toggle:focus .tamu-facet-toggle__count {
+  background: var(--white);
+  color: var(--primary-brand);
+}
+
+/* First facet block carries a 1rem top margin that drops the sidebar
+   below the "Displaying results" line. */
+body.page-view-solr-search-content.layout-sidebar-first #sidebar_first .block-facets:first-child {
+  margin-top: 0;
+}
+
+/* Results count */
+body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_content .view-header {
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+/* Pager: 3rem above and below plus 1.5rem padding over the dotted rule */
+body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_content ul.pagination {
+  flex-wrap: wrap;
+  row-gap: 0.375rem;
+  margin: 0.75rem 0;
+  padding-top: 0.75rem;
+}
+
+/* ---------- 2. Result cards (/search list display) ---------- */
+
+.view-id-solr_search_content.view-display-id-page_1 .view-content {
+  margin-bottom: 0;
+}
+
+/* Each row sits in a .row child that carries a 12px gutter, which
+   indents the cards from the results count and the pager. */
+.view-id-solr_search_content.view-display-id-page_1 .view-content > div {
+  margin-bottom: 1rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol {
+  --search-thumb: 200px;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--search-thumb) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "thumb title"
+    "thumb meta";
+  column-gap: 1.5rem;
+  padding: calc(1.25rem + 4px) 1.5rem 1.25rem;
+  background: var(--white);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* Maroon accent bar, as on .tamu-card */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary-brand);
+}
+
+/* twocol.css sizes the regions as flex items (flex: 0 1 50%) */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region {
+  flex: none;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  padding: 0;
+}
+
+/* Each region's .field carries a 2rem bottom margin from the parent
+   theme; inside a card the padding already provides that space.
+   :root and the attribute selector outrank Chiloe's
+   `:root .archipelago-chiloe-theme div.content div[data-history-node-id] div.field`. */
+:root .view-id-solr_search_content.view-display-id-page_1 .layout--twocol[data-history-node-id] > .layout__region > div.field {
+  margin-bottom: 0;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--top {
+  grid-area: title;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--first {
+  grid-area: thumb;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second {
+  grid-area: meta;
+}
+
+/* Nothing at all in the thumbnail slot: let the text take the full
+   width rather than leaving an empty column. Objects without an image
+   normally still get an icon from Archipelago (below), so this is rare. */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:not(:has(> .layout__region--first :is(img, i))) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "title"
+    "meta";
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:not(:has(> .layout__region--first :is(img, i))) > .layout__region--first {
+  display: none;
+}
+
+/* Default thumbnail. When an object has no image, Archipelago renders a
+   Font Awesome icon for its media in the slot instead (fa-headphones-alt
+   for audio, fab fa-buffer otherwise) at fa-9x. Shown on the same tile
+   as real thumbnails, at a size that fits it, so these cards line up
+   with the rest. */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item:has(> a > i) {
+  background: #e9e4dc; /* AUX $ivory */
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a > i {
+  font-size: calc(var(--search-thumb) * 0.32);
+  line-height: 1;
+  color: #732f2f; /* AUX $primary-brand-light */
+  transition: color 0.15s ease;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a:hover > i,
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a:focus > i {
+  color: var(--primary-brand);
+}
+
+/* One icon per ADO type. Archipelago picks the icon from the media it
+   finds, so an audio record gets headphones but the series grouping its
+   sides gets a generic logo (fab fa-buffer). The metadata display marks
+   the type on its tag (search-result__type--audioobject, …); these swap
+   in a Font Awesome 5 solid glyph for each. Types not listed keep the
+   icon Archipelago chose. */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(
+  .search-result__type--audioobject, .search-result__type--musicrecording,
+  .search-result__type--podcast, .search-result__type--podcastepisode,
+  .search-result__type--videoobject, .search-result__type--streamingvideo,
+  .search-result__type--movie, .search-result__type--creativeworkseries,
+  .search-result__type--book, .search-result__type--manuscript,
+  .search-result__type--letter, .search-result__type--map,
+  .search-result__type--photograph, .search-result__type--image,
+  .search-result__type--visualartwork, .search-result__type--painting,
+  .search-result__type--digitaldocument, .search-result__type--article,
+  .search-result__type--thesis, .search-result__type--text,
+  .search-result__type--3dmodel, .search-result__type--webpage,
+  .search-result__type--collection
+)) .layout__region--first .field__item > a > i {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+/* headphones-alt */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--audioobject, .search-result__type--musicrecording, .search-result__type--podcast, .search-result__type--podcastepisode)) .layout__region--first .field__item > a > i::before {
+  content: "\f58f";
+}
+
+/* film */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--videoobject, .search-result__type--streamingvideo, .search-result__type--movie)) .layout__region--first .field__item > a > i::before {
+  content: "\f008";
+}
+
+/* layer-group: a series groups other records (e.g. the sides of a tape) */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--creativeworkseries) .layout__region--first .field__item > a > i::before {
+  content: "\f5fd";
+}
+
+/* book */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--book) .layout__region--first .field__item > a > i::before {
+  content: "\f02d";
+}
+
+/* envelope-open-text */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--manuscript, .search-result__type--letter)) .layout__region--first .field__item > a > i::before {
+  content: "\f658";
+}
+
+/* map */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--map) .layout__region--first .field__item > a > i::before {
+  content: "\f279";
+}
+
+/* image */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--photograph, .search-result__type--image, .search-result__type--visualartwork, .search-result__type--painting)) .layout__region--first .field__item > a > i::before {
+  content: "\f03e";
+}
+
+/* file-alt */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--digitaldocument, .search-result__type--article, .search-result__type--thesis, .search-result__type--text)) .layout__region--first .field__item > a > i::before {
+  content: "\f15c";
+}
+
+/* cube */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--3dmodel) .layout__region--first .field__item > a > i::before {
+  content: "\f1b2";
+}
+
+/* globe */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--webpage) .layout__region--first .field__item > a > i::before {
+  content: "\f0ac";
+}
+
+/* archive */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--collection) .layout__region--first .field__item > a > i::before {
+  content: "\f187";
+}
+
+/* Thumbnail: square tile, whole image visible (no cropping of
+   archival material), centred on a light ground. */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  background: #f4f1f1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--first img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0 !important;
+}
+
+/* Type follows Aggie UX (aggieux.tamu.edu): Work Sans 600 in maroon for
+   card headings, as on its Inline Card; Open Sans for everything smaller,
+   since AUX keeps Oswald to large display headings. Nothing is set in
+   capitals; the parent theme uppercases h2. */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 {
+  margin: 0 0 0.375rem;
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--primary-brand);
+}
+
+/* The link carries its own font and capitals (oswald_droid.css
+   `h2 a { text-transform: uppercase }`, Chiloe's Biryani). */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+/* Multi-part objects get Font Awesome classes on the h2 itself
+   (fas fa-archive); the font override above would turn the icon into a
+   missing-glyph box, so the icon gets its font back. */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2.fas::before,
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2.far::before {
+  margin-right: 0.4rem;
+  font-family: "Font Awesome 5 Free";
+  font-size: 0.85em;
+  font-weight: 900;
+  color: #732f2f;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a:hover,
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a:focus {
+  text-decoration: underline;
+}
+
+/* Byline under the title: "[Type] First creator, N more · Date". Emitted
+   by the Object_Metadata_Abstract_for_Search_Results metadata display. */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-result__byline {
+  margin: 0;
+  font-family: var(--open-sans);
+  font-size: 0.9rem;
+  color: #535353; /* AUX $gray-700 */
+}
+
+/* slim.css sets every span italic and grey */
+.view-id-solr_search_content.view-display-id-page_1 .search-result__byline > span {
+  font-family: inherit;
+  font-style: normal;
+  color: inherit;
+}
+
+/* The template puts a space between the parts; the dot sits after it. */
+.view-id-solr_search_content.view-display-id-page_1 .search-result__creators + .search-result__date::before {
+  content: "\00b7";
+  margin-right: 0.4rem;
+}
+
+/* ADO type as an AUX tag: Work Sans 500, maroon on white, $gray-300
+   border, pill radius. Sized down for a card. */
+.view-id-solr_search_content.view-display-id-page_1 .search-result__byline > .search-result__type {
+  display: inline-block;
+  margin: 0 0.35rem 0.25rem 0;
+  padding: 0.05rem 0.6rem;
+  border: 2px solid #d1d1d1;
+  border-radius: 24px;
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--primary-brand);
+}
+
+/* Field labels (Abstract): AUX h4-h6 are Open Sans; sentence case. */
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second h4 {
+  margin: 0.75rem 0 0.125rem;
+  font-family: var(--open-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-transform: none;
+  color: #732f2f; /* AUX $primary-brand-light */
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second h4:first-child {
+  margin-top: 0;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.95rem;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second li {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ---------- Match (keyword searches) ----------
+
+   Search API appends its excerpt to the region as bare text after the
+   metadata field. js/search-matches.js wraps it in .search-match and,
+   for full-text matches, replaces it with page- or time-located hits.
+   The rules on the bare region below are the no-JS fallback. */
+.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second {
+  font-family: var(--open-sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #535353;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong {
+  color: var(--primary-brand);
+  font-weight: 700;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong a:hover,
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong a:focus {
+  text-decoration: underline;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second:has(> strong) > .field::after {
+  content: "Match:";
+  display: block;
+  margin: 0.75rem 0 0.125rem;
+  font-family: var(--open-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #732f2f;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid #d1d1d1;
+  border-radius: 0 4px 4px 0;
+  background: #f6f6f6; /* AUX $gray-100 */
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match--pages,
+.view-id-solr_search_content.view-display-id-page_1 .search-match--fulltext {
+  border-left-color: var(--primary-brand);
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match--transcript {
+  border-left-color: #732f2f;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match.is-loading {
+  opacity: 0.7;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-match__label {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #732f2f;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-match__excerpt {
+  font-size: 0.9rem;
+  color: #3e3e3e;
+}
+
+/* ul. to outweigh the region's own list indent above */
+.view-id-solr_search_content.view-display-id-page_1 ul.search-match__hits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match__hit {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  color: #3e3e3e;
+}
+
+/* Location chip, "Page 34" or "1:02:15": an AUX tag at chip size. */
+.view-id-solr_search_content.view-display-id-page_1 .search-match__where {
+  flex: none;
+  min-width: 4.25rem;
+  padding: 0 0.5rem;
+  border: 2px solid #d1d1d1;
+  border-radius: 24px;
+  background: var(--white);
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 0.78rem;
+  font-style: normal; /* slim.css italicises every span */
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--primary-brand);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match__hit--time .search-match__where::before {
+  content: "\25B6";
+  margin-right: 0.3rem;
+  font-size: 0.65em;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 a.search-match__where:hover,
+.view-id-solr_search_content.view-display-id-page_1 a.search-match__where:focus {
+  border-color: #a7a7a7;
+  background: #eaeaea;
+  color: #732f2f;
+  text-decoration: none;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 a.search-match__where:focus-visible {
+  outline: 2px dotted var(--primary-brand);
+  outline-offset: 2px;
+}
+
+/* Chip on metadata ("Abstract", "Subject", "Details"): says where the
+   text is, links nowhere. */
+.view-id-solr_search_content.view-display-id-page_1 .search-match__where--static {
+  min-width: 0;
+}
+
+/* The record's fields, kept for js/search-matches.js; never shown. */
+.search-result__fields {
+  display: none !important;
+}
+
+/* The member item a collection hit was found in: "Item title — … text …" */
+.view-id-solr_search_content.view-display-id-page_1 .search-match__context {
+  font-family: inherit;
+  font-style: normal;
+  font-weight: 600;
+  color: #3e3e3e;
+}
+
+.view-id-solr_search_content.view-display-id-page_1 .search-match__context::after {
+  content: " \2014 ";
+  font-weight: 400;
+}
+
+/* slim.css again: the snippet is a span */
+.view-id-solr_search_content.view-display-id-page_1 .search-match__text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-width: 0;
+  font-family: inherit;
+  font-style: normal;
+  color: inherit;
+}
+
+/* Phones: smaller thumbnail beside the title, metadata full width below.
+   A metadata column next to the thumbnail is ~200px wide here, which
+   stretches long abstracts into 1500px-tall cards. */
+@media (max-width: 575.98px) {
+  body.page-view-solr-search-content.layout-sidebar-first #main-breadcrumbs,
+  body.page-view-solr-search-content.layout-sidebar-first #main-top,
+  body.page-view-solr-search-content.layout-sidebar-first #main-top-flex,
+  body.page-view-solr-search-content.layout-sidebar-first #main,
+  body.page-view-solr-search-content.layout-sidebar-first #content_bottom_container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .view-id-solr_search_content.view-display-id-page_1 .layout--twocol {
+    --search-thumb: 104px;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "thumb title"
+      "meta meta";
+    column-gap: 0.875rem;
+    row-gap: 0.75rem;
+    padding: calc(1rem + 4px) 1rem 1rem;
+  }
+
+  .view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Chip above its snippet, so the snippet gets the full width. */
+  .view-id-solr_search_content.view-display-id-page_1 .search-match__hit {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ---------- 3. Grid display (/search_grid) ----------
+
+   The grid reuses .tamu-card, built for the front page, so several
+   cards.css rules carry !important and need it here too. Scoped to the
+   search grid so the front page and collection pages are untouched. */
+
+/* An even CSS grid instead of Bootstrap's col-lg-3 flex row, which gave
+   four wide columns of uneven height on a full-width page. */
+.view-id-solr_search_content.view-display-id-grid .views-view-grid > .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+/* The grid wrapper is a .row child, so it carries a 12px gutter that
+   indents the cards from the results count and the pager. */
+.view-id-solr_search_content.view-display-id-grid .view-content > .views-view-grid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.view-id-solr_search_content.view-display-id-grid .views-view-grid > .row > [class*="col"] {
+  width: auto;
+  max-width: none;
+  padding: 0;
+  margin: 0 !important;
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card {
+  height: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* Same tile as the list view: fixed 4:3 frame, whole image visible on a
+   light ground, so every card in a row lines up. */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image {
+  aspect-ratio: 4 / 3;
+  background: #f4f1f1;
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image > .field {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card:hover .tamu-card__image img {
+  transform: none;
+}
+
+/* Default thumbnail, as in the list: objects without an image get a Font
+   Awesome icon in the image slot instead, either linked
+   (fa-headphones-alt, fab fa-buffer) or bare with inline padding and
+   fa-4x (fa-archive, from the card thumbnail template). */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image:has(i) {
+  background: #e9e4dc; /* AUX $ivory */
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image > .field:has(i) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* !important against the template's inline padding and colour, which
+   are set for the dark tile the same card uses on the front page. */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image i {
+  padding: 0 !important;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: #732f2f !important; /* AUX $primary-brand-light */
+}
+
+/* Series reach the grid through Archipelago's thumbnail display, which
+   gives them a brand logo (fab fa-buffer); use the layer-group glyph the
+   list and the card template use for series. */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image i.fab.fa-buffer {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card__image i.fab.fa-buffer::before {
+  content: "\f5fd";
+}
+
+.view-id-solr_search_content.view-display-id-grid .tamu-card__body {
+  padding: 0.75rem 1rem 1rem !important;
+}
+
+/* Title matches the list view's result titles: Work Sans 600, maroon,
+   as entered rather than uppercased (AUX keeps Oswald for large display
+   headings). Clamped so one long title does not stretch the row. */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  /* The type and date line (cards.css) follows close below. */
+  margin: 0 0 0.375rem !important;
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif !important;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  text-transform: none;
+  color: var(--primary-brand) !important;
+}
+
+/* Always empty in this display; it only added 3.5rem of blank space. */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__description:empty {
+  display: none;
+}
+
+/* slim.css sets every span italic */
+.view-id-solr_search_content.view-display-id-grid .tamu-card__link {
+  font-family: var(--open-sans);
+  font-style: normal;
+}
+
+@media (max-width: 575.98px) {
+  .view-id-solr_search_content.view-display-id-grid .views-view-grid > .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .view-id-solr_search_content.view-display-id-grid .tamu-card__body {
+    padding: 0.625rem 0.75rem 0.75rem !important;
+  }
+
+  .view-id-solr_search_content.view-display-id-grid .tamu-card__title {
+    font-size: 0.95rem;
+  }
+}

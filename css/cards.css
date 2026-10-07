@@ -106,6 +106,44 @@ h2, h2 a {
   font-weight: 400;
 }
 
+/* "[Type] Date" under the title. The card thumbnail template renders it
+   hidden in the image box; js/card-meta.js moves it here and shows it.
+   The display rule below would otherwise override the hidden attribute. */
+.tamu-card__meta[hidden] {
+  display: none;
+}
+
+.tamu-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin: 0 0 0.75rem;
+  font-family: var(--open-sans);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--gray-700);
+}
+
+/* slim.css sets every span italic, grey and its own size */
+.tamu-card__meta > span {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: normal;
+  color: inherit;
+}
+
+/* AUX tag, as on the search result list */
+.tamu-card__meta > .tamu-card__type {
+  padding: 0 0.55rem;
+  border: 2px solid #d1d1d1;
+  border-radius: 24px;
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--primary-brand);
+}
+
 /* Optional "View collection" link at bottom */
 .tamu-card__link {
   display: inline-flex;
