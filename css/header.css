@@ -734,101 +734,154 @@ h3 {
   color: var(--white) !important;
 }
 
-/* Fix: global slim.css span rule (font-style:italic; color:gray) bleeds into
-   accordion headers and facet item labels — restore normal text rendering */
-.block-facets .accordion-button span {
-  font-style: normal !important;
-  color: var(--white) !important;
-  font-family: var(--oswald) !important;
-  font-weight: 400 !important;
-  font-size: 1rem !important;
+/* ---------------------------------------------------------------
+ * Sidebar facets: maroon text on white.
+ * Several selectors are deliberately more specific than usual (or use
+ * !important) to beat rules in the parent Chiloe theme's style.css
+ * and in Bootstrap; see comments on each.
+ * --------------------------------------------------------------- */
+
+.block-facets {
+  margin-bottom: 0.75rem;
 }
 
-.block-facets .facet-item__value,
-.block-facets .facet-item__count {
-  font-style: normal;
-  color: inherit;
-  font-family: var(--open-sans);
+/* :root prefix matches the parent theme rule that strips item borders */
+:root .block-facets .accordion-item {
+  background: var(--white);
+  border: 1px solid #e3d9d9;
+  border-left: 4px solid var(--primary-brand);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(80, 0, 0, 0.06);
 }
 
-.block-facets .facet-item__count {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.875em;
-  font-weight: 400;
-}
-
-/* Facet items: maroon background / white text at rest; darken on hover */
-.block-facets .facet-item a {
-  display: flex;
-  align-items: baseline;
-  gap: 0.3em;
-  padding: 0.3rem 0.75rem;
-  border-radius: 3px;
-  margin-left: 0;
-  background: var(--primary-brand);
-  color: var(--white) !important;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.15s ease;
-}
-
-.block-facets .facet-item a:hover,
-.block-facets .facet-item a:active {
-  background: var(--primary-brand-dark);
-  color: var(--white) !important;
-  text-decoration: none;
-}
-
-.block-facets .facet-item a:focus {
-  color: var(--white) !important;
-  text-decoration: none;
-  outline: none;
-}
-
-.block-facets .facet-item a:focus-visible {
-  outline: 2px dotted var(--gold);
-  outline-offset: 2px;
-  background: var(--primary-brand-dark);
-}
-
-.block-facets .facet-item.is-active a {
-  background: var(--primary-brand-dark);
-  color: var(--white) !important;
-  font-weight: 700;
-}
-
-/* Fix: Bootstrap Barrio sets 1rem top+bottom margin on each facet item —
-   tighten spacing to match AUX compact list density */
-:root .block-facets ul li.facet-item {
-  margin-top: 0.125rem !important;
-  margin-bottom: 0.125rem !important;
-}
-
-/* Accordion buttons: maroon background + white text in all states.
-   Without background-color here, collapsed buttons revert to Bootstrap's
-   white background and our white text becomes invisible. */
+/* Header button */
 .block-facets .accordion-button,
 .block-facets .accordion-button.collapsed {
-  background-color: var(--primary-brand) !important;
-  color: var(--white) !important;
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23500000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M3 6l5 5 5-5'/%3E%3C/svg%3E");
+  --bs-accordion-btn-active-icon: var(--bs-accordion-btn-icon);
+  --bs-accordion-btn-icon-width: 1rem;
+  /* Bootstrap rounds the first header's top corners via this variable;
+     zero it so the item's overflow clip defines the corners instead */
+  --bs-accordion-inner-border-radius: 0;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0;
   box-shadow: none;
+  background-color: var(--white);
+  color: var(--primary-brand);
+  text-transform: none;
 }
 
-/* Invert the Bootstrap chevron icon so it stays white on dark bg */
+/* Facet title: matches the result titles (Oswald, uppercase, maroon).
+   The parent theme styles this span as a sidebar h2 (Biryani, grey,
+   underline) and turns it white on open accordions; this selector is
+   specific enough to override both. */
+:root .sidebar .block-facets .accordion-item .accordion-button span {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-shadow: none;
+  font-family: var(--oswald);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--primary-brand);
+}
+
 .block-facets .accordion-button::after {
-  filter: brightness(0) invert(1);
+  filter: none;
+  transition: transform 0.2s ease;
 }
 
 .block-facets .accordion-button:hover,
 .block-facets .accordion-button:focus {
-  background-color: var(--primary-brand-dark) !important;
-  color: var(--white) !important;
+  background-color: #f7eded;
+  color: var(--primary-brand);
+}
+
+.block-facets .accordion-button:not(.collapsed) {
+  background-color: #f7eded;
+  border-bottom: 1px solid #e3d9d9;
 }
 
 .block-facets .accordion-button:focus-visible {
-  outline: 2px dotted var(--gold);
-  outline-offset: -4px;
+  outline: 2px solid var(--primary-brand);
+  outline-offset: -3px;
   box-shadow: none;
+}
+
+/* Facet values */
+.block-facets .accordion-body {
+  background: var(--white);
+  padding: 0.5rem 0.5rem 0.75rem;
+}
+
+:root .archipelago-chiloe-theme .block-facets .accordion-body ul {
+  padding-left: 0;
+}
+
+/* !important needed: parent theme sets 1rem !important on this selector */
+:root .block-facets ul li.facet-item {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.block-facets .facet-item a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--primary-brand);
+  font-weight: 400;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.block-facets .facet-item a:hover,
+.block-facets .facet-item a:active,
+.block-facets .facet-item a:focus {
+  background: #f7eded;
+  color: var(--primary-brand-dark);
+  text-decoration: none;
+}
+
+.block-facets .facet-item a:focus-visible {
+  outline: 2px solid var(--primary-brand);
+  outline-offset: 1px;
+}
+
+.block-facets .facet-item.is-active a {
+  background: #f7eded;
+  color: var(--primary-brand-dark);
+  font-weight: 700;
+}
+
+/* Values use the body/nav serif; counts use the pager's Open Sans */
+.block-facets .facet-item__value {
+  font-family: "Droid Serif", serif;
+  font-style: normal;
+  font-size: 0.9375rem;
+  color: inherit;
+}
+
+.block-facets .facet-item__count {
+  flex-shrink: 0;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: #f1eeee;
+  color: #5c5c5c;
+  font-family: var(--open-sans);
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 
