@@ -345,7 +345,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 .view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a > i {
   font-size: calc(var(--search-thumb) * 0.32);
   line-height: 1;
-  color: #732f2f; /* AUX $primary-brand-light */
+     color: var(--primary-brand-light);
   transition: color 0.15s ease;
 }
 
