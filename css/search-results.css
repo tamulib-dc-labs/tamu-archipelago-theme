@@ -853,7 +853,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   padding: 0 !important;
   font-size: 3.5rem;
   line-height: 1;
-  color: #732f2f !important; /* AUX $primary-brand-light */
+  color: var(--primary-brand-light) !important;
 }
 
 /* Series reach the grid through Archipelago's thumbnail display, which
