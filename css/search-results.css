@@ -547,7 +547,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   line-height: 1.3;
   letter-spacing: normal;
   text-transform: none;
-  color: #732f2f; /* AUX $primary-brand-light */
+  color: var(--primary-brand-light);
 }
 
 .view-id-solr_search_content.view-display-id-page_1 .layout__region--second h4:first-child {
