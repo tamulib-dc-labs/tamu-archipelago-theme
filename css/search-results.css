@@ -636,7 +636,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   font-size: 0.85rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #732f2f;
+  color: var(--primary-brand-light);
 }
 
 .view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-match__excerpt {
