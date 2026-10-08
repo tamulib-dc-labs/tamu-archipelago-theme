@@ -493,7 +493,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   font-family: "Font Awesome 5 Free";
   font-size: 0.85em;
   font-weight: 900;
-  color: #732f2f;
+     color: var(--primary-brand-light);
 }
 
 .view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a:hover,
