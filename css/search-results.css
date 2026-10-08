@@ -624,7 +624,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 .view-id-solr_search_content.view-display-id-page_1 .search-match--transcript {
-  border-left-color: #732f2f;
+  border-left-color: var(--primary-brand-light);
 }
 
 .view-id-solr_search_content.view-display-id-page_1 .search-match.is-loading {
