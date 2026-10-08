@@ -698,10 +698,15 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   outline-offset: 2px;
 }
 
-/* Chip on metadata ("Abstract", "Subject", "Details"): says where the
-   text is, links nowhere. */
+/* Chip with no item to link to: says where the text is, links nowhere. */
 .view-id-solr_search_content.view-display-id-page_1 .search-match__where--static {
   min-width: 0;
+}
+
+/* Clicked before its collection member was found: js/search-matches.js
+   goes there once it is. */
+.view-id-solr_search_content.view-display-id-page_1 .search-match a.is-resolving {
+  cursor: progress;
 }
 
 /* The record's fields, kept for js/search-matches.js; never shown. */

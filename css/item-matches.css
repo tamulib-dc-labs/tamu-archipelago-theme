@@ -1,0 +1,33 @@
+/* ── Item page: where a search match lands ─────────────────────────────
+
+   js/match-focus.js marks the metadata row a match came from. */
+
+/* The search words in that row. */
+mark.tamu-hit {
+  padding: 0 0.1em;
+  border-radius: 2px;
+  background: #fce8a6;
+  color: inherit;
+}
+
+/* The row a metadata match came from: a maroon bar that fades, so the
+   eye finds it after the scroll and it does not stay shouting. */
+dt.tamu-field-hit,
+dd.tamu-field-hit {
+  scroll-margin-top: calc(var(--tamu-top-bar-h, 0px) + 1.5rem);
+  box-shadow: inset 3px 0 0 var(--primary-brand);
+  padding-left: 0.75rem;
+  animation: tamu-field-hit 2.4s ease-out 1;
+}
+
+@keyframes tamu-field-hit {
+  from { background-color: #fdf3d0; }
+  to   { background-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dt.tamu-field-hit,
+  dd.tamu-field-hit {
+    animation: none;
+  }
+}
