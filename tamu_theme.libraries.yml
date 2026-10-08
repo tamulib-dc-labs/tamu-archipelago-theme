@@ -15,6 +15,11 @@ cards:
   css:
     theme:
       css/cards.css: {}
+  js:
+    js/card-meta.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
 
 viewer:
   version: VERSION
@@ -45,6 +50,21 @@ collections-list:
   css:
     theme:
       css/collections-list.css: { weight: 999 }
+
+search-results:
+  version: VERSION
+  css:
+    theme:
+      css/search-results.css: { weight: 999 }
+  js:
+    js/search-matches.js: {}
+    js/media-seek.js: {}
+    js/facet-drawer.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    # facet-drawer.js uses Bootstrap's Offcanvas from the base theme.
+    - archipelago_subtheme_chiloe/global-styling
 
 aggie-ux-cdn:
   version: '2.0.0'
