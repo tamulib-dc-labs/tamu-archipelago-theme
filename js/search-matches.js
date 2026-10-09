@@ -334,10 +334,10 @@
       });
   }
 
-  // The record's fields searched when Solr's excerpt says nothing: Solr
-  // only excerpts the abstract and description (and full text), so a
-  // word found only in a subject comes back with no excerpt at all.
-  var FALLBACK_FIELDS = ['abstract', 'description', 'subject'];
+  // The record's fields searched when Solr gives no excerpt. Subjects are
+  // excerpted by Solr itself (the index's full-text Subject field), so
+  // they come back in the excerpt and are labelled from there.
+  var FALLBACK_FIELDS = ['abstract', 'description'];
 
   // The first search word found at the start of a word in one of the
   // fields named (data-field keys, tried in order), as a metadata hit.
@@ -1120,15 +1120,6 @@
         return;
       }
       metaHits.push(found);
-    }
-    // Subjects are never in the excerpt: one holding a search word gets
-    // its own line, where there is room for it.
-    var hasSubject = metaHits.some(function (hit) {
-      return hit.field === 'subject';
-    });
-    var subject = hasSubject ? null : fieldMatch(region, ['subject']);
-    if (subject) {
-      metaHits.push(subject);
     }
 
     var block = el('div', 'search-match search-match--' + (text ? 'fulltext' : 'metadata'));
