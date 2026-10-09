@@ -460,29 +460,6 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   border-radius: 0 !important;
 }
 
-/* Wide screens: at 200px the thumbnail is a tenth of a ~1850px card and
-   the cards read small. The thumbnail takes a quarter of the card and the
-   card grows by a quarter (257px to ~321px for one with a short abstract):
-   the tile is 276px high instead of square, so a quarter-width square does
-   not make every card twice as tall. The whole image still shows. */
-@media (min-width: 1400px) {
-  .view-id-solr_search_content.view-display-id-page_1 .layout--twocol {
-    grid-template-columns: 25% minmax(0, 1fr);
-    column-gap: 2rem;
-  }
-
-  .view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item {
-    aspect-ratio: auto;
-    height: 17.25rem;
-  }
-
-  /* The icon size follows --search-thumb, a length; here the column is a
-     percentage, so size the icon from the tile height instead. */
-  .view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a > i {
-    font-size: 6rem;
-  }
-}
-
 /* Type follows Aggie UX (aggieux.tamu.edu): Work Sans 600 in maroon for
    card headings, as on its Inline Card; Open Sans for everything smaller,
    since AUX keeps Oswald to large display headings. Nothing is set in
@@ -674,13 +651,11 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   list-style: none;
 }
 
-/* 5px round each line, so the lines of a match do not run together. */
 .view-id-solr_search_content.view-display-id-page_1 .search-match__hit {
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
-  margin: 0;
-  padding: 5px;
+  margin: 0 0 0.25rem;
   font-size: 0.9rem;
   color: #3e3e3e;
 }
@@ -723,15 +698,10 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   outline-offset: 2px;
 }
 
-/* Chip with no item to link to: says where the text is, links nowhere. */
+/* Chip on metadata ("Abstract", "Subject", "Details"): says where the
+   text is, links nowhere. */
 .view-id-solr_search_content.view-display-id-page_1 .search-match__where--static {
   min-width: 0;
-}
-
-/* Clicked before its collection member was found: js/search-matches.js
-   goes there once it is. */
-.view-id-solr_search_content.view-display-id-page_1 .search-match a.is-resolving {
-  cursor: progress;
 }
 
 /* The record's fields, kept for js/search-matches.js; never shown. */
@@ -797,6 +767,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
     flex-direction: column;
     align-items: flex-start;
     gap: 0.125rem;
+    margin-bottom: 0.5rem;
   }
 }
 
