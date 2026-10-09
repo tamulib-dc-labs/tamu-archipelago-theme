@@ -334,9 +334,15 @@
       });
   }
 
-  // For records Solr gave no excerpt: the first search word found at the
-  // start of a word in the abstract or description, as a metadata hit.
-  function fieldMatch(region) {
+  // The record's fields searched when Solr's excerpt says nothing: Solr
+  // only excerpts the abstract and description (and full text), so a
+  // word found only in a subject comes back with no excerpt at all.
+  var FALLBACK_FIELDS = ['abstract', 'description', 'subject'];
+
+  // The first search word found at the start of a word in one of the
+  // fields named (data-field keys, tried in order), as a metadata hit.
+  // Null when none holds one.
+  function fieldMatch(region, names) {
     var words = searchWords();
     if (!words.length) {
       return null;
@@ -345,24 +351,24 @@
       return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     });
     var pattern = new RegExp('(^|[^\\w])(' + escaped.join('|') + ')', 'i');
-    var nodes = region.querySelectorAll(
-      '.search-result__fields [data-field="abstract"], .search-result__fields [data-field="description"]'
-    );
-    for (var i = 0; i < nodes.length; i++) {
-      var text = nodes[i].textContent;
-      var found = pattern.exec(text);
-      if (found) {
-        var at = found.index + found[1].length;
-        return {
-          kind: 'meta',
-          field: nodes[i].getAttribute('data-field'),
-          label: nodes[i].getAttribute('data-label'),
-          runs: [
-            { text: text.slice(0, at), hl: false },
-            { text: found[2], hl: true },
-            { text: text.slice(at + found[2].length), hl: false }
-          ]
-        };
+    for (var n = 0; n < names.length; n++) {
+      var nodes = region.querySelectorAll('.search-result__fields [data-field="' + names[n] + '"]');
+      for (var i = 0; i < nodes.length; i++) {
+        var text = nodes[i].textContent;
+        var found = pattern.exec(text);
+        if (found) {
+          var at = found.index + found[1].length;
+          return {
+            kind: 'meta',
+            field: nodes[i].getAttribute('data-field'),
+            label: nodes[i].getAttribute('data-label'),
+            runs: [
+              { text: text.slice(0, at), hl: false },
+              { text: found[2], hl: true },
+              { text: text.slice(at + found[2].length), hl: false }
+            ]
+          };
+        }
       }
     }
     return null;
@@ -1109,11 +1115,20 @@
       region.removeChild(n);
     });
     if (!text && !metaHits.length) {
-      var found = fieldMatch(region);
+      var found = fieldMatch(region, FALLBACK_FIELDS);
       if (!found) {
         return;
       }
       metaHits.push(found);
+    }
+    // Subjects are never in the excerpt: one holding a search word gets
+    // its own line, where there is room for it.
+    var hasSubject = metaHits.some(function (hit) {
+      return hit.field === 'subject';
+    });
+    var subject = hasSubject ? null : fieldMatch(region, ['subject']);
+    if (subject) {
+      metaHits.push(subject);
     }
 
     var block = el('div', 'search-match search-match--' + (text ? 'fulltext' : 'metadata'));
