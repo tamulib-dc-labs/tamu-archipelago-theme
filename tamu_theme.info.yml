@@ -12,6 +12,7 @@ libraries:
   - tamu_theme/collection-hero
   - tamu_theme/collections-list
   - tamu_theme/search-results
+  - tamu_theme/item-matches
   - tamu_theme/footer
   - tamu_theme/aggie-ux-cdn
   - tamu_theme/google-fonts
