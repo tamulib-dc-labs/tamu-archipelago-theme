@@ -51,8 +51,11 @@ collections-list:
     theme:
       css/collections-list.css: { weight: 999 }
 
+# No version: Drupal then versions the JS with the query string that
+# changes on every cache rebuild. With "version: VERSION" the URL stays
+# ?v={core version}, and the cache in front of the site keeps serving the
+# old file for hours after a deploy.
 search-results:
-  version: VERSION
   css:
     theme:
       css/search-results.css: { weight: 999 }
@@ -69,7 +72,6 @@ search-results:
 # Item pages: land on the metadata field a search match came from
 # (linked from js/search-matches.js).
 item-matches:
-  version: VERSION
   css:
     theme:
       css/item-matches.css: { weight: 999 }
