@@ -674,11 +674,13 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   list-style: none;
 }
 
+/* 5px round each line, so the lines of a match do not run together. */
 .view-id-solr_search_content.view-display-id-page_1 .search-match__hit {
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
-  margin: 0 0 0.25rem;
+  margin: 0;
+  padding: 5px;
   font-size: 0.9rem;
   color: #3e3e3e;
 }
@@ -795,7 +797,6 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
     flex-direction: column;
     align-items: flex-start;
     gap: 0.125rem;
-    margin-bottom: 0.5rem;
   }
 }
 
