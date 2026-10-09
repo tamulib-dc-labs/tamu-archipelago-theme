@@ -51,8 +51,11 @@ collections-list:
     theme:
       css/collections-list.css: { weight: 999 }
 
+# No version: Drupal then versions the JS with the query string that
+# changes on every cache rebuild. With "version: VERSION" the URL stays
+# ?v={core version}, and the cache in front of the site keeps serving the
+# old file for hours after a deploy.
 search-results:
-  version: VERSION
   css:
     theme:
       css/search-results.css: { weight: 999 }
@@ -64,6 +67,20 @@ search-results:
     - core/drupal
     - core/once
     # facet-drawer.js uses Bootstrap's Offcanvas from the base theme.
+    - archipelago_subtheme_chiloe/global-styling
+
+# Item pages: land on the metadata field a search match came from
+# (linked from js/search-matches.js).
+item-matches:
+  css:
+    theme:
+      css/item-matches.css: { weight: 999 }
+  js:
+    js/match-focus.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    # match-focus.js shows a hidden metadata tab with Bootstrap's Tab.
     - archipelago_subtheme_chiloe/global-styling
 
 aggie-ux-cdn:

@@ -42,13 +42,26 @@
  * A result shows at most MAX_HITS lines in all; the rest are left to the
  * item's own viewer.
  *
- * Each located hit links straight to its place in the viewer, from both its
- * chip and its highlighted words: /do/{uuid}#search/{term}/page/{n} opens
- * Mirador on that page with the term highlighted (see
- * PAGE_LINKS_WITH_SEARCH for the viewer setting this depends on), and
- * /do/{uuid}#time/{seconds} is picked up by js/media-seek.js on the item
- * page. Maps open in the Clover viewer, which cannot be pointed at a page
- * or a word, so their hits link to the map itself.
+ * Every hit links to its place on the item page, from both its chip and its
+ * highlighted words:
+ *
+ * - Pages: /do/{uuid}#search/{term}/page/{n} opens Mirador on that page
+ *   with the term highlighted (see PAGE_LINKS_WITH_SEARCH for the viewer
+ *   setting this depends on). Maps open in the Clover viewer, which cannot
+ *   be pointed at a page or a word, so their hits link to the map itself.
+ * - Times: /do/{uuid}#time/{seconds}, picked up by js/media-seek.js.
+ * - Untimed transcript: the item, where the Clover viewer lists the
+ *   transcript in its information panel (the A/V display's Clover
+ *   formatter, with the panel's About and Annotations tabs on).
+ * - Metadata: /do/{uuid}#field/{label}/q/{term}, the field's row with the
+ *   words marked (js/match-focus.js); #q/{term} for "Details".
+ * - Collections and series have no player and, for collections, no
+ *   viewer: their transcript and full-text hits are in a member item
+ *   (the side of an album, an interview in a collection). Which one is
+ *   looked up when the reader first points at or focuses the link, by a
+ *   phrase search for the hit's words among the members, and the link
+ *   then goes to that item at that time. Until then, or if none is found,
+ *   it goes to the collection or series page, which lists its members.
  *
  * Anything that cannot be located keeps the original excerpt, so a result
  * never shows less than before.
@@ -79,6 +92,13 @@
   // Types shown in the Clover viewer, which reads no page or search from
   // the URL: their hits link to the object itself.
   var PLAIN_LINK_TYPES = ['map'];
+
+  // Types whose transcript and full text are their members' (see the file
+  // comment): those hits link to the member they are found in.
+  var PARENT_TYPES = ['collection', 'creativeworkseries'];
+
+  // A result's metadata region, here and in fetched search pages.
+  var REGION = '.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second';
 
   // Which manifest's search service to ask, in order. Book and Manuscript
   // can be a single object or a multi-part one; the type alone does not
@@ -249,6 +269,7 @@
     }
     return {
       kind: 'meta',
+      field: source ? source.field : '',
       label: source ? source.label : Drupal.t('Details'),
       runs: hitRuns
     };
@@ -256,6 +277,30 @@
 
   function runsText(hitRuns) {
     return norm(hitRuns.map(function (run) { return run.text; }).join(''));
+  }
+
+  // The field sharing the most words with a hit, for text that runs field
+  // labels and values together ("Title Charting Texas Abstract This
+  // exhibition …", a collection's own canvas). Title is left out, as it is
+  // for metadata hits; null when no field shares three words.
+  function bestField(fields, hitRuns) {
+    var words = runsText(hitRuns).split(' ').filter(function (word) {
+      return word.length > 2;
+    });
+    var best = null;
+    fields.forEach(function (field) {
+      if (field.field === 'title') {
+        return;
+      }
+      var own = ' ' + field.text + ' ';
+      var shared = words.filter(function (word) {
+        return own.indexOf(' ' + word + ' ') !== -1;
+      }).length;
+      if (shared >= 3 && (!best || shared > best.shared)) {
+        best = { field: field, shared: shared };
+      }
+    });
+    return best ? best.field : null;
   }
 
   // One hit per label: further text from the same field joins the first,
@@ -289,9 +334,15 @@
       });
   }
 
-  // For records Solr gave no excerpt: the first search word found at the
-  // start of a word in the abstract or description, as a metadata hit.
-  function fieldMatch(region) {
+  // The record's fields searched when Solr gives no excerpt. Subjects are
+  // excerpted by Solr itself (the index's full-text Subject field), so
+  // they come back in the excerpt and are labelled from there.
+  var FALLBACK_FIELDS = ['abstract', 'description'];
+
+  // The first search word found at the start of a word in one of the
+  // fields named (data-field keys, tried in order), as a metadata hit.
+  // Null when none holds one.
+  function fieldMatch(region, names) {
     var words = searchWords();
     if (!words.length) {
       return null;
@@ -300,23 +351,24 @@
       return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     });
     var pattern = new RegExp('(^|[^\\w])(' + escaped.join('|') + ')', 'i');
-    var nodes = region.querySelectorAll(
-      '.search-result__fields [data-field="abstract"], .search-result__fields [data-field="description"]'
-    );
-    for (var i = 0; i < nodes.length; i++) {
-      var text = nodes[i].textContent;
-      var found = pattern.exec(text);
-      if (found) {
-        var at = found.index + found[1].length;
-        return {
-          kind: 'meta',
-          label: nodes[i].getAttribute('data-label'),
-          runs: [
-            { text: text.slice(0, at), hl: false },
-            { text: found[2], hl: true },
-            { text: text.slice(at + found[2].length), hl: false }
-          ]
-        };
+    for (var n = 0; n < names.length; n++) {
+      var nodes = region.querySelectorAll('.search-result__fields [data-field="' + names[n] + '"]');
+      for (var i = 0; i < nodes.length; i++) {
+        var text = nodes[i].textContent;
+        var found = pattern.exec(text);
+        if (found) {
+          var at = found.index + found[1].length;
+          return {
+            kind: 'meta',
+            field: nodes[i].getAttribute('data-field'),
+            label: nodes[i].getAttribute('data-label'),
+            runs: [
+              { text: text.slice(0, at), hl: false },
+              { text: found[2], hl: true },
+              { text: text.slice(at + found[2].length), hl: false }
+            ]
+          };
+        }
       }
     }
     return null;
@@ -369,6 +421,8 @@
       }
       var clean = fragment
         .replace(CUE, ' ')
+        // The file's header, when the hit is in its first cue.
+        .replace(/^\s*WEBVTT\b/, ' ')
         // A timing cut off at the end of the fragment, before its arrow:
         // "… tuition. 04" or "… $25. 06:13.457".
         .replace(/\s+(?:\d{1,2}|[\d:.]*[:.][\d:.]*\d)\s*$/, '')
@@ -454,6 +508,8 @@
       if (!canvas || (type === 'collection' && canvas[1] === uuid)) {
         hit.kind = 'text';
         hit.label = textLabel(type);
+        // On the collection's own canvas: its description, on its page.
+        hit.own = !!canvas;
       }
       else if (type === 'collection') {
         hit.kind = 'item';
@@ -516,11 +572,47 @@
     return out;
   }
 
-  // Where a hit's chip and highlight link to. Hits that could not be
-  // located keep the item's own #search link.
-  function hitHref(hit, href) {
-    var parts = href.split('#');
-    var item = parts[0];
+  // The words searched for: the term in the item's #search link, else the
+  // search box.
+  function searchTerm(href) {
+    var match = /#search\/([^/]+)/.exec(href || '');
+    if (match) {
+      try {
+        return decodeURIComponent(match[1]);
+      }
+      catch (e) {
+        return match[1];
+      }
+    }
+    return searchWords().join(' ');
+  }
+
+  // The item's own page: its #search link without the fragment, or the
+  // card's title link when the excerpt has no link (metadata matches).
+  function itemUrl(region, href) {
+    if (href) {
+      return href.split('#')[0];
+    }
+    var card = region.closest('.layout--twocol') || region;
+    var link = card.querySelector('a[href*="/do/"]');
+    return link ? link.getAttribute('href').split('#')[0] : '';
+  }
+
+  // Where a hit's chip and highlight link to, on the item `ctx` describes:
+  // {item, href (its #search link, if any), term, type}.
+  function hitHref(hit, ctx) {
+    var item = ctx.item;
+    var parts = (ctx.href || '').split('#');
+    var q = ctx.term ? 'q/' + encodeURIComponent(ctx.term) : '';
+    if (!item) {
+      return ctx.href || '';
+    }
+    if (hit.kind === 'meta' || hit.own) {
+      // A "Details" chip, or a collection's own text, names no field: the
+      // item page finds the words.
+      var at = hit.field ? 'field/' + encodeURIComponent(hit.label) + (q ? '/' + q : '') : q;
+      return at ? item + '#' + at : item;
+    }
     if (hit.kind === 'page' && hit.plain) {
       return item;
     }
@@ -535,7 +627,222 @@
     if (hit.kind === 'item') {
       return '/do/' + hit.item + (parts[1] ? '#' + parts[1] : '');
     }
-    return href;
+    if (AV_TYPES.indexOf(ctx.type) !== -1) {
+      // Nothing on an A/V page reads #search; the viewer shows the
+      // transcript.
+      return item;
+    }
+    return ctx.href || item;
+  }
+
+  /* ---------------------------------------------------------------
+     Members of collections and series
+     --------------------------------------------------------------- */
+
+  // A few words around a hit's first highlight, for a phrase search: up to
+  // four either side, as Search API indexes them (no punctuation).
+  function phrases(hitRuns) {
+    var first = -1;
+    hitRuns.some(function (run, i) {
+      if (run.hl) {
+        first = i;
+      }
+      return run.hl;
+    });
+    if (first < 0) {
+      return [];
+    }
+    var words = function (list) {
+      return norm(list.map(function (run) { return run.text; }).join('')).split(' ').filter(Boolean);
+    };
+    var before = words(hitRuns.slice(0, first)).slice(-4);
+    var hl = words([hitRuns[first]]);
+    var after = words(hitRuns.slice(first + 1)).slice(0, 4);
+    // A transcript's indexed text has cue timings between its lines, which
+    // the hit's words no longer show: a phrase across two lines finds
+    // nothing, so shorter ones are tried after it.
+    var out = [before.concat(hl, after), hl.concat(after), before.concat(hl), hl]
+      .map(function (list) { return list.join(' '); })
+      .filter(Boolean);
+    return out.filter(function (text, i) {
+      return out.indexOf(text) === i;
+    });
+  }
+
+  // The members a series lists on its own page; a collection's are found
+  // with the search page's collection filter instead.
+  var childrenOf = {};
+  function seriesChildren(item) {
+    if (!childrenOf[item]) {
+      childrenOf[item] = fetch(item, { credentials: 'same-origin' })
+        .then(function (response) {
+          return response.ok ? response.text() : '';
+        })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          return Array.prototype.map.call(
+            doc.querySelectorAll('.view-id-creative_work_series_children a[href*="/do/"]'),
+            function (link) {
+              return link.getAttribute('href').split('#')[0].replace(/^https?:\/\/[^/]+/, '');
+            }
+          );
+        })
+        .catch(function () {
+          return [];
+        });
+    }
+    return childrenOf[item];
+  }
+
+  // Search results for a phrase among the members, parsed as on this page.
+  function memberResults(text, ctx) {
+    var url = '/search?search_api_fulltext=' + encodeURIComponent('"' + text + '"');
+    if (ctx.type === 'collection' && ctx.title) {
+      url += '&' + encodeURIComponent('f[0]') + '=' +
+        encodeURIComponent('is_member_of_content_title:' + ctx.title);
+    }
+    return fetch(url, { credentials: 'same-origin' })
+      .then(function (response) {
+        return response.ok ? response.text() : '';
+      })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return Array.prototype.map.call(doc.querySelectorAll(REGION), parse)
+          .filter(function (result) {
+            return result && result.item && result.item !== ctx.item;
+          });
+      });
+  }
+
+  // The member a parent's hit is in. A timed hit takes the member whose own
+  // transcript has a hit nearest that time; anything else the first member
+  // the phrase finds.
+  function pickMember(results, hit) {
+    if (hit.kind !== 'time') {
+      return results[0] || null;
+    }
+    var best = null;
+    results.forEach(function (result) {
+      if (!hasCues(result.text)) {
+        return;
+      }
+      transcriptHits(result.text, result.fields, result.type, []).forEach(function (own) {
+        if (own.time === null) {
+          return;
+        }
+        var off = Math.abs(own.time - hit.time);
+        if (!best || off < best.off) {
+          best = { result: result, off: off };
+        }
+      });
+    });
+    return best ? best.result : (results[0] || null);
+  }
+
+  // Where a parent's hit is in a member: {href, title}, or null if no
+  // member is found.
+  function memberHref(hit, ctx) {
+    var tries = phrases(hit.runs);
+    var allowed = ctx.type === 'creativeworkseries' ? seriesChildren(ctx.item) : Promise.resolve(null);
+    return allowed.then(function (children) {
+      var attempt = function (i) {
+        if (i >= tries.length) {
+          return null;
+        }
+        return memberResults(tries[i], ctx).then(function (results) {
+          if (children && children.length) {
+            results = results.filter(function (result) {
+              return children.indexOf(result.item.replace(/^https?:\/\/[^/]+/, '')) !== -1;
+            });
+          }
+          var member = pickMember(results, hit);
+          if (!member) {
+            return attempt(i + 1);
+          }
+          return {
+            title: member.title,
+            href: hitHref(hit, {
+              item: member.item,
+              // Its own #search link carries the phrase, not what was searched.
+              href: ctx.term ? member.item + '#search/' + encodeURIComponent(ctx.term) : '',
+              term: ctx.term,
+              type: member.type
+            })
+          };
+        });
+      };
+      return attempt(0);
+    });
+  }
+
+  // Member lookups run two at a time, so a page of collection results does
+  // not send every search at once.
+  var LOOKUPS = 2;
+  var running = 0;
+  var queued = [];
+  function queue(task) {
+    return new Promise(function (resolve) {
+      queued.push(function () {
+        running++;
+        task().then(resolve, function () {
+          resolve(null);
+        }).then(function () {
+          running--;
+          if (queued.length) {
+            queued.shift()();
+          }
+        });
+      });
+      if (running < LOOKUPS) {
+        queued.shift()();
+      }
+    });
+  }
+
+  // A parent's hit, pointed at its member once that is known: the links
+  // change to the member, the snippet is headed by the member's title (as
+  // a collection's page hits are, see nameItem) and a full-text chip says
+  // "Item". Looked up as soon as the result is shown; a click before then
+  // waits for it. Until then, and if no member is found, the links go to
+  // the collection or series page, which lists its members.
+  function linkToMember(hit, ctx, chip, snippetNode) {
+    var links = [chip].concat(Array.prototype.slice.call(snippetNode.querySelectorAll('a')));
+    var done = false;
+    var pending = queue(function () {
+      return memberHref(hit, ctx);
+    }).then(function (member) {
+      done = true;
+      links.forEach(function (link) {
+        link.classList.remove('is-resolving');
+      });
+      if (member) {
+        links.forEach(function (link) {
+          link.href = member.href;
+        });
+        if (member.title) {
+          snippetNode.insertBefore(el('span', 'search-match__context', member.title), snippetNode.firstChild);
+        }
+        if (hit.kind === 'text') {
+          chip.textContent = Drupal.t('Item');
+        }
+      }
+      return member;
+    });
+    links.forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        // Modifier clicks open a new tab, which cannot wait.
+        if (done || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+          return;
+        }
+        event.preventDefault();
+        links.forEach(function (each) {
+          each.classList.add('is-resolving');
+        });
+        pending.then(function (member) {
+          window.location.href = member ? member.href : link.href;
+        });
+      });
+    });
   }
 
   function snippet(hitRuns, href) {
@@ -591,12 +898,12 @@
       });
   }
 
-  // A list of hits, chip then snippet. Metadata hits have nowhere to link
-  // to: their chip is a plain label.
-  function hitList(hits, href) {
+  // A list of hits, chip then snippet, each linking to its place (see
+  // hitHref). A chip only stays a plain label if the item has no link.
+  function hitList(hits, ctx) {
     var list = el('ul', 'search-match__hits');
     hits.forEach(function (hit) {
-      var target = hit.kind === 'meta' ? '' : hitHref(hit, href);
+      var target = hitHref(hit, ctx);
       var item = el('li', 'search-match__hit search-match__hit--' + hit.kind);
       var chip;
       if (target) {
@@ -612,15 +919,19 @@
       if (hit.kind === 'item') {
         nameItem(hit, text);
       }
+      if (target && !hit.own && PARENT_TYPES.indexOf(ctx.type) !== -1 &&
+        (hit.kind === 'time' || hit.kind === 'text')) {
+        linkToMember(hit, ctx, chip, text);
+      }
       list.appendChild(item);
     });
     return list;
   }
 
-  function showHits(block, excerpt, hits, href, kind, limit) {
+  function showHits(block, excerpt, hits, ctx, kind, limit) {
     block.classList.remove('search-match--fulltext');
     block.classList.add('search-match--' + kind);
-    block.replaceChild(hitList(hits.slice(0, limit), href), excerpt);
+    block.replaceChild(hitList(hits.slice(0, limit), ctx), excerpt);
   }
 
   function search(uuid, display, term) {
@@ -637,10 +948,11 @@
 
   // Locates the full-text hits on pages, sheets or member items; anything
   // that cannot be located is shown as the `fallback` hits instead.
-  function loadPageHits(block, excerpt, href, type, limit, fallback) {
-    var match = /\/do\/([0-9a-f-]{36})#search\/(.+)$/.exec(href);
+  function loadPageHits(block, excerpt, ctx, limit, fallback) {
+    var type = ctx.type;
+    var match = /\/do\/([0-9a-f-]{36})#search\/(.+)$/.exec(ctx.href);
     if (!match || !window.fetch) {
-      showHits(block, excerpt, fallback, href, 'fulltext', limit);
+      showHits(block, excerpt, fallback, ctx, 'fulltext', limit);
       return;
     }
     var uuid = match[1];
@@ -664,7 +976,7 @@
     attempt(0)
       .then(function (hits) {
         if (!hits.length) {
-          showHits(block, excerpt, fallback, href, 'fulltext', limit);
+          showHits(block, excerpt, fallback, ctx, 'fulltext', limit);
           return;
         }
         // The service ranks by relevance; read in page order instead.
@@ -688,10 +1000,18 @@
           }
           return false;
         });
-        showHits(block, excerpt, places, href, places[0].kind === 'item' ? 'items' : 'pages', limit);
+        // A collection's own text is named by the field it is in.
+        places.forEach(function (hit) {
+          var field = hit.own ? bestField(ctx.fields, hit.runs) : null;
+          if (field) {
+            hit.field = field.field;
+            hit.label = field.label;
+          }
+        });
+        showHits(block, excerpt, places, ctx, places[0].kind === 'item' ? 'items' : 'pages', limit);
       })
       .catch(function () {
-        showHits(block, excerpt, fallback, href, 'fulltext', limit);
+        showHits(block, excerpt, fallback, ctx, 'fulltext', limit);
       })
       .then(function () {
         block.classList.remove('is-loading');
@@ -721,10 +1041,13 @@
     });
   }
 
-  function build(region) {
+  // A result's excerpt, read without changing the page: the nodes after
+  // the metadata field, its metadata hits, its full text and its link.
+  // Also used on search pages fetched to find a collection's member.
+  function parse(region) {
     var field = region.querySelector(':scope > .field');
     if (!field) {
-      return;
+      return null;
     }
     // Everything after the metadata field is the excerpt.
     var nodes = [];
@@ -747,14 +1070,52 @@
     });
     var link = region.querySelector(':scope > strong a[href*="#search/"]');
     var href = link ? link.getAttribute('href') : '';
-    var text = unquote(flatten(fullNodes)).trim();
+    return {
+      nodes: nodes,
+      fields: fields,
+      type: type,
+      fullNodes: fullNodes,
+      metaHits: metaHits,
+      href: href,
+      item: itemUrl(region, href),
+      title: cardTitle(region),
+      text: unquote(flatten(fullNodes)).trim()
+    };
+  }
+
+  // The result's title, which the collection filter matches on.
+  function cardTitle(region) {
+    var card = region.closest('.layout--twocol') || region;
+    var title = card.querySelector('.layout__region--top h2, h2');
+    return title ? title.textContent.replace(/\s+/g, ' ').trim() : '';
+  }
+
+  function build(region) {
+    var result = parse(region);
+    if (!result) {
+      return;
+    }
+    var fields = result.fields;
+    var type = result.type;
+    var fullNodes = result.fullNodes;
+    var metaHits = result.metaHits;
+    var href = result.href;
+    var text = result.text;
+    var ctx = {
+      item: result.item,
+      href: href,
+      term: searchTerm(href),
+      type: type,
+      title: result.title,
+      fields: fields
+    };
 
     // The Match block replaces the excerpt, including a title-only one.
-    nodes.forEach(function (n) {
+    result.nodes.forEach(function (n) {
       region.removeChild(n);
     });
     if (!text && !metaHits.length) {
-      var found = fieldMatch(region);
+      var found = fieldMatch(region, FALLBACK_FIELDS);
       if (!found) {
         return;
       }
@@ -795,27 +1156,23 @@
     metaHits = mergeByLabel(metaHits);
     var metaShown = metaHits.slice(0, text ? 1 : MAX_HITS);
     if (metaShown.length) {
-      block.appendChild(hitList(metaShown, href));
+      block.appendChild(hitList(metaShown, ctx));
     }
     var limit = MAX_HITS - metaShown.length;
     if (mode === 'transcript') {
-      showHits(block, excerpt, hits, href, 'transcript', limit);
+      showHits(block, excerpt, hits, ctx, 'transcript', limit);
     }
     else if (mode === 'whole') {
-      showHits(block, excerpt, whole, href, 'fulltext', limit);
+      showHits(block, excerpt, whole, ctx, 'fulltext', limit);
     }
     else if (mode === 'pages') {
-      loadPageHits(block, excerpt, href, type, limit, whole);
+      loadPageHits(block, excerpt, ctx, limit, whole);
     }
   }
 
   Drupal.behaviors.tamuSearchMatches = {
     attach: function (context) {
-      once(
-        'tamu-search-match',
-        '.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second',
-        context
-      ).forEach(build);
+      once('tamu-search-match', REGION, context).forEach(build);
     }
   };
 })(Drupal, once);
