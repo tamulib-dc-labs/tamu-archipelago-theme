@@ -173,6 +173,14 @@
         if (!filters.length) {
           return;
         }
+        // Block order in the region is whatever the block layout says;
+        // the filters read best broadest first.
+        var ORDER = ['type', 'rights', 'digital_origin', 'medium'];
+        var rank = function (alias) {
+          var i = ORDER.indexOf(alias);
+          return i === -1 ? ORDER.length : i;
+        };
+        filters.sort(function (a, b) { return rank(a.alias) - rank(b.alias); });
 
         var ours = filters.map(function (filter) { return filter.alias; });
         var panel = document.createElement('fieldset');
