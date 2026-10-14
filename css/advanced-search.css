@@ -433,6 +433,25 @@
   grid-column: 3 / 5;
 }
 
+/* Date row: the Date filter's From / To inputs, side by side across the
+   same two columns. (The Date fieldset they come from is hidden.) */
+:root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search > .form-row .tamu-adv-row > .fieldset-wrapper > .tamu-adv-dates {
+  grid-row: 1;
+  grid-column: 3 / 5;
+}
+
+:root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search .tamu-adv-dates__boxes {
+  display: flex;
+  gap: 0.75rem;
+}
+
+:root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search .tamu-adv-dates__boxes > .js-form-item {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0 !important; /* Bootstrap mb-3 */
+}
+
 /* The base theme gives <details> a 1rem margin above and below, which
    would lift the list out of line with the row's other controls. */
 :root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search .tamu-adv-ms {
@@ -567,7 +586,7 @@
 
 @media (max-width: 767.98px) {
 
-  :root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search > .form-row .tamu-adv-row > .fieldset-wrapper > .tamu-adv-values {
+  :root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search > .form-row .tamu-adv-row > .fieldset-wrapper > :is(.tamu-adv-values, .tamu-adv-dates) {
     grid-row: auto;
     grid-column: 1 / -1;
   }

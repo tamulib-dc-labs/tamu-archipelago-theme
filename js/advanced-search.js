@@ -1,8 +1,8 @@
 /**
  * @file
- * Advanced search (/advanced-search): filter rows (Type, Rights, Digital
- * origin, Medium picked in a row's "Search in" list) and a one-line
- * summary of the search above the results.
+ * Advanced search (/advanced-search): filter rows (Date, Type, Rights,
+ * Digital origin, Medium picked in a row's "Search in" list) and a
+ * one-line summary of the search above the results.
  *
  *   Results for Title has all of “cotton” AND Subject has any of “football”
  *   dated 1940 to 1949 · Type: Video or Audio
@@ -19,6 +19,9 @@
   // "Search in" values for filters are "facet:{alias}"; the server never
   // sees them (see the submit handler).
   var PREFIX = 'facet:';
+
+  // "Search in" value for the Date filter row.
+  var DATE = 'date:range';
 
   // Filters read best broadest first.
   var ORDER = ['type', 'rights', 'digital_origin', 'medium'];
@@ -186,21 +189,25 @@
   }
 
   /**
-   * Filter rows: Type / Rights / Digital origin / Medium are offered at
-   * the end of every row's "Search in" list (a "Filter by" group). Picking
-   * one swaps that row's Match and Search words for the filter's value
-   * list; picking a field again brings them back. A filter is used in one
-   * row at a time, and a filter row is always ANDed with the rest.
+   * Filter rows: Date, Type, Rights, Digital origin and Medium are offered
+   * at the end of every row's "Search in" list (a "Filter by" group).
+   * Picking one swaps that row's Match and Search words for the filter:
+   * From / To boxes for Date, the value list for the others; picking a
+   * field again brings them back. A filter is used in one row at a time,
+   * and a filter row is always ANDed with the rest.
    *
-   * Ticked values apply with Search, which sends them as f[n]=alias:value
-   * (values of one filter ORed, filters ANDed) and hands the server an
-   * empty "All fields" row in place of each filter row, so the
-   * Strawberryfield filter never sees the facet:… values. The page that
-   * comes back has those rows empty; the filters in its URL are put back
+   * On Search, ticked values go out as f[n]=alias:value (values of one
+   * filter ORed, filters ANDed) and Date as the Date filter's own date[min]
+   * / date[max] inputs, which the date row borrows from the (now hidden)
+   * Date fieldset; with no date row the range is cleared. The server gets
+   * an empty "All fields" row in place of each filter row, so the
+   * Strawberryfield filter never sees the facet:… / date:… values. On the
+   * page that comes back, the URL's filters and date range are put back
    * into empty rows (adding rows with "Add another field" when needed).
    * Reset sends no filters.
    *
-   * Without JavaScript the facet blocks stay on the page as links.
+   * Without JavaScript the facet blocks stay on the page as links and the
+   * Date fieldset stays as it is.
    */
   Drupal.behaviors.tamuAdvancedSearchFilters = {
     attach: function (context) {
@@ -208,8 +215,15 @@
         var inUrl = urlFacets();
         var facets = readFacets(document.querySelector('.region-content-top'), inUrl);
         var aliases = sortedAliases(facets);
-        if (!aliases.length) {
+        var dateFieldset = form.querySelector('.tamu-adv-date');
+        var dateHome = dateFieldset ? dateFieldset.querySelector(':scope > .fieldset-wrapper') : null;
+        var dateItems = dateHome ? Array.prototype.slice.call(dateHome.querySelectorAll(':scope > .js-form-item')) : [];
+        var dateInputs = dateItems.map(function (item) { return item.querySelector('input'); });
+        if (!aliases.length && !dateInputs.length) {
           return;
+        }
+        if (dateFieldset) {
+          dateFieldset.classList.add('hidden');
         }
         var ticked = {};
         aliases.forEach(function (alias) {
@@ -224,45 +238,87 @@
         var groupSelect = function (row) {
           return row.querySelector('select[data-advanced-search-type="group_op"], select[data-advanced-search-type="op"]');
         };
+        // The filter a row's "Search in" names: "date", a facet alias, or
+        // null for a field.
+        var filterOf = function (row) {
+          var value = fieldSelect(row).value;
+          if (value === DATE) {
+            return 'date';
+          }
+          return value.indexOf(PREFIX) === 0 ? value.slice(PREFIX.length) : null;
+        };
 
         // The "Filter by" options, the same in every row (Remove shifts
         // rows by option index).
         rows().forEach(function (row) {
-          var select = fieldSelect(row);
           var group = document.createElement('optgroup');
           group.label = Drupal.t('Filter by');
+          if (dateInputs.length) {
+            var date = document.createElement('option');
+            date.value = DATE;
+            date.textContent = Drupal.t('Date');
+            group.appendChild(date);
+          }
           aliases.forEach(function (alias) {
             var option = document.createElement('option');
             option.value = PREFIX + alias;
             option.textContent = facets[alias].title;
             group.appendChild(option);
           });
-          select.appendChild(group);
+          fieldSelect(row).appendChild(group);
         });
+
+        // From / To boxes for a date row: the Date filter's own inputs,
+        // moved in.
+        var buildDates = function (first) {
+          var wrap = document.createElement('div');
+          wrap.className = 'js-form-item tamu-adv-dates';
+          wrap.dataset.filter = 'date';
+          var label = document.createElement('span');
+          label.className = 'tamu-adv-values__label' + (first ? '' : ' visually-hidden');
+          label.textContent = Drupal.t('Between');
+          wrap.appendChild(label);
+          var boxes = document.createElement('div');
+          boxes.className = 'tamu-adv-dates__boxes';
+          dateItems.forEach(function (item) {
+            boxes.appendChild(item);
+          });
+          wrap.appendChild(boxes);
+          return wrap;
+        };
+        var putDatesHome = function () {
+          dateItems.forEach(function (item) {
+            dateHome.appendChild(item);
+          });
+        };
 
         var render = function () {
           var used = {};
           rows().forEach(function (row, index) {
             var select = fieldSelect(row);
-            var value = select.value;
-            var alias = value.indexOf(PREFIX) === 0 ? value.slice(PREFIX.length) : null;
-            if (alias && used[alias]) {
+            var filter = filterOf(row);
+            if (filter && used[filter]) {
               // Same filter twice (after a shift): the later row goes back
               // to "All fields".
               select.selectedIndex = 0;
-              alias = null;
+              filter = null;
             }
-            var current = row.querySelector('.tamu-adv-values');
-            if (current && current.dataset.alias !== alias) {
+            var current = row.querySelector('.tamu-adv-values, .tamu-adv-dates');
+            if (current && current.dataset.filter !== filter) {
+              if (current.classList.contains('tamu-adv-dates')) {
+                putDatesHome();
+              }
               current.remove();
               current = null;
             }
             var connector = groupSelect(row);
-            if (alias) {
-              used[alias] = true;
+            if (filter) {
+              used[filter] = true;
               row.classList.add('tamu-adv-row--filter');
               if (!current) {
-                row.querySelector(':scope > .fieldset-wrapper').appendChild(buildValues(facets[alias], ticked, index === 0));
+                row.querySelector(':scope > .fieldset-wrapper').appendChild(
+                  filter === 'date' ? buildDates(index === 0) : buildValues(facets[filter], ticked, index === 0)
+                );
               }
               if (connector && connector.dataset.advancedSearchType === 'group_op') {
                 connector.value = 'and';
@@ -279,33 +335,40 @@
           // Each filter in one row only.
           rows().forEach(function (row) {
             var select = fieldSelect(row);
-            Array.prototype.forEach.call(select.querySelectorAll('option[value^="' + PREFIX + '"]'), function (option) {
-              var alias = option.value.slice(PREFIX.length);
-              option.disabled = Boolean(used[alias]) && select.value !== option.value;
+            Array.prototype.forEach.call(select.querySelectorAll('optgroup option'), function (option) {
+              var key = option.value === DATE ? 'date' : option.value.slice(PREFIX.length);
+              option.disabled = Boolean(used[key]) && select.value !== option.value;
             });
           });
         };
 
-        // Put the URL's filters back, each into the next empty row.
+        // Put the searched date range and the URL's filters back, each into
+        // the next empty row.
         var addOne = form.querySelector('[data-advanced-search-addone]');
-        aliases.filter(function (alias) { return facets[alias].chosen.length; }).forEach(function (alias) {
-          var free = rows().filter(function (row) {
+        var freeRows = function () {
+          return rows().filter(function (row) {
             var words = row.querySelector('input[type="text"]');
-            return !row.classList.contains('hidden') &&
-              fieldSelect(row).value.indexOf(PREFIX) !== 0 &&
+            return !row.classList.contains('hidden') && !filterOf(row) &&
               !(words && words.value.trim());
           });
+        };
+        var restore = [];
+        if (dateInputs.some(function (input) { return input.value.trim(); })) {
+          restore.push(DATE);
+        }
+        aliases.forEach(function (alias) {
+          if (facets[alias].chosen.length) {
+            restore.push(PREFIX + alias);
+          }
+        });
+        restore.forEach(function (value) {
+          var free = freeRows();
           if (!free.length && addOne && !addOne.classList.contains('visually-hidden')) {
             addOne.click();
-            free = rows().filter(function (row) {
-              var words = row.querySelector('input[type="text"]');
-              return !row.classList.contains('hidden') &&
-                fieldSelect(row).value.indexOf(PREFIX) !== 0 &&
-                !(words && words.value.trim());
-            });
+            free = freeRows();
           }
           if (free.length) {
-            fieldSelect(free[0]).value = PREFIX + alias;
+            fieldSelect(free[0]).value = value;
           }
         });
         render();
@@ -356,17 +419,22 @@
             input.remove();
           });
           var values = inUrl.filter(function (pair) { return aliases.indexOf(pair[0]) === -1; });
+          var dated = false;
           rows().forEach(function (row) {
-            var select = fieldSelect(row);
-            if (select.value.indexOf(PREFIX) !== 0) {
+            var filter = filterOf(row);
+            if (!filter) {
               return;
             }
-            var alias = select.value.slice(PREFIX.length);
-            ticked[alias].forEach(function (value) {
-              values.push([alias, value]);
-            });
+            if (filter === 'date') {
+              dated = true;
+            }
+            else {
+              ticked[filter].forEach(function (value) {
+                values.push([filter, value]);
+              });
+            }
             // An empty "All fields" row for the server.
-            select.selectedIndex = 0;
+            fieldSelect(row).selectedIndex = 0;
             var words = row.querySelector('input[type="text"]');
             if (words) {
               words.value = '';
@@ -376,6 +444,11 @@
               connector.disabled = false;
             }
           });
+          if (!dated) {
+            dateInputs.forEach(function (input) {
+              input.value = '';
+            });
+          }
           var submitter = event.submitter || document.activeElement;
           if (submitter && /^edit-reset/.test(submitter.getAttribute('data-drupal-selector') || '')) {
             return;
