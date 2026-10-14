@@ -858,14 +858,54 @@ h3 {
   outline-offset: 1px;
 }
 
-.block-facets .facet-item.is-active a {
+/* The facets module puts is-active on the <a>, not the <li>. */
+.block-facets .facet-item.is-active a,
+.block-facets .facet-item a.is-active {
   background: #f7eded;
   color: var(--primary-brand-dark);
   font-weight: 700;
 }
 
+/* Tick box before each value (templates/facets/facets-result-item.html.twig).
+   Several values can be ticked per facet; the "(-)" marker is replaced by
+   the ticked box. */
+.block-facets .facet-item a .facet-item__status,
+.block-facets .facets-reset .facet-item__checkbox {
+  display: none;
+}
+
+.block-facets .facet-item a .facet-item__checkbox {
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-start;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+  border: 1.5px solid var(--primary-brand);
+  border-radius: 3px;
+  background: var(--white);
+  transition: background 0.15s;
+}
+
+.block-facets .facet-item a.is-active .facet-item__checkbox {
+  background: var(--primary-brand);
+}
+
+.block-facets .facet-item a.is-active .facet-item__checkbox::after {
+  content: "";
+  position: absolute;
+  left: 0.27rem;
+  top: 0.08rem;
+  width: 0.32rem;
+  height: 0.55rem;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 /* Values use the body/nav serif; counts use the pager's Open Sans */
 .block-facets .facet-item__value {
+  flex-grow: 1;
   font-family: "Droid Serif", serif;
   font-style: normal;
   font-size: 0.9375rem;
