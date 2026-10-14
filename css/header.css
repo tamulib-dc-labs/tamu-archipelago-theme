@@ -866,10 +866,12 @@ h3 {
   font-weight: 700;
 }
 
+.block-facets .facet-item a.is-active .facet-item__value {
+  font-weight: 700;
+}
+
 /* Tick box before each value (templates/facets/facets-result-item.html.twig).
-   Several values can be ticked per facet; the "(-)" marker is replaced by
-   the ticked box. */
-.block-facets .facet-item a .facet-item__status,
+   Several values can be ticked per facet. */
 .block-facets .facets-reset .facet-item__checkbox {
   display: none;
 }

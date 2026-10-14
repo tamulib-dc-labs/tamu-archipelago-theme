@@ -3,13 +3,11 @@
  * @file
  * Facet result item, with a tick box for the search filters.
  *
- * The facets module's template plus an empty box that header.css draws as
- * a checkbox in the sidebar facets, ticked on the selected values. Several
- * values can be ticked per facet (the facets use the OR operator).
- *
- * The box is only drawn inside .block-facets, so the facets summary keeps
- * its "(-)" remove marker. The sidebar hides that marker and screen
- * readers hear "Selected" instead.
+ * The facets module's template without its "(-)" marker on selected
+ * values, plus an empty box that header.css draws as a checkbox in the
+ * sidebar facets. Selected values get a ticked box and bold text, and
+ * screen readers hear "Selected" instead. Several values can be ticked per
+ * facet (the facets use the OR operator).
  *
  * Available variables:
  * - value: The item value.
@@ -22,7 +20,6 @@
 #}
 <span class="facet-item__checkbox" aria-hidden="true"></span>
 {% if is_active %}
-  <span class="facet-item__status js-facet-deactivate">(-)</span>
   <span class="facet-item__selected visually-hidden">{{ 'Selected:'|t }}</span>
 {% endif %}
 <span class="facet-item__value">{{ value }}</span>
