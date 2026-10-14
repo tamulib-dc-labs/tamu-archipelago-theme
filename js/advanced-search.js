@@ -317,11 +317,12 @@
         });
         // Remove and Add another field move values between rows (the
         // Strawberryfield script, on the same click); redraw after them.
+        // Capture phase: that script stops the click from bubbling.
         form.addEventListener('click', function (event) {
           if (event.target.closest('[data-advanced-search-delone], [data-advanced-search-addone]')) {
             window.setTimeout(render, 0);
           }
-        });
+        }, true);
 
         // One open list at a time; Esc or a click elsewhere closes it.
         form.addEventListener('toggle', function (event) {
@@ -349,7 +350,9 @@
         });
 
         form.addEventListener('submit', function (event) {
-          form.querySelectorAll('input[data-tamu-adv-facet]').forEach(function (input) {
+          // Facets renders the active values into the form as hidden f[n]
+          // inputs, to keep them across searches; the rows decide now.
+          form.querySelectorAll('input[type="hidden"][name^="f["]').forEach(function (input) {
             input.remove();
           });
           var values = inUrl.filter(function (pair) { return aliases.indexOf(pair[0]) === -1; });

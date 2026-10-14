@@ -433,6 +433,14 @@
   grid-column: 3 / 5;
 }
 
+/* The base theme gives <details> a 1rem margin above and below, which
+   would lift the list out of line with the row's other controls. */
+:root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search .tamu-adv-ms {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 :root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search .tamu-adv-values__label:not(.visually-hidden) {
   display: block;
   margin: 0 0 0.375rem;
