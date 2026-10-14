@@ -1,5 +1,5 @@
 /* ============================================================
-   Search results (/search, /search_grid)
+   Search results (/search, /search_grid, /advanced-search)
 
    1. Page frame: drop the centred container-lg, tighten the vertical
       gaps around the results, and move the facets into a slide-in
@@ -14,15 +14,19 @@
    Page rules are keyed on page-view-solr-search-content plus
    layout-sidebar-first, which matches /search and /search_grid (the
    faceted displays) but not /search_websites or /search_pages.
+   /advanced-search (view advanced_search) renders its rows with the
+   same metadata display, so it shares the result cards (section 2)
+   and the full-width frame, results count and pager; it has no facets
+   (layout-no-sidebars), so the facet column and panel stay /search's.
    ============================================================ */
 
 /* ---------- 1. Page frame ---------- */
 
-body.page-view-solr-search-content.layout-sidebar-first #main-breadcrumbs,
-body.page-view-solr-search-content.layout-sidebar-first #main-top,
-body.page-view-solr-search-content.layout-sidebar-first #main-top-flex,
-body.page-view-solr-search-content.layout-sidebar-first #main,
-body.page-view-solr-search-content.layout-sidebar-first #content_bottom_container {
+body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main-breadcrumbs,
+body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main-top,
+body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main-top-flex,
+body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main,
+body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #content_bottom_container {
   max-width: none;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -230,13 +234,13 @@ body.page-view-solr-search-content.layout-sidebar-first #sidebar_first .block-fa
 }
 
 /* Results count */
-body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_content .view-header {
+:is(body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_content, body.page-view-advanced-search .view-id-advanced_search) .view-header {
   margin-bottom: 0.25rem;
   font-size: 1.25rem;
 }
 
 /* Pager: 3rem above and below plus 1.5rem padding over the dotted rule */
-body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_content ul.pagination {
+:is(body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_content, body.page-view-advanced-search .view-id-advanced_search) ul.pagination {
   flex-wrap: wrap;
   row-gap: 0.375rem;
   margin: 0.75rem 0;
@@ -245,19 +249,19 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 
 /* ---------- 2. Result cards (/search list display) ---------- */
 
-.view-id-solr_search_content.view-display-id-page_1 .view-content {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .view-content {
   margin-bottom: 0;
 }
 
 /* Each row sits in a .row child that carries a 12px gutter, which
    indents the cards from the results count and the pager. */
-.view-id-solr_search_content.view-display-id-page_1 .view-content > div {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .view-content > div {
   margin-bottom: 1rem;
   padding-left: 0;
   padding-right: 0;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol {
   --search-thumb: 200px;
   position: relative;
   display: grid;
@@ -275,12 +279,12 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   transition: box-shadow 0.2s ease;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:hover {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
 }
 
 /* Maroon accent bar, as on .tamu-card */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol::before {
   content: '';
   position: absolute;
   top: 0;
@@ -291,7 +295,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 /* twocol.css sizes the regions as flex items (flex: 0 1 50%) */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol > .layout__region {
   flex: none;
   width: auto;
   max-width: none;
@@ -303,33 +307,33 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    theme; inside a card the padding already provides that space.
    :root and the attribute selector outrank Chiloe's
    `:root .archipelago-chiloe-theme div.content div[data-history-node-id] div.field`. */
-:root .view-id-solr_search_content.view-display-id-page_1 .layout--twocol[data-history-node-id] > .layout__region > div.field {
+:root :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol[data-history-node-id] > .layout__region > div.field {
   margin-bottom: 0;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--top {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol > .layout__region--top {
   grid-area: title;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--first {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol > .layout__region--first {
   grid-area: thumb;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol > .layout__region--second {
   grid-area: meta;
 }
 
 /* Nothing at all in the thumbnail slot: let the text take the full
    width rather than leaving an empty column. Objects without an image
    normally still get an icon from Archipelago (below), so this is rare. */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:not(:has(> .layout__region--first :is(img, i))) {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:not(:has(> .layout__region--first :is(img, i))) {
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
     "title"
     "meta";
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:not(:has(> .layout__region--first :is(img, i))) > .layout__region--first {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:not(:has(> .layout__region--first :is(img, i))) > .layout__region--first {
   display: none;
 }
 
@@ -338,19 +342,19 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    for audio, fab fa-buffer otherwise) at fa-9x. Shown on the same tile
    as real thumbnails, at a size that fits it, so these cards line up
    with the rest. */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item:has(> a > i) {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item:has(> a > i) {
   background: #e9e4dc; /* AUX $ivory */
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a > i {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item > a > i {
   font-size: calc(var(--search-thumb) * 0.32);
   line-height: 1;
      color: var(--primary-brand-light);
   transition: color 0.15s ease;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a:hover > i,
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a:focus > i {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item > a:hover > i,
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item > a:focus > i {
   color: var(--primary-brand);
 }
 
@@ -360,7 +364,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    the type on its tag (search-result__type--audioobject, …); these swap
    in a Font Awesome 5 solid glyph for each. Types not listed keep the
    icon Archipelago chose. */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(:is(
   .search-result__type--audioobject, .search-result__type--musicrecording,
   .search-result__type--podcast, .search-result__type--podcastepisode,
   .search-result__type--videoobject, .search-result__type--streamingvideo,
@@ -379,63 +383,63 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 /* headphones-alt */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--audioobject, .search-result__type--musicrecording, .search-result__type--podcast, .search-result__type--podcastepisode)) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--audioobject, .search-result__type--musicrecording, .search-result__type--podcast, .search-result__type--podcastepisode)) .layout__region--first .field__item > a > i::before {
   content: "\f58f";
 }
 
 /* film */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--videoobject, .search-result__type--streamingvideo, .search-result__type--movie)) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--videoobject, .search-result__type--streamingvideo, .search-result__type--movie)) .layout__region--first .field__item > a > i::before {
   content: "\f008";
 }
 
 /* layer-group: a series groups other records (e.g. the sides of a tape) */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--creativeworkseries) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(.search-result__type--creativeworkseries) .layout__region--first .field__item > a > i::before {
   content: "\f5fd";
 }
 
 /* book */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--book) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(.search-result__type--book) .layout__region--first .field__item > a > i::before {
   content: "\f02d";
 }
 
 /* envelope-open-text */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--manuscript, .search-result__type--letter)) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--manuscript, .search-result__type--letter)) .layout__region--first .field__item > a > i::before {
   content: "\f658";
 }
 
 /* map */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--map) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(.search-result__type--map) .layout__region--first .field__item > a > i::before {
   content: "\f279";
 }
 
 /* image */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--photograph, .search-result__type--image, .search-result__type--visualartwork, .search-result__type--painting)) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--photograph, .search-result__type--image, .search-result__type--visualartwork, .search-result__type--painting)) .layout__region--first .field__item > a > i::before {
   content: "\f03e";
 }
 
 /* file-alt */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--digitaldocument, .search-result__type--article, .search-result__type--thesis, .search-result__type--text)) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(:is(.search-result__type--digitaldocument, .search-result__type--article, .search-result__type--thesis, .search-result__type--text)) .layout__region--first .field__item > a > i::before {
   content: "\f15c";
 }
 
 /* cube */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--3dmodel) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(.search-result__type--3dmodel) .layout__region--first .field__item > a > i::before {
   content: "\f1b2";
 }
 
 /* globe */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--webpage) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(.search-result__type--webpage) .layout__region--first .field__item > a > i::before {
   content: "\f0ac";
 }
 
 /* archive */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol:has(.search-result__type--collection) .layout__region--first .field__item > a > i::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol:has(.search-result__type--collection) .layout__region--first .field__item > a > i::before {
   content: "\f187";
 }
 
 /* Thumbnail: square tile, whole image visible (no cropping of
    archival material), centred on a light ground. */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -445,7 +449,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   overflow: hidden;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item > a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -453,7 +457,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   height: 100%;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--first img {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -466,19 +470,19 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    the tile is 276px high instead of square, so a quarter-width square does
    not make every card twice as tall. The whole image still shows. */
 @media (min-width: 1400px) {
-  .view-id-solr_search_content.view-display-id-page_1 .layout--twocol {
+  :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol {
     grid-template-columns: 25% minmax(0, 1fr);
     column-gap: 2rem;
   }
 
-  .view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item {
+  :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item {
     aspect-ratio: auto;
     height: 17.25rem;
   }
 
   /* The icon size follows --search-thumb, a length; here the column is a
      percentage, so size the icon from the tile height instead. */
-  .view-id-solr_search_content.view-display-id-page_1 .layout__region--first .field__item > a > i {
+  :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--first .field__item > a > i {
     font-size: 6rem;
   }
 }
@@ -487,7 +491,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    card headings, as on its Inline Card; Open Sans for everything smaller,
    since AUX keeps Oswald to large display headings. Nothing is set in
    capitals; the parent theme uppercases h2. */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2 {
   margin: 0 0 0.375rem;
   font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
   font-size: 1.35rem;
@@ -500,7 +504,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 
 /* The link carries its own font and capitals (oswald_droid.css
    `h2 a { text-transform: uppercase }`, Chiloe's Biryani). */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2 a {
   font: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
@@ -510,8 +514,8 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 /* Multi-part objects get Font Awesome classes on the h2 itself
    (fas fa-archive); the font override above would turn the icon into a
    missing-glyph box, so the icon gets its font back. */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2.fas::before,
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2.far::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2.fas::before,
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2.far::before {
   margin-right: 0.4rem;
   font-family: "Font Awesome 5 Free";
   font-size: 0.85em;
@@ -519,14 +523,14 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
      color: var(--primary-brand-light);
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a:hover,
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 a:focus {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2 a:hover,
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2 a:focus {
   text-decoration: underline;
 }
 
 /* Byline under the title: "[Type] First creator, N more · Date". Emitted
    by the Object_Metadata_Abstract_for_Search_Results metadata display. */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-result__byline {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second p.search-result__byline {
   margin: 0;
   font-family: var(--open-sans);
   font-size: 0.9rem;
@@ -534,21 +538,21 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 /* slim.css sets every span italic and grey */
-.view-id-solr_search_content.view-display-id-page_1 .search-result__byline > span {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-result__byline > span {
   font-family: inherit;
   font-style: normal;
   color: inherit;
 }
 
 /* The template puts a space between the parts; the dot sits after it. */
-.view-id-solr_search_content.view-display-id-page_1 .search-result__creators + .search-result__date::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-result__creators + .search-result__date::before {
   content: "\00b7";
   margin-right: 0.4rem;
 }
 
 /* ADO type as an AUX tag: Work Sans 500, maroon on white, $gray-300
    border, pill radius. Sized down for a card. */
-.view-id-solr_search_content.view-display-id-page_1 .search-result__byline > .search-result__type {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-result__byline > .search-result__type {
   display: inline-block;
   margin: 0 0.35rem 0.25rem 0;
   padding: 0.05rem 0.6rem;
@@ -562,7 +566,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 /* Field labels (Abstract): AUX h4-h6 are Open Sans; sentence case. */
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second h4 {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second h4 {
   margin: 0.75rem 0 0.125rem;
   font-family: var(--open-sans);
   font-size: 0.85rem;
@@ -573,23 +577,23 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   color: var(--primary-brand-light);
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second h4:first-child {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second h4:first-child {
   margin-top: 0;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second p {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second ul {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second ul {
   margin: 0;
   padding-left: 1.1rem;
   font-size: 0.95rem;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second li {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second li {
   margin: 0;
   line-height: 1.5;
 }
@@ -600,29 +604,29 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    metadata field. js/search-matches.js wraps it in .search-match and,
    for full-text matches, replaces it with page- or time-located hits.
    The rules on the bare region below are the no-JS fallback. */
-.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol > .layout__region--second {
   font-family: var(--open-sans);
   font-size: 0.9rem;
   line-height: 1.5;
   color: #535353;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second strong {
   color: var(--primary-brand);
   font-weight: 700;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong a {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second strong a {
   color: inherit;
   text-decoration: none;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong a:hover,
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second strong a:focus {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second strong a:hover,
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second strong a:focus {
   text-decoration: underline;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second:has(> strong) > .field::after {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second:has(> strong) > .field::after {
   content: "Match:";
   display: block;
   margin: 0.75rem 0 0.125rem;
@@ -633,7 +637,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   color: var(--primary-brand-light);
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .search-match {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match {
   margin-top: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-left: 3px solid #d1d1d1;
@@ -641,20 +645,20 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   background: #f6f6f6; /* AUX $gray-100 */
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .search-match--pages,
-.view-id-solr_search_content.view-display-id-page_1 .search-match--fulltext {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match--pages,
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match--fulltext {
   border-left-color: var(--primary-brand);
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .search-match--transcript {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match--transcript {
   border-left-color: var(--primary-brand-light);
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .search-match.is-loading {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match.is-loading {
   opacity: 0.7;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-match__label {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second p.search-match__label {
   margin: 0 0 0.25rem;
   font-size: 0.85rem;
   font-weight: 700;
@@ -662,20 +666,20 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   color: var(--primary-brand-light);
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .layout__region--second p.search-match__excerpt {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--second p.search-match__excerpt {
   font-size: 0.9rem;
   color: #3e3e3e;
 }
 
 /* ul. to outweigh the region's own list indent above */
-.view-id-solr_search_content.view-display-id-page_1 ul.search-match__hits {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 ul.search-match__hits {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 /* 5px round each line, so the lines of a match do not run together. */
-.view-id-solr_search_content.view-display-id-page_1 .search-match__hit {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__hit {
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
@@ -686,7 +690,7 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 /* Location chip, "Page 34" or "1:02:15": an AUX tag at chip size. */
-.view-id-solr_search_content.view-display-id-page_1 .search-match__where {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__where {
   flex: none;
   min-width: 4.25rem;
   padding: 0 0.5rem;
@@ -704,33 +708,33 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
   font-variant-numeric: tabular-nums;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .search-match__hit--time .search-match__where::before {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__hit--time .search-match__where::before {
   content: "\25B6";
   margin-right: 0.3rem;
   font-size: 0.65em;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 a.search-match__where:hover,
-.view-id-solr_search_content.view-display-id-page_1 a.search-match__where:focus {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 a.search-match__where:hover,
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 a.search-match__where:focus {
   border-color: #a7a7a7;
   background: #eaeaea;
   color: #732f2f;
   text-decoration: none;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 a.search-match__where:focus-visible {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 a.search-match__where:focus-visible {
   outline: 2px dotted var(--primary-brand);
   outline-offset: 2px;
 }
 
 /* Chip with no item to link to: says where the text is, links nowhere. */
-.view-id-solr_search_content.view-display-id-page_1 .search-match__where--static {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__where--static {
   min-width: 0;
 }
 
 /* Clicked before its collection member was found: js/search-matches.js
    goes there once it is. */
-.view-id-solr_search_content.view-display-id-page_1 .search-match a.is-resolving {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match a.is-resolving {
   cursor: progress;
 }
 
@@ -740,20 +744,20 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
 }
 
 /* The member item a collection hit was found in: "Item title — … text …" */
-.view-id-solr_search_content.view-display-id-page_1 .search-match__context {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__context {
   font-family: inherit;
   font-style: normal;
   font-weight: 600;
   color: #3e3e3e;
 }
 
-.view-id-solr_search_content.view-display-id-page_1 .search-match__context::after {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__context::after {
   content: " \2014 ";
   font-weight: 400;
 }
 
 /* slim.css again: the snippet is a span */
-.view-id-solr_search_content.view-display-id-page_1 .search-match__text {
+:is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -768,16 +772,16 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
    A metadata column next to the thumbnail is ~200px wide here, which
    stretches long abstracts into 1500px-tall cards. */
 @media (max-width: 575.98px) {
-  body.page-view-solr-search-content.layout-sidebar-first #main-breadcrumbs,
-  body.page-view-solr-search-content.layout-sidebar-first #main-top,
-  body.page-view-solr-search-content.layout-sidebar-first #main-top-flex,
-  body.page-view-solr-search-content.layout-sidebar-first #main,
-  body.page-view-solr-search-content.layout-sidebar-first #content_bottom_container {
+  body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main-breadcrumbs,
+  body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main-top,
+  body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main-top-flex,
+  body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #main,
+  body:is(.page-view-solr-search-content.layout-sidebar-first, .page-view-advanced-search) #content_bottom_container {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
 
-  .view-id-solr_search_content.view-display-id-page_1 .layout--twocol {
+  :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol {
     --search-thumb: 104px;
     grid-template-rows: auto;
     grid-template-areas:
@@ -788,12 +792,12 @@ body.page-view-solr-search-content.layout-sidebar-first .view-id-solr_search_con
     padding: calc(1rem + 4px) 1rem 1rem;
   }
 
-  .view-id-solr_search_content.view-display-id-page_1 .layout__region--top h2 {
+  :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout__region--top h2 {
     font-size: 1.2rem;
   }
 
   /* Chip above its snippet, so the snippet gets the full width. */
-  .view-id-solr_search_content.view-display-id-page_1 .search-match__hit {
+  :is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .search-match__hit {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.125rem;

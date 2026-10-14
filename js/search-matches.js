@@ -1,6 +1,6 @@
 /**
  * @file
- * Search result "Match" block (/search list display).
+ * Search result "Match" block (/search list display, /advanced-search).
  *
  * On a keyword search Search API appends an excerpt to each result as bare
  * text after the metadata field. It comes in two shapes, and neither says
@@ -97,8 +97,9 @@
   // comment): those hits link to the member they are found in.
   var PARENT_TYPES = ['collection', 'creativeworkseries'];
 
-  // A result's metadata region, here and in fetched search pages.
-  var REGION = '.view-id-solr_search_content.view-display-id-page_1 .layout--twocol > .layout__region--second';
+  // A result's metadata region, here and in fetched search pages
+  // (/search and /advanced-search share the metadata display).
+  var REGION = ':is(.view-id-solr_search_content, .view-id-advanced_search).view-display-id-page_1 .layout--twocol > .layout__region--second';
 
   // Which manifest's search service to ask, in order. Book and Manuscript
   // can be a single object or a multi-part one; the type alone does not
@@ -323,10 +324,30 @@
     });
   }
 
-  // The search words, from the exposed fulltext filter.
+  // Advanced search rows: ADVANCED_PREFIX (first row) and
+  // ADVANCED_PREFIX_{n}, each with its match operator in ADVANCED_PREFIX_op
+  // or ADVANCED_PREFIX_op_{n}.
+  var ADVANCED_PREFIX = 'sbf_advanced_search_api_fulltext';
+
+  // The words of every advanced search row, except "none of these words"
+  // rows, which no result contains.
+  function advancedSearchText(params) {
+    var pattern = new RegExp('^' + ADVANCED_PREFIX + '(_\\d+)?$');
+    var text = [];
+    params.forEach(function (value, key) {
+      var row = pattern.exec(key);
+      if (row && params.get(ADVANCED_PREFIX + '_op' + (row[1] || '')) !== 'not') {
+        text.push(value);
+      }
+    });
+    return text.join(' ');
+  }
+
+  // The search words, from the exposed fulltext filter (/search) or the
+  // advanced search rows (/advanced-search).
   function searchWords() {
     var params = new URLSearchParams(window.location.search);
-    return (params.get('search_api_fulltext') || '')
+    return ((params.get('search_api_fulltext') || '') + ' ' + advancedSearchText(params))
       .replace(/["()+\-~*]/g, ' ')
       .split(/\s+/)
       .filter(function (word) {

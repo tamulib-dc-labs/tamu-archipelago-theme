@@ -96,4 +96,161 @@ function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\Form
     $form['search_api_fulltext']['#title'] = t('Search');
     $form['search_api_fulltext']['#title_display'] = 'invisible';
   }
+  tamu_theme_advanced_search_form_alter($form);
+}
+
+/**
+ * Advanced search (Strawberryfield "Advanced Fulltext search" filter).
+ *
+ * The filter renders each row as a fieldset, "{id}_wrapper" for the first
+ * and "{id}_wrapper_{n}" for the rest, holding the AND/OR group operator,
+ * the match operator, the search words and the searched-field select, in
+ * that order. Rows read here as "Search in [field] [match] [words]", so the
+ * children are re-weighted, which moves them in the DOM and keeps the tab
+ * order the same as the visual one.
+ *
+ * Chiloé swaps every exposed-form select for a Bootstrap dropdown over a
+ * hidden input. The filter's Classic Mode script clears and shifts rows
+ * through `select[name^=…]` and data-advanced-search-type, which the swap
+ * drops, so these selects opt out with data-convert="no" and stay native.
+ */
+function tamu_theme_advanced_search_form_alter(array &$form) {
+  $rows = [];
+  foreach (\Drupal\Core\Render\Element::children($form) as $key) {
+    if (preg_match('/_wrapper(_(\d+))?$/', $key, $m) && tamu_theme_advanced_search_is_row($form[$key])) {
+      $rows[$key] = isset($m[2]) ? (int) $m[2] : 0;
+    }
+  }
+  if (!$rows) {
+    return;
+  }
+  $form['#attributes']['class'][] = 'tamu-advanced-search';
+  tamu_theme_advanced_search_date_alter($form);
+
+  foreach ($rows as $key => $index) {
+    $row = &$form[$key];
+    $row['#attributes']['class'][] = 'tamu-adv-row';
+    // Labels show once, over the first row; the others carry them for
+    // screen readers only.
+    $display = $index === 0 ? 'before' : 'invisible';
+    foreach (\Drupal\Core\Render\Element::children($row) as $child) {
+      $element = &$row[$child];
+      $type = $element['#attributes']['data-advanced-search-type'] ?? NULL;
+      if ($type === 'op' || $type === 'group_op') {
+        $element['#title'] = t('Combine with');
+        $element['#title_display'] = 'invisible';
+        $element['#weight'] = -10;
+        $element['#attributes']['data-convert'] = 'no';
+      }
+      elseif ($type === 'fields') {
+        $element['#title'] = t('Search in');
+        $element['#title_display'] = $display;
+        $element['#weight'] = -5;
+        $element['#attributes']['data-convert'] = 'no';
+      }
+      elseif ($type === 'boolean') {
+        $element['#title'] = t('Match');
+        $element['#title_display'] = $display;
+        $element['#weight'] = -4;
+        $element['#attributes']['data-convert'] = 'no';
+        // "Contains all of these words" under a "Match" heading leaves the
+        // search words too little room; the values stay the same.
+        $short = [
+          'and' => t('All of these words'),
+          'or' => t('Any of these words'),
+          'not' => t('None of these words'),
+        ];
+        foreach ($element['#options'] ?? [] as $value => $label) {
+          if (isset($short[$value])) {
+            $element['#options'][$value] = $short[$value];
+          }
+        }
+      }
+      elseif (($element['#type'] ?? '') === 'textfield') {
+        $element['#title'] = t('Search words');
+        $element['#title_display'] = $display;
+        $element['#weight'] = -3;
+        $element['#attributes']['placeholder'] = t('Enter search words');
+      }
+      unset($element);
+    }
+    unset($row);
+  }
+}
+
+/**
+ * Advanced search "Date" filter: Date created (original), "Is between",
+ * exposed as "date" on the advanced_search view.
+ *
+ * Search API reads the values with strtotime(), which takes a bare year
+ * such as "1950" as a time of day (19:50 today). People type years, so a
+ * four-digit year becomes 1 January (From) or 31 December (To), and a
+ * range with only one end filled in is left open at the other.
+ */
+function tamu_theme_advanced_search_date_alter(array &$form) {
+  $date = NULL;
+  if (isset($form['date']['min'], $form['date']['max'])) {
+    $date = &$form['date'];
+  }
+  elseif (isset($form['date_wrapper']['date']['min'], $form['date_wrapper']['date']['max'])) {
+    $date = &$form['date_wrapper']['date'];
+  }
+  if ($date === NULL) {
+    return;
+  }
+  if (isset($form['date_wrapper'])) {
+    $form['date_wrapper']['#attributes']['class'][] = 'tamu-adv-date';
+  }
+  else {
+    $date['#attributes']['class'][] = 'tamu-adv-date';
+  }
+  foreach (['min' => t('From year'), 'max' => t('To year')] as $end => $label) {
+    $date[$end]['#title'] = $label;
+    $date[$end]['#title_display'] = 'invisible';
+    $date[$end]['#size'] = 10;
+    $date[$end]['#attributes']['placeholder'] = $label;
+    $date[$end]['#attributes']['inputmode'] = 'numeric';
+    $date[$end]['#attributes']['data-tamu-adv-date'] = $end;
+  }
+  $date['#element_validate'][] = 'tamu_theme_advanced_search_date_validate';
+}
+
+/**
+ * Element validate: years to dates, one-sided ranges left open.
+ */
+function tamu_theme_advanced_search_date_validate(array &$element, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $value = $form_state->getValue($element['#parents']);
+  if (!is_array($value)) {
+    return;
+  }
+  $min = trim((string) ($value['min'] ?? ''));
+  $max = trim((string) ($value['max'] ?? ''));
+  if ($min === '' && $max === '') {
+    return;
+  }
+  if (preg_match('/^\d{4}$/', $min)) {
+    $min .= '-01-01';
+  }
+  if (preg_match('/^\d{4}$/', $max)) {
+    $max .= '-12-31';
+  }
+  $value['min'] = $min === '' ? '0001-01-01' : $min;
+  $value['max'] = $max === '' ? '9999-12-31' : $max;
+  $form_state->setValueForElement($element, $value);
+}
+
+/**
+ * Whether a form element is an advanced search row: it holds the
+ * searched-field select the filter marks data-advanced-search-type="fields".
+ */
+function tamu_theme_advanced_search_is_row($element) {
+  if (!is_array($element)) {
+    return FALSE;
+  }
+  foreach (\Drupal\Core\Render\Element::children($element) as $child) {
+    if (($element[$child]['#attributes']['data-advanced-search-type'] ?? NULL) === 'fields') {
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
