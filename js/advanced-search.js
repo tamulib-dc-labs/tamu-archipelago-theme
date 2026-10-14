@@ -126,4 +126,67 @@
       });
     }
   };
+
+  /**
+   * "Narrow results": the Type / Rights / Digital origin / Medium facets
+   * (dropdown widget, blocks in the Content 12 Columns width region) as
+   * one Aggie UX Horizontal Filters panel straight under the search form.
+   *
+   * Chiloé renders each facet block as a collapsed accordion. Each select
+   * (built by the facets dropdown widget from its links) moves into the
+   * panel under a real label taken from the block title; moving the
+   * element keeps the widget's change handler, which loads the filtered
+   * page. Facets with no values for the current search stay hidden (the
+   * block has .hidden), and with none to show there is no panel. Without
+   * JavaScript the blocks stay where they are, as links.
+   */
+  Drupal.behaviors.tamuAdvancedSearchNarrow = {
+    attach: function (context) {
+      once('tamu-adv-narrow', 'body.page-view-advanced-search', context).forEach(function () {
+        var form = document.querySelector('form.tamu-advanced-search');
+        var region = document.querySelector('.region-content-top');
+        if (!form || !region) {
+          return;
+        }
+        var fields = [];
+        region.querySelectorAll('.block-facets.block-facet--dropdown').forEach(function (block) {
+          var select = block.querySelector('.facets-widget-dropdown select');
+          if (!select || block.classList.contains('hidden')) {
+            return;
+          }
+          var title = block.querySelector('.accordion-button span, h2, .block-title');
+          if (!select.id) {
+            select.id = block.id + '-select';
+          }
+          var field = document.createElement('div');
+          field.className = 'tamu-adv-narrow__field';
+          var label = document.createElement('label');
+          label.setAttribute('for', select.id);
+          label.textContent = title ? title.textContent.trim() : '';
+          field.appendChild(label);
+          field.appendChild(select);
+          fields.push(field);
+          block.hidden = true;
+        });
+        if (!fields.length) {
+          return;
+        }
+        var panel = document.createElement('section');
+        panel.className = 'tamu-adv-narrow';
+        panel.setAttribute('aria-labelledby', 'tamu-adv-narrow-heading');
+        var heading = document.createElement('h2');
+        heading.id = 'tamu-adv-narrow-heading';
+        heading.className = 'tamu-adv-narrow__heading';
+        heading.textContent = Drupal.t('Narrow results');
+        var list = document.createElement('div');
+        list.className = 'tamu-adv-narrow__fields';
+        fields.forEach(function (field) {
+          list.appendChild(field);
+        });
+        panel.appendChild(heading);
+        panel.appendChild(list);
+        form.parentNode.insertBefore(panel, form.nextSibling);
+      });
+    }
+  };
 })(Drupal, once);
