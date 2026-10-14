@@ -437,6 +437,7 @@
         }
       }
       var time = before !== null ? before : after;
+      var cueTime = time;
       if (time !== null) {
         time = Math.max(0, time - TIME_LEAD);
       }
@@ -460,6 +461,7 @@
       hits.push({
         kind: time === null ? 'text' : 'time',
         time: time,
+        cue: cueTime,
         label: time === null ? textLabel(type) : formatTime(time),
         runs: hitRuns
       });
@@ -476,6 +478,226 @@
     });
     timed.sort(function (a, b) { return a.time - b.time; });
     return timed.concat(mergeByLabel(untimed));
+  }
+
+  /* ---------------------------------------------------------------
+     Which recording (audio and video records with several files)
+     --------------------------------------------------------------- */
+
+  // An oral history is often several recordings in one record (the sides
+  // of its tapes), each with its own WebVTT transcript, and the excerpt
+  // does not say which one a hit is in: "▶ 30:53" alone would start the
+  // first recording. So the record's transcripts are read and each hit is
+  // matched to the cue holding its words, near its time if it has one.
+  // The transcripts, in sequence order, are the recordings in the viewer's
+  // manifest, in order (checked against the Avalon manifests), so the
+  // cue's transcript is the recording to play: the hit links to
+  // #time/{s}/canvas/{n} (js/media-seek.js), from the cue's own start, and
+  // is headed by the recording's label ("Jim Woodall Part 1 - C"). An
+  // untimed transcript hit found this way gets its time as well.
+  var mediaOf = {};
+
+  // A IIIF label (v2 string or v3 language map) as plain text.
+  function labelText(label) {
+    if (!label) {
+      return '';
+    }
+    if (typeof label === 'string') {
+      return label;
+    }
+    if (Array.isArray(label)) {
+      return labelText(label[0]);
+    }
+    var values = label[Object.keys(label)[0]];
+    return labelText(values);
+  }
+
+  function parseVtt(text) {
+    return text.split(/\r?\n[ \t]*\r?\n/).map(function (block) {
+      var cue = /((?:\d+:)?\d{1,2}:\d{2}\.\d{3})\s*-->[^\n]*\n([\s\S]*)/.exec(block);
+      return cue ? { start: seconds(cue[1]), text: norm(cue[2].replace(/<[^>]*>/g, ' ')) } : null;
+    }).filter(function (cue) {
+      return cue && cue.start !== null;
+    });
+  }
+
+  // The record's transcripts ({name, uuid} in sequence order) and manifest.
+  function recordTranscripts(item) {
+    if (!mediaOf[item]) {
+      mediaOf[item] = fetch(item + '?_format=json', { credentials: 'same-origin' })
+        .then(function (response) {
+          return response.ok ? response.json() : null;
+        })
+        .then(function (json) {
+          var value = json && json.field_descriptive_metadata && json.field_descriptive_metadata[0] &&
+            json.field_descriptive_metadata[0].value;
+          var data = typeof value === 'string' ? JSON.parse(value) : value;
+          if (!data) {
+            return null;
+          }
+          var files = [];
+          ['as:text', 'as:document'].forEach(function (key) {
+            Object.keys(data[key] || {}).forEach(function (id) {
+              var file = data[key][id];
+              if (/\.vtt$/i.test(file.name || '') && file['dr:uuid']) {
+                files.push(file);
+              }
+            });
+          });
+          files.sort(function (a, b) {
+            return (parseInt(a.sequence, 10) || 0) - (parseInt(b.sequence, 10) || 0);
+          });
+          return {
+            files: files,
+            manifest: typeof data.iiifmanifest === 'string' && data.iiifmanifest ?
+              data.iiifmanifest : item + '/metadata/iiifmanifest/default.jsonld'
+          };
+        })
+        .catch(function () {
+          return null;
+        });
+    }
+    return mediaOf[item];
+  }
+
+  // Cues of every transcript, and the recordings' labels when the manifest
+  // has one recording per transcript.
+  function loadTracks(item, record) {
+    var labels = record.files.length < 2 ? Promise.resolve(null) :
+      fetch(record.manifest)
+        .then(function (response) {
+          return response.ok ? response.json() : null;
+        })
+        .then(function (json) {
+          var canvases = json && (json.items || (json.sequences && json.sequences[0] && json.sequences[0].canvases)) || [];
+          return canvases.length === record.files.length ? canvases.map(function (canvas) {
+            return labelText(canvas.label);
+          }) : null;
+        })
+        .catch(function () {
+          return null;
+        });
+    var tracks = record.files.map(function (file) {
+      return fetch(item + '/file/' + file['dr:uuid'] + '/download/' + encodeURIComponent(file.name), { credentials: 'same-origin' })
+        .then(function (response) {
+          return response.ok ? response.text() : '';
+        })
+        .then(parseVtt)
+        .catch(function () {
+          return [];
+        });
+    });
+    return Promise.all([labels].concat(tracks)).then(function (all) {
+      return { labels: all[0], tracks: all.slice(1) };
+    });
+  }
+
+  // Puts `hit` on the cue holding its highlighted words: the nearest one to
+  // its time, or, for an untimed hit, the one whose neighbourhood shares
+  // most words with the snippet. False if none.
+  function placeHit(hit, media) {
+    var words = hit.runs.filter(function (run) { return run.hl; }).map(function (run) {
+      return norm(run.text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }).filter(Boolean);
+    if (!words.length) {
+      return false;
+    }
+    var pattern = new RegExp('(^| )(' + words.join('|') + ')');
+    var timed = hit.cue !== undefined && hit.cue !== null;
+    var context = runsText(hit.runs).split(' ').filter(function (word) {
+      return word.length > 2;
+    });
+    var best = null;
+    media.tracks.forEach(function (cues, track) {
+      cues.forEach(function (cue, k) {
+        if (!pattern.test(cue.text)) {
+          return;
+        }
+        var score;
+        if (timed) {
+          var distance = Math.abs(cue.start - hit.cue);
+          if (distance > 60) {
+            return;
+          }
+          score = 1000 - distance;
+        }
+        else {
+          var near = [cues[k - 1], cue, cues[k + 1]].filter(Boolean).map(function (c) {
+            return c.text;
+          }).join(' ').split(' ');
+          score = context.filter(function (word) {
+            return near.indexOf(word) !== -1;
+          }).length;
+          if (score < 2) {
+            return;
+          }
+        }
+        if (!best || score > best.score) {
+          best = { score: score, track: track, start: cue.start };
+        }
+      });
+    });
+    if (!best) {
+      return false;
+    }
+    hit.kind = 'time';
+    hit.time = Math.max(0, best.start - TIME_LEAD);
+    hit.label = formatTime(hit.time);
+    if (media.tracks.length > 1) {
+      hit.canvas = best.track;
+      hit.context = media.labels && media.labels[best.track] ||
+        Drupal.t('Recording @n', { '@n': best.track + 1 });
+    }
+    return true;
+  }
+
+  // For an audio or video result, once its hits are shown: places them in
+  // the record's recordings and redraws the list. Records with a single
+  // transcript are only read when there is an untimed hit to time.
+  function locateInMedia(block, list, hits, ctx, limit) {
+    if (AV_TYPES.indexOf(ctx.type) === -1 || !ctx.item || !window.fetch) {
+      return;
+    }
+    var untimed = hits.some(function (hit) { return hit.kind === 'text'; });
+    queue(function () {
+      return recordTranscripts(ctx.item).then(function (record) {
+        if (!record || !record.files.length || (record.files.length < 2 && !untimed)) {
+          return null;
+        }
+        return loadTracks(ctx.item, record);
+      });
+    }).then(function (media) {
+      if (!media || !list.parentNode) {
+        return;
+      }
+      var placed = hits.filter(function (hit) {
+        return placeHit(hit, media);
+      });
+      if (!placed.length) {
+        return;
+      }
+      // Recording by recording, in time order; one line per cue.
+      var seen = {};
+      var ordered = hits.filter(function (hit) {
+        if (hit.kind !== 'time') {
+          return true;
+        }
+        var key = (hit.canvas || 0) + ':' + hit.time;
+        if (seen[key]) {
+          return false;
+        }
+        seen[key] = true;
+        return true;
+      }).sort(function (a, b) {
+        if ((a.kind === 'time') !== (b.kind === 'time')) {
+          return a.kind === 'time' ? -1 : 1;
+        }
+        return ((a.canvas || 0) - (b.canvas || 0)) || ((a.time || 0) - (b.time || 0));
+      });
+      block.replaceChild(hitList(ordered.slice(0, limit), ctx), list);
+      block.classList.remove('search-match--fulltext');
+      block.classList.add('search-match--transcript');
+    });
   }
 
   /* ---------------------------------------------------------------
@@ -643,7 +865,8 @@
         item + '#page/' + hit.page;
     }
     if (hit.kind === 'time') {
-      return item + '#time/' + hit.time;
+      // canvas: which of the item's recordings (see locateInMedia).
+      return item + '#time/' + hit.time + (hit.canvas !== undefined ? '/canvas/' + hit.canvas : '');
     }
     if (hit.kind === 'item') {
       return '/do/' + hit.item + (parts[1] ? '#' + parts[1] : '');
@@ -936,6 +1159,10 @@
       }
       item.appendChild(chip);
       var text = snippet(hit.runs, target);
+      if (hit.context) {
+        // Which of the item's recordings the hit is in (locateInMedia).
+        text.insertBefore(el('span', 'search-match__context', hit.context), text.firstChild);
+      }
       item.appendChild(text);
       if (hit.kind === 'item') {
         nameItem(hit, text);
@@ -950,9 +1177,11 @@
   }
 
   function showHits(block, excerpt, hits, ctx, kind, limit) {
+    var list = hitList(hits.slice(0, limit), ctx);
     block.classList.remove('search-match--fulltext');
     block.classList.add('search-match--' + kind);
-    block.replaceChild(hitList(hits.slice(0, limit), ctx), excerpt);
+    block.replaceChild(list, excerpt);
+    return list;
   }
 
   function search(uuid, display, term) {
@@ -1181,10 +1410,10 @@
     }
     var limit = MAX_HITS - metaShown.length;
     if (mode === 'transcript') {
-      showHits(block, excerpt, hits, ctx, 'transcript', limit);
+      locateInMedia(block, showHits(block, excerpt, hits, ctx, 'transcript', limit), hits, ctx, limit);
     }
     else if (mode === 'whole') {
-      showHits(block, excerpt, whole, ctx, 'fulltext', limit);
+      locateInMedia(block, showHits(block, excerpt, whole, ctx, 'fulltext', limit), whole, ctx, limit);
     }
     else if (mode === 'pages') {
       loadPageHits(block, excerpt, ctx, limit, whole);
