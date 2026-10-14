@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Facet result item, with a tick box for the search filters.
+ *
+ * The facets module's template without its "(-)" marker on selected
+ * values, plus an empty box that header.css draws as a checkbox in the
+ * sidebar facets. Selected values get a ticked box and bold text, and
+ * screen readers hear "Selected" instead. Several values can be ticked per
+ * facet (the facets use the OR operator).
+ *
+ * Available variables:
+ * - value: The item value.
+ * - raw_value: The raw item value.
+ * - show_count: If this facet provides count.
+ * - count: The amount of results.
+ * - is_active: The item is active.
+ * - facet: The facet for this result item.
+ */
+#}
+<span class="facet-item__checkbox" aria-hidden="true"></span>
+{% if is_active %}
+  <span class="facet-item__selected visually-hidden">{{ 'Selected:'|t }}</span>
+{% endif %}
+<span class="facet-item__value">{{ value }}</span>
+{% if show_count %}
+  <span class="facet-item__count">({{ count }})</span>
+{% endif %}
