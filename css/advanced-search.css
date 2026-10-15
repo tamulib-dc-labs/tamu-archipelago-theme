@@ -32,6 +32,14 @@
    where Chiloé uses it.
    ============================================================ */
 
+/* Space under the site header. Other listing pages get it from the
+   toolbar that sits in #main-breadcrumbs; this page has nothing there,
+   header.css collapses the empty row, and "Displaying results" ended up
+   flush against the header. */
+:root .archipelago-chiloe-theme #page .advanced-search-box {
+  padding-top: 1.5rem;
+}
+
 :root .archipelago-chiloe-theme #page .views-exposed-form.tamu-advanced-search {
   /* Aggie UX palette */
   --aux-maroon: #500000;

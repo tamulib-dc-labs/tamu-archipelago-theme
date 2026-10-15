@@ -40,12 +40,17 @@
        ============================================================ #}
     <div id="tamu-top-bar" role="banner" aria-label="Institutional header">
       <div class="tamu-top-bar__inner">
-        <a href="https://www.tamu.edu" class="tamu-top-bar__brand" target="_blank" rel="noopener">
-          <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-            <path d="M60.98 0H13.5c-1.67 0-3.02 1.35-3.02 3.02s1.35 3.02 3.02 3.02h40.18L.89 58.84a3.018 3.018 0 0 0 0 4.27 3.018 3.018 0 0 0 4.27 0l52.79-52.79V50.5c0 1.67 1.35 3.02 3.02 3.02s3.02-1.35 3.02-3.02V3.02c0-1.67-1.35-3.02-3.02-3.02Z" style="stroke-width:0"/>
-          </svg>
-          <span class="tamu-top-bar__wordmark">Texas A&amp;M University</span>
-        </a>
+        {# Aggie UX utility nav, left side: "back to Texas A&M University",
+           then the parent unit this site belongs to. #}
+        <div class="tamu-top-bar__left">
+          <a href="https://www.tamu.edu" class="tamu-top-bar__brand" target="_blank" rel="noopener">
+            <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+              <path d="M60.98 0H13.5c-1.67 0-3.02 1.35-3.02 3.02s1.35 3.02 3.02 3.02h40.18L.89 58.84a3.018 3.018 0 0 0 0 4.27 3.018 3.018 0 0 0 4.27 0l52.79-52.79V50.5c0 1.67 1.35 3.02 3.02 3.02s3.02-1.35 3.02-3.02V3.02c0-1.67-1.35-3.02-3.02-3.02Z" style="stroke-width:0"/>
+            </svg>
+            <span class="tamu-top-bar__wordmark">Texas A&amp;M University</span>
+          </a>
+          <a href="https://library.tamu.edu" class="tamu-top-bar__parent" target="_blank" rel="noopener">University Libraries</a>
+        </div>
         <nav class="tamu-top-bar__nav" aria-label="Institutional links">
           <a href="https://library.tamu.edu/askus" class="tamu-top-bar__link">Help</a>
           <a href="https://library.tamu.edu/about/hours" class="tamu-top-bar__link">Hours</a>
@@ -96,8 +101,10 @@
     {# ============================================================ #}
 
     {# ============================================================
-       Site identity — site title + TAMU logo lockup, white band
-       between the institutional bar and the primary nav.
+       Site identity — Aggie UX "text identity" layout: the site name
+       in plain text on the left, the unit identity it belongs to
+       (University Libraries) on the right, linked to that unit's site.
+       Aggie UX prefers the unit identity over the plain university logo.
        ============================================================ #}
     <div class="tamu-site-identity">
       <div class="tamu-site-identity__inner">
@@ -105,8 +112,12 @@
           <a href="{{ path('<front>') }}">Digital Collections</a>
         </div>
         <div class="tamu-site-identity__logo">
-          <a aria-label="Texas A&amp;M University Link" href="https://www.tamu.edu" target="_blank" rel="noopener">
-            <img alt="Texas A&amp;M University" src="https://aux.tamu.edu/logos/primaryTAM.png">
+          <a href="https://library.tamu.edu" target="_blank" rel="noopener" aria-label="Texas A&amp;M University Libraries">
+            <img alt="" src="https://aux.tamu.edu/logos/boxTAM.svg" width="75" height="70">
+            <span class="tamu-site-identity__wordmark">
+              <span class="tamu-site-identity__wordmark-small">Texas A&amp;M University</span>
+              <span class="tamu-site-identity__wordmark-large">University Libraries</span>
+            </span>
           </a>
         </div>
       </div>

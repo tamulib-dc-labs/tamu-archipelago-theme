@@ -2,27 +2,29 @@
  * TAMU-inspired header styles for tamu_theme.
  *
  * Table of contents:
- *  1. Institutional top bar (#tamu-top-bar)
- *  2. Main navbar
- *  3. Branding
- *  4. Navigation links
- *  5. Mobile toggler
+ *  1. Institutional top bar (#tamu-top-bar) — Aggie UX utility nav
+ *  1b. Site identity band — Aggie UX text identity
+ *  2. Main navbar — Aggie UX primary nav, header search
+ *  6. Mobile menu
  *
  * Targets the two <nav> elements in page.html.twig:
  *  - header#header nav (top utility bar + main navbar)
  *
  * TAMU brand colors:
  *  Maroon:       #500000
- *  Dark maroon:  #3d0000  (used for top utility bar)
+ *  Dark maroon:  #3c0000
  *  White:        #ffffff
  */
 
 /* ============================================================
    1. Institutional top bar
-   Sticky strip above all theme regions.
+   Sticky strip above all theme regions. Styled after the Aggie UX
+   utility nav (aggieux.tamu.edu → Navigation → Site Headers): maroon
+   bar, "Texas A&M University" back-link plus the parent unit on the
+   left, italic CTA links and light-gray dropdown buttons on the right.
    ============================================================ */
 #tamu-top-bar {
-  background-color: var(--primary-brand-dark);
+  background-color: var(--primary-brand);
   color: var(--white);
   position: sticky;
   top: 0;
@@ -30,116 +32,168 @@
   isolation: isolate;
   will-change: transform;
   width: 100%;
-  font-size: 0.8rem;
-  font-family: sans-serif;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: var(--work-sans);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .tamu-top-bar__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.35rem 1.5rem;
+  gap: 1rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.tamu-top-bar__left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+}
+
+.tamu-top-bar__brand,
+.tamu-top-bar__parent {
+  color: var(--white);
+  font-family: var(--work-sans);
+  font-size: 1rem;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .tamu-top-bar__brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--white);
-  text-decoration: none;
 }
 
 .tamu-top-bar__brand svg {
-  height: 18px;
-  width: 18px;
+  height: 0.9rem;
+  width: 0.9rem;
+  min-width: 0.9rem;
+  margin-right: 0.5rem;
   fill: currentColor;
-  color: var(--white);
   transform: scaleX(-1);
 }
 
 .tamu-top-bar__wordmark {
-  color: var(--white) !important;
+  color: inherit !important;
   font-style: normal !important;
   font-family: inherit;
+  font-size: inherit;
   font-weight: 700;
-  letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  white-space: nowrap;
 }
 
-.tamu-top-bar__brand:hover {
-  color: var(--white);
-  text-decoration: none;
+.tamu-top-bar__parent {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.tamu-top-bar__brand:hover,
+.tamu-top-bar__brand:focus,
+.tamu-top-bar__parent:hover,
+.tamu-top-bar__parent:focus {
+  color: var(--gray-300);
+  text-decoration: underline;
 }
 
 .tamu-top-bar__nav {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.75rem;
   align-items: center;
   min-height: 0;
-  padding: 0 0.5rem;
 }
 
+/* CTA links */
 .tamu-top-bar__link {
-  color: var(--link-on-dark);
+  color: var(--white);
+  font-family: var(--work-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
   text-decoration: none;
   white-space: nowrap;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: italic;
+  padding: 0.5rem;
 }
 
-.tamu-top-bar__link:hover {
-  color: var(--link-on-dark-hover);
+.tamu-top-bar__link:hover,
+.tamu-top-bar__link:focus {
+  color: var(--gray-200);
   text-decoration: underline;
 }
 
-/* Pill-style utility button (e.g. "Libraries") — mirrors library.tamu.edu's
-   outlined dropdown buttons in the institutional bar.
+#tamu-top-bar a:focus-visible,
+#tamu-top-bar button:focus-visible {
+  outline: 2px dotted var(--gold);
+  outline-offset: 2px;
+}
+
+/* Dropdown buttons ("Libraries", "Information For") — Aggie UX's
+   For You / Quick Links buttons.
    It's a real <button>, so slim.css's global `button { ... }` rule (block
    display, uppercase, maroon fill, 2px border, margin-bottom, etc.) applies
    too and has to be reset explicitly rather than just overridden piecemeal. */
 button.tamu-top-bar__button.dropdown-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   width: auto;
-  margin-bottom: 0;
+  height: 45px;
+  margin: 0;
+  padding: 0 0.75rem;
   text-align: left;
   text-transform: none;
   line-height: normal;
   position: relative;
-  background: var(--white);
+  background: var(--gray-100);
   color: var(--primary-brand);
   text-decoration: none;
   white-space: nowrap;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border: 1px solid var(--primary-brand);
+  font-family: var(--work-sans);
+  font-size: 0.9rem;
+  font-weight: 400;
+  border: 0;
   border-radius: 0;
-  padding: 0.25rem 0.85rem;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.2s ease;
 }
 
 .tamu-top-bar__button svg {
-  height: 16px;
-  width: 16px;
+  height: 1.25rem;
+  width: 1.25rem;
+  min-width: 1.25rem;
   fill: currentColor;
 }
 
-.tamu-top-bar__button:hover {
-  color: var(--white);
-  background-color: var(--primary-brand);
-  border-color: var(--primary-brand);
-  text-decoration: none;
+/* Aggie UX chevron in place of Bootstrap's border caret. */
+button.tamu-top-bar__button.dropdown-toggle::after {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.2rem;
+  border: 0;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: url("https://aux.tamu.edu/icons/aux-prod-icons/angle-down.svg") center / 0.8rem no-repeat;
+  mask: url("https://aux.tamu.edu/icons/aux-prod-icons/angle-down.svg") center / 0.8rem no-repeat;
+  transition: transform 0.2s ease;
+}
+
+button.tamu-top-bar__button.dropdown-toggle[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+button.tamu-top-bar__button.dropdown-toggle:hover,
+button.tamu-top-bar__button.dropdown-toggle:focus,
+button.tamu-top-bar__button.dropdown-toggle[aria-expanded="true"] {
+  color: var(--primary-brand);
+  background-color: var(--gray-200);
+  border-color: transparent;
 }
 
 /* ============================================================
-   Libraries dropdown — maroon links on light-gray panel,
-   matching library.tamu.edu's utility-nav persona menu.
+   Utility dropdown panels — white list with dotted dividers,
+   maroon links, as in the Aggie UX For You / Quick Links menus.
    ============================================================ */
 .tamu-top-bar__dropdown {
   position: relative;
@@ -150,33 +204,43 @@ button.tamu-top-bar__button.dropdown-toggle {
 }
 
 #tamu-top-bar .dropdown-menu {
-  background-color: var(--gray-100, #f6f6f6) !important;
-  border: none !important;
+  background-color: var(--white) !important;
+  border: 2px solid var(--gray-200) !important;
   border-radius: 0 !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  padding: 0.5rem 0;
-  margin-top: 0.5rem;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 0 !important;
   min-width: 260px;
+}
+
+#tamu-top-bar .dropdown-menu li {
+  margin: 0;
+  border-bottom: 2px dotted var(--gray-300);
+}
+
+#tamu-top-bar .dropdown-menu li:last-child {
+  border-bottom: 0;
 }
 
 #tamu-top-bar .dropdown-menu .dropdown-item {
   color: var(--primary-brand) !important;
-  font-size: 0.95rem;
-  font-weight: 600;
-  padding: 0.5rem 1.25rem;
+  font-family: var(--work-sans);
+  font-size: 0.9rem;
+  font-weight: 400;
+  padding: 0.75rem;
   white-space: normal;
   background-color: transparent !important;
 }
 
 #tamu-top-bar .dropdown-menu .dropdown-item:hover,
 #tamu-top-bar .dropdown-menu .dropdown-item:focus {
-  background-color: var(--white) !important;
-  color: var(--primary-brand-dark) !important;
+  background-color: var(--gray-100) !important;
+  color: var(--primary-brand) !important;
   text-decoration: underline;
 }
 
-/* Below lg, the brand + 4 links + 2 pill buttons + hamburger no longer fit
-   on one line (nothing here shrinks or wraps on its own), so the row
+/* Below lg, the brand + 3 links + 2 dropdown buttons + hamburger no longer
+   fit on one line (nothing here shrinks or wraps on its own), so the row
    overflows and squeezes — or fully hides — the hamburger off the right
    edge, making the whole mobile nav look broken/unreachable. Rather than
    hiding the utility links (losing Help/Hours/My Library/Libraries/
@@ -188,8 +252,12 @@ button.tamu-top-bar__button.dropdown-toggle {
     row-gap: 0.5rem;
   }
 
-  .tamu-top-bar__brand {
+  /* Take the free width (wrapping "University Libraries" under the brand
+     if it must) so the menu toggle keeps its place at the top right. */
+  .tamu-top-bar__left {
     order: 1;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .tamu-top-bar__menu-toggle {
@@ -205,12 +273,12 @@ button.tamu-top-bar__button.dropdown-toggle {
 }
 
 /* ============================================================
-   1b. Site identity band — white strip between the institutional
-   bar and the primary nav: site title + TAMU logo lockup.
+   1b. Site identity band — Aggie UX "text identity" layout: site
+   name on the left, University Libraries unit identity on the right.
    ============================================================ */
 .tamu-site-identity {
   background-color: var(--white, #ffffff);
-  border-bottom: 1px solid var(--gray-400, #a7a7a7);
+  border-bottom: 2px solid var(--gray-300, #d1d1d1);
 }
 
 .tamu-site-identity__inner {
@@ -218,46 +286,94 @@ button.tamu-top-bar__button.dropdown-toggle {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.65rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .tamu-site-identity__title a {
   color: var(--black, #000000);
-  font-family: var(--work-sans, "Work Sans", Arial, sans-serif);
+  font-family: var(--work-sans);
   font-weight: 700;
   font-style: italic;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  line-height: 1.5;
   text-decoration: none;
 }
 
-.tamu-site-identity__title a:hover {
+.tamu-site-identity__title a:hover,
+.tamu-site-identity__title a:focus {
   color: var(--primary-brand);
+  text-decoration: underline;
+}
+
+.tamu-site-identity__logo a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--black);
+  font-weight: 400;
   text-decoration: none;
+}
+
+.tamu-site-identity__logo a:hover,
+.tamu-site-identity__logo a:focus {
+  color: var(--black);
+  text-decoration: underline;
 }
 
 .tamu-site-identity__logo img {
   display: block;
-  height: 36px;
-  width: auto;
+  width: 75px;
+  min-width: 75px;
+  height: auto;
+}
+
+.tamu-site-identity__wordmark-small,
+.tamu-site-identity__wordmark-large {
+  display: block;
+  color: var(--black);
+  font-family: var(--open-sans);
+  font-style: normal;
+}
+
+.tamu-site-identity__wordmark-small {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+}
+
+.tamu-site-identity__wordmark-large {
+  font-size: 1.35rem;
+  line-height: 1.5;
+}
+
+/* Aggie UX drops the unit wordmark on small screens and keeps the box. */
+@media (max-width: 767.98px) {
+  .tamu-site-identity__wordmark {
+    display: none;
+  }
 }
 
 @media (max-width: 575px) {
   .tamu-site-identity__inner {
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
   }
 
   .tamu-site-identity__title a {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
   }
 
   .tamu-site-identity__logo img {
-    height: 28px;
+    width: 56px;
+    min-width: 56px;
   }
 }
 
 /* ============================================================
-   2. Main navbar — maroon background
-   Overrides Bootstrap's bg-white utility (!important needed)
+   2. Main navbar — Aggie UX primary nav: white bar with a 2px
+   gray rule underneath, bold Work Sans items, maroon underline on
+   hover and a gray tab behind the current section.
    ============================================================ */
 /* Create a stacking context on the header so nav links can't escape above #tamu-top-bar */
 header#header {
@@ -278,8 +394,10 @@ header#header nav.navbar#navbar-top {
   align-items: center;
 }
 
+/* Pull the first item's padding into the gutter so its text lines up
+   with the site name above. */
 #navbar-top .navbar-nav {
-  margin-left: -16px;
+  margin-left: -0.75rem;
 }
 
 header#header nav.navbar > .container-fluid,
@@ -294,19 +412,10 @@ header#header nav.navbar > .container {
 }
 
 header#header nav.navbar,
-header#header nav.navbar.bg-white {
-  background-color: var(--gray-100, #f6f6f6) !important;
-  border-bottom: 1px solid var(--gray-400, #a7a7a7);
-}
-
+header#header nav.navbar.bg-white,
 header#header nav#navbar-main {
-  background-color: var(--gray-100, #f6f6f6) !important;
-}
-
-/* Top utility bar (secondary_menu / top_header region) */
-header#header nav.navbar:first-of-type {
-  background-color: var(--gray-100, #f6f6f6) !important;
-  border-bottom: 1px solid var(--gray-400, #a7a7a7);
+  background-color: var(--white) !important;
+  border-bottom: 2px solid var(--gray-300, #d1d1d1);
 }
 
 /* ============================================================
@@ -329,34 +438,88 @@ header#header .page-header {
 /* ============================================================
    Primary navigation links
    ============================================================ */
+/* aux-styles.css gives every `ul li` a 0.6rem bottom margin; the items
+   have to sit flush on the bar for the hover underline to meet its edge. */
+header#header nav.navbar li.nav-item {
+  margin-bottom: 0 !important;
+  display: flex;
+}
+
+/* The !important padding beats the global `.nav-link` rule further down. */
 header#header nav.navbar .nav-link {
+  display: flex;
+  align-items: center;
   color: var(--black) !important;
-  font-weight: 500;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  font-family: var(--work-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 0.75rem !important;
+  text-decoration: none;
+  transition: color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 header#header nav.navbar .nav-link:hover,
 header#header nav.navbar .nav-link:focus,
-header#header nav.navbar .nav-link.active {
+header#header nav.navbar .nav-link[aria-expanded="true"] {
   color: var(--primary-brand) !important;
-  text-decoration: underline;
+  text-decoration: none;
+  box-shadow: inset 0 -3px var(--primary-brand);
 }
 
-/* Dropdown menus */
+/* Current section */
+header#header nav.navbar .nav-link.active,
+header#header nav.navbar .nav-link.is-active {
+  color: var(--primary-brand) !important;
+  background-color: var(--gray-300);
+}
+
+header#header nav.navbar .nav-link:focus-visible {
+  outline: 2px dotted var(--primary-brand);
+  outline-offset: 2px;
+}
+
+/* Aggie UX chevron in place of Bootstrap's border caret. */
+header#header nav.navbar .nav-link.dropdown-toggle::after {
+  content: "";
+  display: inline-block;
+  width: 1.1rem;
+  min-width: 1.1rem;
+  height: 1rem;
+  margin-left: 0.3rem;
+  border: 0;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: url("https://aux.tamu.edu/icons/aux-prod-icons/angle-down.svg") center / 0.8rem no-repeat;
+  mask: url("https://aux.tamu.edu/icons/aux-prod-icons/angle-down.svg") center / 0.8rem no-repeat;
+  transition: transform 0.2s ease;
+}
+
+header#header nav.navbar .nav-link.dropdown-toggle[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menus — white panel, dotted dividers, maroon edge on hover */
 header#header nav.navbar .dropdown-menu {
   background-color: var(--white);
-  border: 1px solid var(--gray-400, #a7a7a7);
+  border: 2px solid var(--gray-300, #d1d1d1);
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 0 !important;
+  padding: 0;
+  min-width: 250px;
 }
 
-header#header nav.navbar .dropdown-item {
-  color: var(--black);
+header#header nav.navbar .dropdown-menu .dropdown-item {
+  margin: 0 !important;
+  padding: 0;
+  background-color: transparent;
+  border-bottom: 2px dotted var(--gray-300, #d1d1d1);
+  white-space: normal;
 }
 
-header#header nav.navbar .dropdown-item:hover,
-header#header nav.navbar .dropdown-item:focus {
-  background-color: var(--gray-100, #f6f6f6);
-  color: var(--primary-brand);
+header#header nav.navbar .dropdown-menu .dropdown-item:last-child {
+  border-bottom: 0;
 }
 
 /* archipelago_subtheme_chiloe's `.navbar-dark ul.dropdown-menu .dropdown-item a`
@@ -364,30 +527,103 @@ header#header nav.navbar .dropdown-item:focus {
    menu nests <a class="nav-link"> inside <li class="dropdown-item">, so it
    needs its own override distinct from the .dropdown-item-as-anchor rule above. */
 header#header nav.navbar .dropdown-menu .dropdown-item a {
+  display: block;
+  padding: 0.75rem;
   color: var(--black) !important;
+  font-family: var(--work-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  text-decoration: none;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-header#header nav.navbar .dropdown-menu .dropdown-item:hover a,
 header#header nav.navbar .dropdown-menu .dropdown-item a:hover,
 header#header nav.navbar .dropdown-menu .dropdown-item a:focus {
   color: var(--primary-brand) !important;
+  background-color: var(--gray-200);
+  box-shadow: inset 3px 0 var(--primary-brand);
 }
 
-/* Current-page item: white on maroon. The `color: var(--black) !important` rule
-   above otherwise leaves it black on the active highlight. :has() covers pages
-   where Drupal puts `is-active` on the <a> instead of `active` on the <li>. */
-header#header nav.navbar .dropdown-menu .dropdown-item.active,
-header#header nav.navbar .dropdown-menu .dropdown-item:has(> a.is-active) {
-  background-color: var(--primary-brand, #500000);
+header#header nav.navbar .dropdown-menu .dropdown-item a:focus-visible {
+  outline: 2px dotted var(--primary-brand);
+  outline-offset: -2px;
 }
 
+/* Current page — same gray tab as the current top-level section. :has()
+   covers pages where Drupal puts `is-active` on the <a> instead of
+   `active` on the <li>. */
 header#header nav.navbar .dropdown-menu .dropdown-item.active a,
-header#header nav.navbar .dropdown-menu .dropdown-item.active a:hover,
-header#header nav.navbar .dropdown-menu .dropdown-item.active a:focus,
-header#header nav.navbar .dropdown-menu .dropdown-item a.is-active,
-header#header nav.navbar .dropdown-menu .dropdown-item a.is-active:hover,
-header#header nav.navbar .dropdown-menu .dropdown-item a.is-active:focus {
-  color: #ffffff !important;
+header#header nav.navbar .dropdown-menu .dropdown-item a.is-active {
+  color: var(--primary-brand) !important;
+  background-color: var(--gray-300);
+}
+
+/* ============================================================
+   Header search — Aggie UX search bar: square input with a 2px
+   maroon border, SEARCH as the primary button, RESET as the
+   outlined secondary one.
+   ============================================================ */
+header#header .views-exposed-form input.form-control:not(.form-submit) {
+  background-color: var(--white);
+  color: var(--black);
+  border: 2px solid var(--primary-brand);
+  border-radius: 0;
+  font-family: var(--work-sans);
+  font-size: 1rem;
+}
+
+/* Something upstream caps the field at 256px. Give it more room on desktop.
+   At 992px the menu items plus SEARCH/RESET leave exactly 16rem for the
+   field (anything wider wraps the menu onto two lines), so it grows only
+   with the width above that, up to 24rem at ~1120px. Below lg it sits in
+   the mobile panel and keeps its own width. */
+@media (min-width: 992px) {
+  header#header .views-exposed-form input.form-control:not(.form-submit) {
+    width: clamp(16rem, 100vw - 46rem, 24rem);
+    max-width: none;
+  }
+}
+
+header#header .views-exposed-form input.form-control:not(.form-submit):focus {
+  outline: 0.2rem solid var(--primary-brand-light);
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+header#header .views-exposed-form input.form-submit {
+  background-color: var(--primary-brand);
+  color: var(--white);
+  border: 2px solid var(--primary-brand-dark);
+  border-radius: 0;
+  font-family: var(--work-sans);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+header#header .views-exposed-form input.form-submit:hover,
+header#header .views-exposed-form input.form-submit:focus {
+  background-color: var(--primary-brand-light);
+  color: var(--white);
+}
+
+header#header .views-exposed-form input.form-submit[name="reset"] {
+  background-color: transparent;
+  color: var(--primary-brand);
+}
+
+header#header .views-exposed-form input.form-submit[name="reset"]:hover,
+header#header .views-exposed-form input.form-submit[name="reset"]:focus {
+  background-color: var(--primary-brand-light);
+  color: var(--white);
+}
+
+header#header .views-exposed-form input.form-submit:focus-visible {
+  outline: 2px dotted var(--gold);
+  outline-offset: 2px;
 }
 
 /* ============================================================
