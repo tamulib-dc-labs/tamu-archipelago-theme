@@ -18,19 +18,20 @@
 
 /* ============================================================
    1. Institutional top bar
-   Sticky strip above all theme regions. Styled after the Aggie UX
-   utility nav (aggieux.tamu.edu → Navigation → Site Headers): maroon
-   bar, "Texas A&M University" back-link plus the parent unit on the
-   left, italic CTA links and light-gray dropdown buttons on the right.
+   Strip above all theme regions; scrolls away with the page. Styled
+   after the Aggie UX utility nav (aggieux.tamu.edu → Navigation → Site
+   Headers): maroon bar, "Texas A&M University" back-link plus the parent
+   unit on the left, italic CTA links and light-gray dropdown buttons on
+   the right.
+   Positioned with a z-index so its dropdown menus open over the identity
+   band and header#header (z-index 10) below it.
    ============================================================ */
 #tamu-top-bar {
   background-color: var(--primary-brand);
   color: var(--white);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1400;
   isolation: isolate;
-  will-change: transform;
   width: 100%;
   font-family: var(--work-sans);
   font-size: 1rem;
@@ -724,13 +725,16 @@ header#header nav.navbar .navbar-toggler-icon {
     border-bottom: 0;
   }
 
-  /* Float over the page rather than pushing it down. --tamu-top-bar-h is
-     measured and published by js/nav.js; the fallback covers the 100px logo
-     plus the bar's own padding and border in case the script has not run. */
+  /* Float over the page rather than pushing it down. Anchored to the
+     bottom of the (now empty) navbar, i.e. just under the identity band,
+     and scrolls with the page like the bar the toggle lives in. */
   header#header .to-be-collapsed.collapse,
   header#header .to-be-collapsed.collapsing {
-    position: fixed;
-    top: var(--tamu-top-bar-h, 52px);
+    position: absolute;
+    top: 100%;
+    /* Bootstrap's .offcanvas-top caps this at max-height: 100%, which is
+       the height of the empty navbar now that the panel is not fixed. */
+    max-height: none;
     left: 0;
     right: 0;
     z-index: 1050;
@@ -740,11 +744,11 @@ header#header nav.navbar .navbar-toggler-icon {
     padding: 0.5rem 1.5rem 1rem;
   }
 
-  /* Only once open — .collapsing needs Bootstrap's own overflow:hidden for
-     the height transition to work. */
+  /* Open: as tall as the menu, in place of .offcanvas-top's 30vh box with
+     its own scrollbar; the page scrolls instead. Only once open, since
+     .collapsing animates an inline height. */
   header#header .to-be-collapsed.collapse.show {
-    max-height: calc(100vh - var(--tamu-top-bar-h, 52px));
-    overflow-y: auto;
+    height: auto;
   }
 }
 
