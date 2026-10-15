@@ -97,6 +97,100 @@ function tamu_theme_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\Form
     $form['search_api_fulltext']['#title_display'] = 'invisible';
   }
   tamu_theme_advanced_search_form_alter($form);
+  tamu_theme_search_inside_form_alter($form, $form_state);
+}
+
+/**
+ * "Search inside" pages, under Advanced Searches in the main menu.
+ *
+ * Two displays of the solr_search_content view list text hits grouped by
+ * the object they belong to: /search_websites (page_2) archived web pages,
+ * /search_pages (page_3) OCR'd book and document pages. They get the
+ * /advanced-search form panel and the /search result cards
+ * (css/search-inside.css) through the views_view__search_inside and
+ * views_bootstrap_grid__search_inside templates.
+ *
+ * @return string|null
+ *   'web' or 'pages' for those displays, NULL for anything else.
+ */
+function tamu_theme_search_inside_kind($view) {
+  if (!$view instanceof \Drupal\views\ViewExecutable || $view->id() !== 'solr_search_content') {
+    return NULL;
+  }
+  return ['page_2' => 'web', 'page_3' => 'pages'][$view->current_display] ?? NULL;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for views_view.
+ */
+function tamu_theme_theme_suggestions_views_view_alter(array &$suggestions, array $variables) {
+  if (tamu_theme_search_inside_kind($variables['view'] ?? NULL)) {
+    $suggestions[] = 'views_view__search_inside';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for views_bootstrap_grid.
+ */
+function tamu_theme_theme_suggestions_views_bootstrap_grid_alter(array &$suggestions, array $variables) {
+  if (tamu_theme_search_inside_kind($variables['view'] ?? NULL)) {
+    $suggestions[] = 'views_bootstrap_grid__search_inside';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view.
+ */
+function tamu_theme_preprocess_views_view(&$variables) {
+  $variables['search_inside'] = tamu_theme_search_inside_kind($variables['view'] ?? NULL);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views_bootstrap_grid.
+ */
+function tamu_theme_preprocess_views_bootstrap_grid(&$variables) {
+  $variables['search_inside'] = tamu_theme_search_inside_kind($variables['view'] ?? NULL);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view_field.
+ *
+ * Hit labels and snippets on the "search inside" pages: page hits are
+ * labelled "Sequence N" and link to page N, so they read "Page N", as the
+ * page chips on /search do; web archive text carries literal "\n" marks.
+ */
+function tamu_theme_preprocess_views_view_field(&$variables) {
+  if (!tamu_theme_search_inside_kind($variables['view'] ?? NULL)) {
+    return;
+  }
+  $field = $variables['field']->options['id'] ?? '';
+  $output = (string) $variables['output'];
+  if ($field === 'sbf_label') {
+    $output = preg_replace('/>\s*Sequence (\d+)\s*</', '>Page $1<', $output);
+  }
+  elseif ($field === 'sbf_plaintext') {
+    $output = str_replace('\n', ' ', $output);
+  }
+  else {
+    return;
+  }
+  $variables['output'] = \Drupal\Core\Render\Markup::create($output);
+}
+
+/**
+ * The search box on the "search inside" pages: a visible label, which
+ * heads the form panel, and a hint of what to type.
+ */
+function tamu_theme_search_inside_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $kind = tamu_theme_search_inside_kind($form_state->get('view'));
+  $key = ['web' => 'search_api_fulltext', 'pages' => 'page_text'][$kind] ?? NULL;
+  if (!$key || !isset($form[$key])) {
+    return;
+  }
+  $form['#attributes']['class'][] = 'tamu-search-inside__form';
+  $form[$key]['#title'] = $kind === 'web' ? t('Search inside web archives') : t('Search inside book and document pages');
+  $form[$key]['#title_display'] = 'before';
+  $form[$key]['#attributes']['placeholder'] = $kind === 'web' ? t('Words or a web address') : t('Words in the page text');
 }
 
 /**

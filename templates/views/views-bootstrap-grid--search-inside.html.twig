@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * One object's hits on the "search inside" pages (/search_websites,
+ * /search_pages): the view groups hits by object, and each group comes
+ * through here with the object's title link as `title`.
+ *
+ * Drawn as a /search result card: the title, then the hits in the same
+ * "Match" box the /search cards use for page and transcript hits. The
+ * Bootstrap grid put two hits side by side at half width.
+ *
+ * search_inside: 'web' or 'pages'.
+ */
+#}
+<article class="tamu-inside-group">
+  {% if title %}
+    <h2 class="tamu-inside-group__title">{{ title }}</h2>
+  {% endif %}
+  <div class="tamu-inside-group__hits">
+    <p class="tamu-inside-group__label">{{ search_inside == 'web' ? 'Archived pages'|t : 'Pages'|t }}</p>
+    <ul class="tamu-inside-group__list">
+      {% for row in rows %}
+        <li class="tamu-inside-hit">{{ row }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</article>

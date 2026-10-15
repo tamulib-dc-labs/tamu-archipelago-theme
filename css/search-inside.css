@@ -1,0 +1,451 @@
+/* ============================================================
+   "Search inside" pages (Advanced Searches menu)
+
+     /search_websites  Search inside Web Archives   (.tamu-search-inside--web)
+     /search_pages     Search inside Book/Document Pages (.tamu-search-inside--pages)
+
+   Two displays of the solr_search_content view that list text hits
+   grouped by object. templates/views/views-view--search-inside puts the
+   search form first; views-bootstrap-grid--search-inside turns each
+   object's group into a card (see tamu_theme_search_inside_kind()).
+
+   Made to match the rest of the search pages and Aggie UX
+   (aggieux.tamu.edu):
+   - the form is the /advanced-search panel (AUX "Horizontal Filters":
+     gray-100, square corners, AUX native input, submit and reset
+     buttons);
+   - each object is a /search result card (white, shadow, maroon top
+     bar, Work Sans 600 maroon title) and its hits sit in the same
+     "Match" box, page hits with the same "Page 12" chips.
+
+   Rules start from the :root .archipelago-chiloe-theme #page anchor to
+   outrank Chiloé's exposed-form and .view-content heading rules.
+   ============================================================ */
+
+/* ---------- Page frame: full width, as /search ---------- */
+
+body:has(.tamu-search-inside) #main-breadcrumbs,
+body:has(.tamu-search-inside) #main-top,
+body:has(.tamu-search-inside) #main-top-flex,
+body:has(.tamu-search-inside) #main,
+body:has(.tamu-search-inside) #content_bottom_container {
+  max-width: none;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside {
+  /* Aggie UX palette */
+  --aux-maroon: #500000;
+  --aux-maroon-dark: #3c0000;
+  --aux-maroon-light: #732f2f;
+  --aux-gold: #af8846;
+  --aux-gray-100: #f6f6f6;
+  --aux-gray-200: #eaeaea;
+  --aux-gray-300: #d1d1d1;
+  --aux-gray-400: #a7a7a7;
+  --aux-gray-700: #535353;
+  --aux-gray-800: #3e3e3e;
+  --aux-font: "Work Sans", Arial, sans-serif;
+  --aux-control-height: 3rem;
+
+  /* Space under the site header, as on /advanced-search. */
+  padding-top: 1.5rem;
+}
+
+/* ---------- Search form: the /advanced-search panel ---------- */
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside > .view-filters {
+  margin: 0 0 1.5rem;
+}
+
+/* Block, not Chiloé's flex row that pushed the box to the right. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form {
+  display: block;
+  margin: 0;
+  padding: 1.5rem;
+  background: var(--aux-gray-100);
+  font-family: var(--aux-font);
+}
+
+/* The row carries Bootstrap's .flex-nowrap (!important), which squeezed
+   Search and Reset onto two lines beside the box. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form > .form-row {
+  display: flex;
+  flex-wrap: wrap !important;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+/* Barrio's mb-3 is margin-bottom: 1rem !important. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form > .form-row > * {
+  margin: 0 !important;
+  padding: 0;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form > .form-row > .js-form-item {
+  flex: 1 1 22rem;
+  max-width: 44rem;
+  min-width: 0;
+}
+
+/* The label heads the panel as the AUX filter heading (Work Sans 20px
+   bold, gray-800). Chiloé hides exposed-form labels with !important. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form > .form-row > .js-form-item > label:not(.visually-hidden) {
+  position: static !important;
+  visibility: visible !important;
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 0 0.75rem !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  border: 0 !important;
+  font-family: var(--aux-font);
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.3;
+  text-transform: none;
+  color: var(--aux-gray-800);
+}
+
+/* AUX native input: 2px gray-400 border, square, maroon focus ring. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form input.form-control:not(.form-submit) {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: var(--aux-control-height);
+  min-height: var(--aux-control-height);
+  margin: 0;
+  padding: 0 0.875rem;
+  border: 2px solid var(--aux-gray-400);
+  border-radius: 0;
+  background-color: #fff;
+  background-image: none;
+  box-shadow: none;
+  font-family: var(--aux-font);
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: none;
+  color: #000;
+  transition: border-color 0.2s ease;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form input.form-control:not(.form-submit)::placeholder {
+  font-style: normal;
+  color: var(--aux-gray-700);
+  opacity: 1;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form input.form-control:not(.form-submit):focus {
+  border-color: var(--aux-maroon);
+  box-shadow: none;
+  outline: 0.3rem solid var(--aux-maroon-light);
+  outline-offset: 0;
+}
+
+/* Search API autocomplete adds a spinner at the right of the box. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form input.form-autocomplete.ui-autocomplete-loading {
+  background-image: url("/core/misc/throbber-active.gif");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form .form-actions {
+  display: flex;
+  flex: none;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ---------- Buttons: AUX submit (Search) and reset (Reset) ---------- */
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form .form-actions > input.form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: var(--aux-control-height);
+  min-height: var(--aux-control-height);
+  margin: 0;
+  padding: 0 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  box-shadow: none;
+  background: var(--aux-maroon-light);
+  font-family: var(--aux-font);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form .form-actions > input.form-submit:is(:hover, :focus, :active) {
+  background: var(--aux-maroon);
+  color: #fff;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form .form-actions > input.form-submit[data-drupal-selector^="edit-reset"] {
+  padding: 0 1rem;
+  background: transparent;
+  font-weight: 400;
+  font-style: italic;
+  text-transform: none;
+  color: var(--aux-maroon-light);
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form .form-actions > input.form-submit[data-drupal-selector^="edit-reset"]:is(:hover, :focus, :active) {
+  background: var(--aux-gray-200);
+  color: var(--aux-maroon);
+}
+
+/* AUX button focus: gold dotted outline. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form .form-actions > input.form-submit:focus-visible {
+  outline: 2px dotted var(--aux-gold);
+  outline-offset: 0.25rem;
+}
+
+/* ---------- Results count and pager, as /search ---------- */
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside > .view-header {
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside ul.pagination {
+  flex-wrap: wrap;
+  row-gap: 0.375rem;
+  margin: 0.75rem 0;
+  padding-top: 0.75rem;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside > .view-content {
+  margin: 0;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside > .view-empty {
+  margin: 1rem 0 2rem;
+  font-family: var(--open-sans);
+  font-size: 1rem;
+  color: var(--aux-gray-800);
+}
+
+/* ---------- One card per object: the /search result card ---------- */
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-group {
+  position: relative;
+  margin: 0 0 1rem;
+  padding: calc(1.25rem + 4px) 1.5rem 1.25rem;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--white, #fff);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-group:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* Maroon accent bar, as on .tamu-card and the /search cards */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-group::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary-brand, var(--aux-maroon));
+}
+
+/* Title: Work Sans 600 in maroon, sentence case (Chiloé: serif italic
+   .view-content h3). */
+:root .archipelago-chiloe-theme #page .tamu-search-inside h2.tamu-inside-group__title {
+  margin: 0;
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 1.35rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--primary-brand, var(--aux-maroon));
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside h2.tamu-inside-group__title a {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-decoration: none;
+  color: inherit;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside h2.tamu-inside-group__title a:is(:hover, :focus) {
+  text-decoration: underline;
+}
+
+/* Hits: the /search "Match" box (gray-100, maroon left rule). */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-group__hits {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--primary-brand, var(--aux-maroon));
+  border-radius: 0 4px 4px 0;
+  background: var(--aux-gray-100);
+  font-family: var(--open-sans);
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside p.tamu-inside-group__label {
+  margin: 0 0 0.25rem;
+  font-family: var(--open-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary-brand-light, var(--aux-maroon-light));
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside ul.tamu-inside-group__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit {
+  margin: 0;
+  padding: 5px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--aux-gray-800);
+}
+
+/* Fields: views wraps each in a div and a span.field-content. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit .views-field {
+  margin: 0;
+  padding: 0;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit .field-content {
+  font-family: inherit;
+  font-style: normal; /* slim.css sets every span italic and grey */
+  color: inherit;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit h5 {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Snippet: two lines, as the /search match lines. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit .views-field-sbf-plaintext .field-content {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit strong {
+  font-weight: 700;
+  color: var(--primary-brand, var(--aux-maroon));
+}
+
+/* Pages: "Page 12" chip, then the snippet beside it (/search's
+   .search-match__hit and .search-match__where). */
+:root .archipelago-chiloe-theme #page .tamu-search-inside--pages .tamu-inside-hit {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside--pages .tamu-inside-hit .views-field-sbf-label {
+  flex: none;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside--pages .tamu-inside-hit .views-field-sbf-plaintext {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside--pages .tamu-inside-hit h5 a {
+  display: inline-block;
+  min-width: 4.25rem;
+  padding: 0 0.5rem;
+  border: 2px solid var(--aux-gray-300);
+  border-radius: 24px;
+  background: var(--white, #fff);
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+  text-transform: none;
+  color: var(--primary-brand, var(--aux-maroon));
+  font-variant-numeric: tabular-nums;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside--pages .tamu-inside-hit h5 a:is(:hover, :focus) {
+  border-color: var(--aux-gray-400);
+  background: var(--aux-gray-200);
+  color: var(--aux-maroon-light);
+  text-decoration: none;
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-hit h5 a:focus-visible {
+  outline: 2px dotted var(--primary-brand, var(--aux-maroon));
+  outline-offset: 2px;
+}
+
+/* Web archives: the page's title or address as a link, the snippet
+   under it. Addresses run long, so they break anywhere. */
+:root .archipelago-chiloe-theme #page .tamu-search-inside--web .tamu-inside-hit + .tamu-inside-hit {
+  border-top: 1px solid var(--aux-gray-200);
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside--web .tamu-inside-hit h5 a {
+  font-family: "Work Sans", var(--open-sans), Arial, sans-serif;
+  font-size: 0.95rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  text-transform: none;
+  color: var(--primary-brand, var(--aux-maroon));
+}
+
+:root .archipelago-chiloe-theme #page .tamu-search-inside--web .tamu-inside-hit h5 a:is(:hover, :focus) {
+  text-decoration: underline;
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 767.98px) {
+  :root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form {
+    padding: 1rem;
+  }
+
+  :root .archipelago-chiloe-theme #page .tamu-search-inside .views-exposed-form > .form-row > .js-form-item {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  :root .archipelago-chiloe-theme #page .tamu-search-inside .tamu-inside-group {
+    padding: calc(1rem + 4px) 1rem 1rem;
+  }
+}
