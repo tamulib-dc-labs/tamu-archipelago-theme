@@ -102,8 +102,8 @@ body.page-view-solr-search-content.layout-sidebar-first #sidebar_first.offcanvas
   border-top: 4px solid var(--primary-brand);
   background: var(--white);
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
-  /* Above the sticky #tamu-top-bar (z-index 1400), which otherwise sits
-     over the top of the panel and is not dimmed by the backdrop.
+  /* Above #tamu-top-bar (z-index 1400), which otherwise sits over the
+     top of the panel and is not dimmed by the backdrop.
      Bootstrap's defaults are 1045 and 1040. */
   z-index: 1500;
 }
