@@ -1,0 +1,902 @@
+uuid: 1110f3b9-0811-4c62-85fd-47dbf99fb7b6
+langcode: en
+status: open
+dependencies:
+  module:
+    - webform_strawberryfield
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: digital_object_collection
+title: 'Default Digital Object Collection'
+description: 'Default Digital Object Collection Webform: 1.3.0.'
+categories:
+  - Archipelago
+elements: |-
+  metadata:
+    '#type': webform_wizard_page
+    '#title': 'Basic Descriptive Metadata'
+    '#access_create_roles':
+      - administrator
+      - metadata_pro
+    '#access_update_roles':
+      - authenticated
+    '#access_view_roles':
+      - authenticated
+    '#next_button_label': 'Move on to next step'
+    label:
+      '#type': textfield
+      '#title': Title
+      '#description': 'A name given to the resource. This can be a supplied title if there is no existing title or if the existing title does not provide enough information for users to distinguish the item from others.'
+      '#title_display': before
+      '#description_display': before
+      '#minlength': 3
+      '#maxlength': 256
+      '#placeholder': 'Title of this Object'
+      '#required': true
+      '#required_error': 'Please provide a brief title for this collection.'
+      '#states_clear': false
+      '#label_attributes':
+        class:
+          - custom-form-input-heading
+      '#format_items': comma
+      '#access_create_roles':
+        - administrator
+        - metadata_pro
+      '#access_update_roles':
+        - administrator
+        - metadata_pro
+    title_alternative:
+      '#type': textfield
+      '#title': 'Title Alternative'
+      '#multiple': true
+      '#description': 'An alternative name for the resource. This may be the original title if a supplied title is used for label.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+    type:
+      '#type': select
+      '#title': 'Collection/Compound Type'
+      '#help': 'For Digital Object Collections, recommended selections from the&nbsp;<a href="/admin/structure/webform/config/options/manage">predefined options</a>&nbsp;found in the Schema.org Creative Works list are: Collection, Creative Work Series (Compound Object/Collection), Newspaper, or Periodical.'
+      '#description': 'The worktype Archipelago uses to display the ADO.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#options': schema_org_cw_collections
+      '#required': true
+      '#states_clear': false
+      '#label_attributes':
+        class:
+          - custom-form-input-heading
+    ismemberof:
+      '#type': entity_autocomplete
+      '#title': 'Related Collection(s) Membership'
+      '#description': 'The Archipelago Collection the item is a part of.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#unique': true
+      '#states_clear': false
+      '#format_items': comma
+      '#target_type': node
+      '#selection_handler': 'default:node'
+      '#selection_settings':
+        target_bundles:
+          digital_object_collection: digital_object_collection
+        sort:
+          field: title
+          direction: ASC
+    collecting_area:
+      '#type': textfield
+      '#title': 'Collecting Area'
+      '#multiple': true
+      '#description': 'The collecting area to which a digital resource and/or corresponding physical item belong.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+    creator_fieldset:
+      '#type': details
+      '#title': 'Creators and Contributors'
+      '#description': 'You may choose to use the free text creator and contributor elements, the agent element (if you must assign a role other than creator and contributor), and/or use the Agent Linked Data element which allows you to select authorized Name headings from the Library of Congress Name Authority File (LCNAF).'
+      '#help_title': Creator/Contributor
+      '#help': 'Individual(s)/Organization(s) responsible for creating the original resource.'
+      '#description_display': before
+      '#help_display': title_after
+      creator:
+        '#type': textfield
+        '#title': Creator
+        '#multiple': true
+        '#description': 'An entity primarily responsible for making the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#states_clear': false
+        '#multiple__min_items': 1
+        '#multiple__empty_items': 0
+        '#multiple__add_more': false
+        '#label_attributes':
+          class:
+            - custom-form-input-heading
+        '#format_items': comma
+      contributor:
+        '#type': textfield
+        '#title': Contributor
+        '#multiple': true
+        '#description': 'An entity responsible for making contributions to the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+      agent:
+        '#type': webform_metadata_multiagent
+        '#title': Agent
+        '#multiple': true
+        '#description': 'An entity responsible for making the resource. Map all creator/contributors that have a role other than creator or contributor here.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__access': false
+        '#name_label': value
+        '#role_label': role
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+      agent_linked_data:
+        '#type': webform_metadata_multiagent
+        '#title': 'Agent Linked Data'
+        '#multiple': true
+        '#description': 'An entity responsible for making the resource using a controlled vocabulary.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__title': URI
+        '#name_label': value
+        '#name_uri': uri
+        '#role_label': role
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+    date_created_fieldset:
+      '#type': fieldset
+      '#title': 'Date Created'
+      '#description': 'You may choose to use either the Date Created in different ways--using <a href="https://www.loc.gov/standards/datetime/">EDTF formatting</a>, as a Fixed/ISO date, or as an&nbsp;unmapped, free-text string. Please note that unmapped/free-text dates will not be indexed for the Date Created facet.'
+      '#states':
+        visible:
+          - ':input[name="type"]':
+              value: Collection
+          - or
+          - ':input[name="type"]':
+              value: CreativeWorkSeries
+          - or
+          - ':input[name="type"]':
+              value: Newspaper
+          - or
+          - ':input[name="type"]':
+              value: Periodical
+          - or
+          - ':input[name="type"]':
+              value: Periodical
+          - or
+          - ':input[name="type"]':
+              value: Publication
+      '#states_clear': false
+      date_created:
+        '#type': date
+        '#title': 'Date Created'
+        '#description': 'Date of creation of the resource'
+        '#help_title': 'Date of original'
+        '#help': 'Date the original resource was created (date the photograph was taken, video or audio file was recorded, document or book was published)'
+        '#title_display': before
+        '#description_display': before
+        '#states_clear': false
+        '#format_items': comma
+        '#datepicker': true
+        '#date_part_order':
+          - year
+          - month
+          - day
+        '#date_year_range': ''
+      date_issued:
+        '#type': date
+        '#title': 'Date Issued'
+        '#description': 'Date of formal issuance of the resource'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      date_created_edtf:
+        '#type': webform_metadata_date
+        '#title': 'Date Created EDTF'
+        '#description': 'Date of creation of the resource using EDTF.'
+        '#format_items': comma
+        '#showfreeformalways': true
+        '#edtf_validateme': true
+        '#date_date_format': ''
+      date_issued_edtf:
+        '#type': webform_metadata_date
+        '#title': 'Date Issued EDTF'
+        '#description': 'Date of formal issuance of the resource using EDTF.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#showfreeformalways': true
+        '#edtf_validateme': true
+      date_available:
+        '#type': textfield
+        '#title': 'Date Available'
+        '#description': 'Date the resource was originally made available in OAKTrust. Only use for items migrated from OAKTrust.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      date_digital_creation:
+        '#type': textfield
+        '#title': 'Date Digital Creation'
+        '#description': 'Date the digital version of the resource was first created (in Fedora, OAKTrust, Avalon, or Archipelago). This may be fedora:created or dc.date.accessioned. Do not put the date of Archipelago ingest for ADOs migrated from another repository.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+    abstract:
+      '#type': textarea
+      '#title': Abstract
+      '#description': 'Summary or abstract of the resource.'
+      '#title_display': before
+      '#description_display': before
+    description:
+      '#type': textarea
+      '#title': Description
+      '#multiple': true
+      '#description': 'An account of the resource, not including abstract/summary or table of contents.'
+      '#title_display': before
+      '#description_display': before
+      '#rows': 4
+      '#autocomplete': 'off'
+      '#required_error': 'Please provide a brief description for this digital object.'
+      '#states_clear': false
+      '#multiple__add_more': false
+      '#label_attributes':
+        class:
+          - custom-form-input-heading
+      '#format_items': comma
+    subjects:
+      '#type': details
+      '#title': Subjects
+      subject:
+        '#type': textfield
+        '#title': Subject
+        '#multiple': true
+        '#description': 'A topic of the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+      geographic_subject:
+        '#type': textfield
+        '#title': 'Geographic Subject'
+        '#multiple': true
+        '#description': 'Geographic topics and spatial characteristics of the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+      temporal_subject:
+        '#type': textfield
+        '#title': 'Temporal Subject'
+        '#multiple': true
+        '#description': 'Temporal characteristics or subjects of the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+      subject_linked_data:
+        '#type': webform_metadata_multiagent
+        '#title': 'Subject Linked Data'
+        '#multiple': true
+        '#description': 'A topic of the resource that uses controlled vocabulary.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__title': URI
+        '#role_label__access': false
+        '#role_uri__access': false
+        '#name_label': value
+        '#name_uri': uri
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+      geographic_subject_linked_data:
+        '#type': webform_metadata_multiagent
+        '#title': 'Geographic Subject Linked Data'
+        '#multiple': true
+        '#description': 'Geographic subjects and spatial characteristics of the resource that uses a controlled vocabulary.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__title': URI
+        '#role_label__access': false
+        '#role_uri__access': false
+        '#name_label': value
+        '#name_uri': uri
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+      temporal_subject_linked_data:
+        '#type': webform_metadata_multiagent
+        '#title': 'Temporal Subject Linked Data'
+        '#multiple': true
+        '#description': 'Temporal characteristics or subjects of the resource that uses a controlled vocabulary.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__title': URI
+        '#role_label__access': false
+        '#role_uri__access': false
+        '#name_label': value
+        '#name_uri': uri
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+    language:
+      '#type': webform_autocomplete
+      '#title': Language
+      '#multiple': 3
+      '#help_title': Language
+      '#help': 'Language(s) of the material(s)'
+      '#title_display': before
+      '#description_display': before
+      '#states_clear': false
+      '#multiple__min_items': 1
+      '#multiple__empty_items': 0
+      '#multiple__sorting': false
+      '#multiple__add_more': false
+      '#format_items': comma
+      '#autocomplete_items': languages
+    digital_publisher:
+      '#type': textfield
+      '#title': 'Digital Publisher'
+      '#description': 'An entity responsible for making the digital resource available.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+    format:
+      '#type': textfield
+      '#title': Format
+      '#description': 'The file format, physical medium, or dimensions of the resource.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+    content_type:
+      '#type': textfield
+      '#title': 'Content Type'
+      '#multiple': true
+      '#description': 'The nature or genre of the resource.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+    genre_form:
+      '#type': textfield
+      '#title': 'Genre Form'
+      '#multiple': true
+      '#description': 'Form and/or genre of the resource.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+    genre_form_linked_data:
+      '#type': webform_metadata_multiagent
+      '#title': 'Genre Form Linked Data'
+      '#multiple': true
+      '#description': 'Form and/or genre of the resource that uses a controlled vocabulary such as LCGFT or AAT.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+      '#agent_type__access': false
+      '#name_label__title': Value
+      '#name_uri__title': URI
+      '#role_label__access': false
+      '#role_uri__access': false
+      '#name_label': value
+      '#name_uri': uri
+      '#vocab_personal_name': names
+      '#vocab_corporate_name': names
+      '#vocab_family_name': names
+      '#role_type': loc
+    extent:
+      '#type': textfield
+      '#title': Extent
+      '#multiple': true
+      '#description': 'The size or duration of the resource.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+    identifier:
+      '#type': webform_metadata_multiagent
+      '#title': Identifier
+      '#multiple': true
+      '#description': 'An unambiguous reference to the resource within a given context.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+      '#agent_type__access': false
+      '#name_label__title': Value
+      '#name_uri__title': Authority
+      '#role_label__access': false
+      '#role_uri__access': false
+      '#name_label': value
+      '#name_uri': authority
+      '#vocab_personal_name': names
+      '#vocab_corporate_name': names
+      '#vocab_family_name': names
+      '#role_type': loc
+    rights_information:
+      '#type': details
+      '#title': 'Rights Information'
+      rights:
+        '#type': url
+        '#title': Rights
+        '#description': 'URI with information about rights held in and over the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      rights_details:
+        '#type': textarea
+        '#title': 'Rights Details'
+        '#description': 'Free text with information about rights held in and over the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      access_rights:
+        '#type': textarea
+        '#title': 'Access Rights'
+        '#description': 'Information about who access the resource or an indication of its security status.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      rights_holder:
+        '#type': textfield
+        '#title': 'Rights Holder'
+        '#description': 'A person or organization owning or managing rights over the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+    origin_info:
+      '#type': details
+      '#title': 'Origin Info'
+      original_publisher:
+        '#type': textfield
+        '#title': 'Original Publisher'
+        '#description': 'An entity responsible for making the original resource available.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      original_publication:
+        '#type': textfield
+        '#title': 'Original Publication'
+        '#description': 'If the physical object was originally published as part of another work, enter that work here.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      provenance:
+        '#type': textarea
+        '#title': Provenance
+        '#description': 'A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      local_department:
+        '#type': textfield
+        '#title': 'Local Department'
+        '#description': 'A&M department the item pertains to.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      sponsorship:
+        '#type': textfield
+        '#title': Sponsorship
+        '#description': 'An agent that sponsored creation of the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+    notes_details:
+      '#type': details
+      '#title': 'Physical Item Information'
+      '#states_clear': false
+      physical_collection:
+        '#type': textfield
+        '#title': 'Physical Collection'
+        '#description': 'The physical collection from which the item was digitized.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      physical_location:
+        '#type': textfield
+        '#title': 'Physical Location'
+        '#description': 'Information about the physical location, such as the box and folder, from which the item was digitized.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      medium:
+        '#type': textfield
+        '#title': Medium
+        '#multiple': true
+        '#description': 'The material or physical carrier of the resource.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+      classification:
+        '#type': webform_metadata_multiagent
+        '#title': Classification
+        '#description': 'Classification information, such as LCC call number.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__title': Authority
+        '#role_label__access': false
+        '#role_uri__access': false
+        '#name_label': value
+        '#name_uri': authority
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+    related_items:
+      '#type': details
+      '#title': 'Related Items'
+      related_record:
+        '#type': url
+        '#title': 'Related Record'
+        '#multiple': true
+        '#description': 'A related resource, such as a catalog record.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#multiple__add_more': false
+      related_url:
+        '#type': url
+        '#title': 'Related URL'
+        '#description': 'A url to a relevant item, such as the same digital object hosted on another platform.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      related_url_historic:
+        '#type': url
+        '#title': 'Related URL Historic'
+        '#description': 'A historic url to a related item. Enter urls to archived website and exhibits here.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+      digital_exhibit:
+        '#type': webform_metadata_multiagent
+        '#title': 'Digital Exhibit'
+        '#description': 'The parent digital collection or exhibit if it is hosted outside Archipelago.'
+        '#title_display': before
+        '#description_display': before
+        '#help_display': title_after
+        '#agent_type__access': false
+        '#name_label__title': Value
+        '#name_uri__title': URI
+        '#role_label__access': false
+        '#role_uri__access': false
+        '#name_label': value
+        '#name_uri': uri
+        '#vocab_personal_name': names
+        '#vocab_corporate_name': names
+        '#vocab_family_name': names
+        '#role_type': loc
+    audience:
+      '#type': textfield
+      '#title': Audience
+      '#multiple': true
+      '#description': 'A class of agents for whom the resource is intended or useful.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+      '#multiple__add_more': false
+    coordinates:
+      '#type': textarea
+      '#title': Coordinates
+      '#description': 'Human readable spatial characteristics of the resource as represented by coordinates. Not machine actionable.'
+      '#description_display': before
+    date_built:
+      '#type': textfield
+      '#title': 'Date Built'
+      '#description': 'The date the building in the photograph was constructed.'
+      '#description_display': before
+    date_razed:
+      '#type': textfield
+      '#title': 'Date Razed'
+      '#description': 'The date the building in the photograph was destroyed.'
+      '#description_display': before
+    mimetype:
+      '#type': textfield
+      '#title': Mimetype
+      '#multiple': true
+      '#description': 'The electronic format type, or the data representation, of the resource.'
+      '#description_display': before
+      '#multiple__add_more': false
+    table_of_contents:
+      '#type': textarea
+      '#title': 'Table of Contents'
+      '#description': 'A list of subunits of the resource.'
+      '#description_display': before
+    attribution:
+      '#type': textarea
+      '#title': Attribution
+      '#description': 'An optional field that is only mapped to the manifest to acknowledge the contributing institution.'
+      '#description_display': before
+    projection:
+      '#type': textfield
+      '#title': Projection
+      '#description': 'The projection of the map. Only use for Map worktype.'
+      '#title_display': before
+      '#description_display': before
+      '#help_display': title_after
+    state_edition:
+      '#type': textfield
+      '#title': 'State Edition'
+      '#description': 'Specific version of a map. Use only for Map worktype.'
+      '#description_display': before
+    note:
+      '#type': textarea
+      '#title': Note
+      '#multiple': true
+      '#description': 'Any details captured about the resource that do not fit elsewhere in the schema.'
+      '#description_display': before
+      '#states_clear': false
+      '#multiple__add_more': false
+      '#format_items': comma
+    images:
+      '#type': webform_image_file
+      '#title': 'Upload Image Files'
+      '#multiple': 5
+      '#states_clear': false
+      '#format': custom
+      '#format_html': '<img src="{{  item.link }}">'
+      '#format_items': ol
+      '#access_create_roles':
+        - authenticated
+      '#access_update_roles':
+        - authenticated
+      '#access_view_roles':
+        - authenticated
+      '#file_preview': ':image'
+      '#max_filesize': '512'
+      '#file_extensions': 'jp2 jpg jpeg png tif tiff'
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+    '#submit__label': 'Save Metadata'
+    '#reset__label': 'Clear Form'
+    '#preview_prev_hide': true
+css: ''
+javascript: ''
+settings:
+  ajax: true
+  ajax_scroll_top: ''
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: true
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: true
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: true
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: true
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 1
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: inline
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: true
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  a_strawberryfield_harvester:
+    id: strawberryField_webform_handler
+    handler_id: a_strawberryfield_harvester
+    label: 'A strawberryField harvester'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      submission_url: 'https://api.example.org/SOME/ENDPOINT'
+      upload_scheme: s3
+      operation: null
+      ado_settings:
+        bundles: null
+        entity_revision: false
+      ado_crud_enabled: false
+      states:
+        - completed
+      ado_prepopulate_enabled: false
+variants: {  }

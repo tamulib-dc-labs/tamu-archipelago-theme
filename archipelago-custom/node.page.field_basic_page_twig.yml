@@ -1,0 +1,23 @@
+uuid: 0aa86c89-750f-4319-86db-d122c7ef0df7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_basic_page_twig
+    - node.type.page
+  module:
+    - twig_field
+id: node.page.field_basic_page_twig
+field_name: field_basic_page_twig
+entity_type: node
+bundle: page
+label: 'Basic page Twig'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_mode: ''
+field_type: twig
+
