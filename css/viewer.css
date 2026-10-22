@@ -86,6 +86,29 @@
   padding: 0.5rem 0.75rem !important;
 }
 
+/* Clover renders each item as a bare <button>; undo the theme's global
+   button styling (slim.css) so the yellow tint shows through. */
+.clover-iiif-annotation-item button,
+.clover-iiif-annotation-item button:hover,
+.clover-iiif-annotation-item button:focus,
+.clover-iiif-annotation-item button:active {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: none;
+  text-align: left;
+}
+
+.clover-iiif-annotation-item button:hover,
+.clover-iiif-annotation-item button:focus {
+  color: var(--primary-brand);
+}
+
 .clover-iiif-annotation-item mark,
 .clover-iiif-annotation-item em {
   background-color: #ffe082 !important;
