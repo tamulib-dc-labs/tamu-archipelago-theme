@@ -18,6 +18,7 @@ libraries:
   - tamu_theme/aggie-ux-cdn
   - tamu_theme/google-fonts
   - tamu_theme/promo-band
+  - tamu_theme/logo-strip
   - tamu_theme/nav
 
 regions:
