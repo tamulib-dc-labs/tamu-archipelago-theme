@@ -39,7 +39,8 @@ promo-band:
     theme:
       css/promo-band.css: {}
 
-# Texas A&M 150 years strip under the main nav (templates/layout/page.html.twig).
+# Texas A&M 150 years strip under the main nav, home page only. Attached from
+# templates/layout/page.html.twig inside its is_front check, not globally.
 logo-strip:
   version: VERSION
   css:
