@@ -1,0 +1,102 @@
+/* ── Texas A&M 150 years logo strip ──
+   Aggie UX "logo strip" (simple, light gray), the band library.tamu.edu runs
+   under its main nav. The rules come from aux-styles.css 2.1.1; the theme
+   still loads 2.0.0, which has no logo strip. Once aux-styles moves to 2.1+
+   this file can go, keeping only the .tamu-logo-strip tweaks at the end. */
+
+.logo-strip {
+  padding: 1.5rem;
+}
+
+.logo-strip .logo-strip__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-strip .logo-strip__container .dot-divider {
+  flex: 1 0 20px;
+  display: block;
+  border-top: dotted #500000 3px;
+}
+
+.logo-strip .logo-strip__container .logo-strip__left {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+}
+
+.logo-strip .logo-strip__container .logo-strip__left img {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  margin-right: 1rem;
+}
+
+.logo-strip .logo-strip__container .logo-strip__right {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-strip .logo-strip__container .logo-strip__right a {
+  font-family: "Work Sans", Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.logo-strip .logo-strip__container .logo-strip__right a::after {
+  content: " →";
+}
+
+.logo-strip--light-gray {
+  background: #eaeaea;
+}
+
+@media screen and (max-width: 875px) {
+  .logo-strip--simple .logo-strip__container .logo-strip__right {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .logo-strip--simple .logo-strip__container {
+    flex-direction: column;
+  }
+  .logo-strip--simple .logo-strip__container .logo-strip__left img {
+    margin: 0;
+  }
+  .logo-strip--simple .logo-strip__container .logo-strip__right {
+    align-items: center;
+  }
+  .logo-strip--simple .logo-strip__container .dot-divider {
+    display: none;
+  }
+}
+
+/* ── Fit to this site ── */
+
+/* Same maroon link with the thick underline library.tamu.edu shows. */
+.tamu-logo-strip .logo-strip__right a {
+  color: #500000;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.tamu-logo-strip .logo-strip__right a:hover,
+.tamu-logo-strip .logo-strip__right a:focus {
+  color: #3c0000;
+  text-decoration-thickness: 3px;
+}
+
+/* Keep the logo from picking up inline-image baseline space. */
+.tamu-logo-strip .logo-strip__left img {
+  display: block;
+  height: auto;
+}

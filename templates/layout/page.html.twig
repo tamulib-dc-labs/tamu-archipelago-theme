@@ -184,6 +184,20 @@
         {% endif %}
       {% endblock %}
     </header>
+    {# Texas A&M 150 years strip, as on library.tamu.edu (Aggie UX logo
+       strip). Styles in css/logo-strip.css. Remove this block when the
+       anniversary campaign ends. #}
+    <div class="logo-strip logo-strip--light-gray logo-strip--simple tamu-logo-strip" role="region" aria-label="{{ 'Texas A&M 150th anniversary'|t }}">
+      <div class="logo-strip__container">
+        <div class="logo-strip__left">
+          <img src="{{ base_path ~ directory }}/images/150-here-for-good.svg" alt="Texas A&amp;M University 150 Here for Good logo" width="150" height="33">
+        </div>
+        <span class="dot-divider" aria-hidden="true"></span>
+        <div class="logo-strip__right">
+          <a href="https://150.tamu.edu/" target="_blank" rel="noopener">Celebrate 150 Years</a>
+        </div>
+      </div>
+    </div>
     {% if page.highlighted %}
       <div class="highlighted">
         <aside class="{{ container }} section clearfix" role="complementary">
