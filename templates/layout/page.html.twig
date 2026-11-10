@@ -185,8 +185,10 @@
       {% endblock %}
     </header>
     {# Texas A&M 150 years strip, as on library.tamu.edu (Aggie UX logo
-       strip). Styles in css/logo-strip.css. Remove this block when the
-       anniversary campaign ends. #}
+       strip), on the home page only. Styles in css/logo-strip.css. Remove
+       this block when the anniversary campaign ends. #}
+    {% if is_front %}
+    {{ attach_library('tamu_theme/logo-strip') }}
     <div class="logo-strip logo-strip--light-gray logo-strip--simple tamu-logo-strip" role="region" aria-label="{{ 'Texas A&M 150th anniversary'|t }}">
       <div class="logo-strip__container">
         <div class="logo-strip__left">
@@ -198,6 +200,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     {% if page.highlighted %}
       <div class="highlighted">
         <aside class="{{ container }} section clearfix" role="complementary">
